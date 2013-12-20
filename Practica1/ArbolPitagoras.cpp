@@ -3,6 +3,7 @@
 #pragma hdrstop
 
 #include "ArbolPitagoras.h"
+#include <cmath>
 
 //---------------------------------------------------------------------------
 
@@ -17,10 +18,6 @@ ArbolPitagoras::ArbolPitagoras(Cuadrado root){
    push_back(rootLvl);
    unselect();
 }
-//---------------------------------------------------------------------------
-/*ArbolPitagoras::~ArbolPitagoras(){
-  //heredado de vector<>
-}*/
 //---------------------------------------------------------------------------
 //---------------------------------------------------------------------------
 void ArbolPitagoras::paint(){
@@ -47,12 +44,12 @@ void ArbolPitagoras::prune(){
     if(deep()<selected_lvl)unselect();
 }
 //---------------------------------------------------------------------------
-void ArbolPitagoras::grow(){
+void ArbolPitagoras::grow(bool randomBranching){
     vector<Cuadrado> growingLvl= back();
     push_back(vector<Cuadrado>());
     for(vector<Cuadrado>::iterator i= growingLvl.begin(); i!= growingLvl.end(); i++){
        auto_ptr<Cuadrado> c1, c2;
-       branch(*i, c1, c2);
+       branch(randomBranching, *i, c1, c2);
        back().push_back(*c1);
        back().push_back(*c2);
        //delete c1, c2;
@@ -81,25 +78,44 @@ void ArbolPitagoras::unselect(){
 }
 //---------------------------------------------------------------------------
 //---------------------------------------------------------------------------
-void ArbolPitagoras::branch(const Cuadrado& parent, auto_ptr<Cuadrado>& son1, auto_ptr<Cuadrado>& son2){
+void ArbolPitagoras::branch(bool randBranch, const Cuadrado& parent, auto_ptr<Cuadrado>& son1, auto_ptr<Cuadrado>& son2){
      //p1 y p2 son los vertices que se van a extender
      GLfloat p1[2]= {parent.getx(3), parent.gety(3)};
      GLfloat p2[2]= {parent.getx(2), parent.gety(2)};
 
      //m es el punto medio entre p1 y p2
-     GLfloat m[2];
+     GLfloat m[2], n[2];
      m[0]=(p1[0]+p2[0])/2;
      m[1]=(p1[1]+p2[1])/2;
 
-     //ahora lo transformo en el nuevo punto que compartrán los dos hijos
-     GLfloat x= p2[0]-m[0];
-     GLfloat y= p2[1]-m[1];
-     m[0] -= y;
-     m[1] += x;
+     //n es el nuevo punto que compartrán los dos hijos
+     n[0] = m[0]-(p2[1]-m[1]);
+     n[1] = m[1]+(p2[0]-m[0]);
+
+     //si es aleatoria, muevo el punto n con centro en m
+     if(randBranch)
+        divert(m,n);
 
      //ahora que tengo los lados inferiores, ya puedo construir los hijos
-     son1.reset( new Cuadrado(m[0], m[1], p2[0], p2[1]) );
-     son2.reset( new Cuadrado(p1[0], p1[1], m[0], m[1]) );
+     son1.reset( new Cuadrado(n[0], n[1], p2[0], p2[1]) );
+     son2.reset( new Cuadrado(p1[0], p1[1], n[0], n[1]) );
+}
+//---------------------------------------------------------------------------
+void ArbolPitagoras::divert(const float (&o)[2], float (&p)[2]){
+   float k = 2.0f * rand() / RAND_MAX - 1.0f; //k= random[-1,1]
+   k= k<0 ? -k*k : k*k; // k^2
+
+   float op[2]= {p[0]-o[0], p[1]-o[1]};
+   float r[2]= {op[0]+(op[1]*k), op[1]+(-op[0]*k)};
+
+   float correction = sqrt((op[0]*op[0]+op[1]*op[1]) / (r[0]*r[0]+ r[1]*r[1]));
+
+   r[0]*= correction;
+   r[1]*= correction;
+
+   p[0]= o[0]+r[0];
+   p[1]= o[1]+r[1];
+
 }
 //---------------------------------------------------------------------------
 const GLfloat* ArbolPitagoras::levelColor(unsigned int level){

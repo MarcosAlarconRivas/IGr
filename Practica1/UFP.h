@@ -8,9 +8,10 @@
 #include <StdCtrls.hpp>
 #include <Forms.hpp>
 
-#include "ArbolPitagoras.h"
+
 #include "Cuadrado.h"
 #include "Selection.h"
+#include "ArbolPitagoras.h"
 
 #include <gl\gl.h>
 #include <gl\glu.h>
@@ -40,6 +41,7 @@ private:	// User declarations
  float zoom;
  ArbolPitagoras * tree;
  Selection * root;
+ bool randomTree;
 
  // métodos privados
  void __fastcall SetPixelFormatDescriptor();

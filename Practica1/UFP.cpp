@@ -110,7 +110,7 @@ void __fastcall TGLForm2D::GLScene()
   // comandos para dibujar la escena
   if(tree)tree->paint();
   if(root){
-   glColor3f(0,1,1);
+   glColor3f(0,1,(!randomTree));
    root->paint();
   }
 
@@ -151,7 +151,7 @@ void __fastcall TGLForm2D::keyPressed(TObject *Sender, char &Key){
                     break;
 
          case '1' : if(!tree)return;
-                    tree->grow();
+                    tree->grow(randomTree);
                     break;
 
          case '2' : if(!tree)return;
@@ -172,6 +172,7 @@ void __fastcall TGLForm2D::FormMouseDown(TObject *Sender,
         point curr={X,Y};
         calcle(curr);
         root= new Selection(curr[0], curr[1], curr[0], curr[1]);
+        randomTree= Shift.Contains(ssCtrl);
     }
     if(Button==0){
        if(!tree)return;
