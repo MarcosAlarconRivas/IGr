@@ -7,7 +7,7 @@ Window::Window()
 {
     setWindowTitle(tr("openGL Widget"));
 
-    GLWidget *openGL = new GLWidget(&helper, this);
+    GLWidget *openGL = new GLWidget(this);
 
     QTimer *timer = new QTimer(this);
     connect(timer, SIGNAL(timeout()), openGL, SLOT(animate()));

@@ -39,13 +39,12 @@
 ****************************************************************************/
 
 #include "glwidget.h"
-#include "helper.h"
 
 #include <QTimer>
 
 //! [0]
-GLWidget::GLWidget(Helper *helper, QWidget *parent)
-    : QGLWidget(QGLFormat(QGL::SampleBuffers), parent), helper(helper)
+GLWidget::GLWidget(QWidget *parent)
+    : QGLWidget(QGLFormat(QGL::SampleBuffers), parent)
 {
     elapsed = 0;
     setFixedSize(200, 200);
@@ -67,7 +66,7 @@ void GLWidget::paintEvent(QPaintEvent *event)
     QPainter painter;
     painter.begin(this);
     painter.setRenderHint(QPainter::Antialiasing);
-    helper->paint(&painter, event, elapsed);
+    //helper->paint(&painter, event, elapsed);
     painter.end();
 }
 //! [2]

@@ -1,7 +1,6 @@
 #ifndef WINDOW_H
 #define WINDOW_H
 
-#include "helper.h"
 #include <QWidget>
 
 class Window : public QWidget
@@ -10,8 +9,5 @@ class Window : public QWidget
 
 public:
     Window();
-
-private:
-    Helper helper;
 };
 #endif

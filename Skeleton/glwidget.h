@@ -50,7 +50,7 @@ class GLWidget : public QGLWidget
     Q_OBJECT
 
 public:
-    GLWidget(Helper *helper, QWidget *parent);
+    GLWidget(QWidget *parent);
 
 public slots:
     void animate();
@@ -59,7 +59,6 @@ protected:
     void paintEvent(QPaintEvent *event);
 
 private:
-    Helper *helper;
     int elapsed;
 };
 
