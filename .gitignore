@@ -13,5 +13,5 @@
 *.a
 
 # Cosas del QT
+*.pro
 *.pro.user
-
