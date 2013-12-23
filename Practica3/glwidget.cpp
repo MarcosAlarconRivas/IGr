@@ -17,7 +17,7 @@ GLWidget::GLWidget(QWidget *parent)
 }
 
 void GLWidget::animate(){
-    repaint();
+    //repaint();
 }
 
 void GLWidget::initializeGL(){
