@@ -3,11 +3,11 @@
 
 #include <QWidget>
 
-class Window : public QWidget
-{
+class Window : public QWidget{
     Q_OBJECT
 
 public:
     Window();
+    QSize sizeHint() const;
 };
 #endif
