@@ -4,8 +4,6 @@
 #include <QGLWidget>
 #include <QKeyEvent>
 
-class Helper;
-
 class GLWidget : public QGLWidget{
     Q_OBJECT
 
