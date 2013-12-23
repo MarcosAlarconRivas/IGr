@@ -1,14 +1,15 @@
 #ifndef V2D_H
 #define V2D_H
 #include <cmath>
-
+#define zero 0.000000001
 class V2d{
 public:
     //Atributes
-    static const double zero = 0.000000001;
+    //static const double zero = 0.000000001;
     float x, y;
 
     //Constructors
+    V2d(){}
     V2d(const V2d & v) { x=v.x; y=v.y; }
     V2d(float x0, float y0) { x=x0; y=y0; }
 

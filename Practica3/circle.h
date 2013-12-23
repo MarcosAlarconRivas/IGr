@@ -3,7 +3,6 @@
 
 #include "v2d.h"
 #include "obstacle.h"
-#include "ball.h"
 
 class Circle : public Obstacle{
 protected:
@@ -12,7 +11,7 @@ protected:
 public:
     Circle(V2d center, float radius);
     virtual void paint()const;
-    virtual bool intersection(Ball& ball, double& tIn, V2d& normalIn)const;
+    virtual bool intersection(V2d p, V2d d, float s, double& tIn, V2d& normalIn)const;
 
     static void circle_vertex(float radius=1, unsigned numVertex=100);
 };

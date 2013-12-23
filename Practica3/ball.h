@@ -17,6 +17,7 @@ public:
     inline V2d d(){return direction;}
     inline V2d m(){return direction*speed;}
     inline float s(){return speed;}
+    virtual void paint()const;
 };
 
 #endif // BALL_H

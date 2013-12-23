@@ -1,9 +1,8 @@
 #include "circle.h"
 #include <cmath>
+#include <GL/gl.h>
 
-static void Circle::circle(unsigned numVertex);
-
-Circle::Circle(V2d center, float radius):Obstacle(){
+Circle::Circle(V2d center, float radius){
     this->center= center; this->radius= radius;
 }
 
@@ -16,23 +15,23 @@ void Circle::paint()const{
     glPopMatrix();
 }
 
-bool Circle::intersection(Ball& ball, double& tIn, V2d& normalIn)const{
+bool Circle::intersection(V2d p, V2d d, float s, double& tIn, V2d& normalIn)const{
 
     //descartar los lejanos
     //NO TIENE EN CUENTA EL RADIO DE LA PELOTA, HAY QUE SUMARLO
-    V2d c_p= ball.p() -center;
-    double lng= radius + ball.s()/* + pelota.r */;
+    V2d c_p= p -center;
+    double lng= radius + s/* + pelota.r */;
     if( c_p.mod2()> lng*lng)return false;
 
-    V2d v = ball.m();
+    V2d v = d *s;
     //(v·v)t2 +2(c_p·v)t + c_p·c_p -r2= 0
     double a = v*v;
     double b = c_p*v*2;
     double c = c_p*c_p - radius*radius;
     double det = b*b-4*a*c;
 
-    if(det < -zero) return false;
-    if(det > zero) {
+    if(det < - zero) return false;
+    if(det >   zero) {
       double t1, t2;
       t1 = ( -b -std::sqrt(det) ) / (2*a);
       t2 = ( -b +std::sqrt(det) ) / (2*a);
@@ -40,13 +39,13 @@ bool Circle::intersection(Ball& ball, double& tIn, V2d& normalIn)const{
     }
     else tIn = (-b) / (2*a);
 
-    normalIn = ((p + v*tIn) - center).unitario();
+    normalIn = ((p + v*tIn) - center)%1;
 
     return true;
 
 }
 
-static void Circle::circle_vertex(float radius, unsigned numVertex){
+void Circle::circle_vertex(float radius, unsigned numVertex){
     float theta = 2 * M_PI / numVertex;
     float c = cos(theta), s = sin(theta);//precalculate the sine and cosine
     float t;
