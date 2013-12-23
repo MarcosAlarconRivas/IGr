@@ -2,8 +2,7 @@
 #define GLWIDGET_H
 
 #include <QGLWidget>
-//#include <GL/gl.h>
-//#include <GL/glu.h>
+#include <QKeyEvent>
 
 class Helper;
 
@@ -22,6 +21,7 @@ protected:
     void initializeGL();
     void paintGL();
     void resizeGL(int width, int height);
+    void keyPressEvent(QKeyEvent *event);
 
 private:
     void aplyView();
