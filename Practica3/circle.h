@@ -14,6 +14,7 @@ public:
     virtual bool intersection(V2d p, V2d d, float s, double& tIn, V2d& normalIn)const;
 
     static void circle_vertex(float radius=1, unsigned numVertex=100);
+
 };
 
 #endif // CIRCLE_H
