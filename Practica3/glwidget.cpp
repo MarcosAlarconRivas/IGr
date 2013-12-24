@@ -93,6 +93,5 @@ void GLWidget::keyPressEvent(QKeyEvent *e){
 
             default:   return;
     }
-    paintGL();
-
+    repaint();
 }
