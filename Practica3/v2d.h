@@ -11,6 +11,7 @@ public:
     //Constructors
     V2d(){x=0;y=0;}
     V2d(const V2d & v) { x=v.x; y=v.y; }
+    //V2d(const V2d && v) { x=v.x; y=v.y; }
     V2d(float x0, float y0) { x=x0; y=y0; }
 
     //Geters

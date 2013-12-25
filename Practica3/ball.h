@@ -12,6 +12,8 @@ protected:
 public:
     static constexpr double radius= 10;
 
+    Ball(V2d center, V2d movement);
+
     bool hit(const Obstacle &toHit, double& tIn, V2d& normalIn);
     void advance(float how=1);
     void revota(V2d normal);
@@ -23,10 +25,6 @@ public:
     inline float s(){return speed;}
     virtual void paint()const;
 
-    Ball(V2d center, V2d movement):Circle(center, radius){
-        speed = movement.mod();
-        direction = movement % 1;
-    }
 };
 
 #endif // BALL_H

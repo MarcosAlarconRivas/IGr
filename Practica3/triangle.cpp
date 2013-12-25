@@ -1,7 +1,7 @@
 #include "triangle.h"
+#include "circle.h"
 #include <GL/gl.h>
 #include <cmath>
-#include <circle.h>
 
 Triangle::Triangle(V2d v0, V2d v1, V2d v2){
        vertex[0]= v0;
@@ -21,19 +21,20 @@ void Triangle::paint()const {
     for(int i=0;i<3;i++)
         glVertex2f(vertex[i].x, vertex[i].y);
     glEnd();
-
+/*
     glPushMatrix();
     glTranslatef(centro.x, centro.y, 0);
     glBegin(GL_LINE_LOOP);
         Circle::circle_vertex(radio);
     glEnd();
     glPopMatrix();
+*/
 }
 
 bool Triangle::intersection(V2d p, V2d v, float speed, double& tIn, V2d& normalIn)const {
 
     //descartar los lejanos
-    if((p -centro).mod2() > (radio+speed)*(radio+speed))return 0;
+    //if((p -centro).mod2() > (radio+speed)*(radio+speed))return 0;
 
    //Compute the vectors dist, proj and sign;
    float proj[3], dist[3]; short sign[3];
