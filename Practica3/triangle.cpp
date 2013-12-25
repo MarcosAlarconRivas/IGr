@@ -1,6 +1,7 @@
 #include "triangle.h"
 #include <GL/gl.h>
 #include <cmath>
+#include <circle.h>
 
 Triangle::Triangle(V2d v0, V2d v1, V2d v2){
        vertex[0]= v0;
@@ -11,7 +12,7 @@ Triangle::Triangle(V2d v0, V2d v1, V2d v2){
        norm[1]= ++(v2-v1)%1;
        norm[2]= ++(v0-v2)%1;
 
-       centro= V2d((v0.x+v1.x+v2.x)/3, (v0.y+v1.y+v2.y)/3);
+       centro= Circle::find_center(v0,v1,v2);
        radio= (v0 - centro).mod();
 }
 
@@ -25,7 +26,6 @@ void Triangle::paint()const {
 bool Triangle::intersection(V2d p, V2d v, float speed, double& tIn, V2d& normalIn)const {
 
     //descartar los lejanos
-    //NO TIENE EN CUENTA EL RADIO DE LA PELOTA, HAY QUE SUMARLO
     if((p -centro).mod2() > (radio+speed)*(radio+speed))return 0;
 
    //Compute the vectors dist, proj and sign;
@@ -39,7 +39,7 @@ bool Triangle::intersection(V2d p, V2d v, float speed, double& tIn, V2d& normalI
       //sign[i]= dist[i]>=(-zero)?(dist[i]<zero?0:1):-1;
    }
 
-  if(std::abs(sign[0]+sign[1]+sign[2])==3) return false;//Trivial failure
+  if(std::abs(sign[0]+sign[1]+sign[2])==3) return 0;//Trivial failure
   int nHits= 0; double hit[3]; V2d n[3]; //For recording tHits and normals
 
   for(int i=0; i<3; i++){ //Intersections edge-line

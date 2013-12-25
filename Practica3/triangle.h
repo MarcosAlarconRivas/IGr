@@ -17,7 +17,7 @@ private:
 public:
     Triangle(V2d v0, V2d v1, V2d v2);
     virtual void paint()const;
-    virtual bool intersection(V2d p, V2d d, float s,  double& tIn, V2d& normalIn)const;
+    virtual bool intersection(V2d p, V2d d, float s, double& tIn, V2d& normalIn)const;
 
 };
 
