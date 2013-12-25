@@ -12,7 +12,7 @@ bool Ball::hit(const Obstacle &toHit, double& tIn, V2d& normalIn){
 void Ball::revota(V2d normal){
  //normal %= 1;
  normal = normal * -(normal * direction);
- direction += (normal*2)% 1;
+ direction += (normal*2);//% 1;
 }
 
 void Ball::inv_mov(){
@@ -20,7 +20,7 @@ void Ball::inv_mov(){
   direction.y = -direction.y;
 }
 
-void Ball::paint(){
+void Ball::paint()const{
     glPushMatrix();
     glTranslatef(center.x, center.y, 0);
     glScalef(radius, radius, 1);
@@ -30,7 +30,7 @@ void Ball::paint(){
     //glRotatef(rotation, 0, 0, 1);
     glBegin(GL_LINE);
         glVertex2f(center.x,center.y);
-        glVertex2(center.x+1,center.y);
+        glVertex2f(center.x+1,center.y);
     glPopMatrix();
 }
 
