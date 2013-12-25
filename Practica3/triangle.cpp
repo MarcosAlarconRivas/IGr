@@ -21,6 +21,13 @@ void Triangle::paint()const {
     for(int i=0;i<3;i++)
         glVertex2f(vertex[i].x, vertex[i].y);
     glEnd();
+
+    glPushMatrix();
+    glTranslatef(centro.x, centro.y, 0);
+    glBegin(GL_LINE_LOOP);
+        Circle::circle_vertex(radio);
+    glEnd();
+    glPopMatrix();
 }
 
 bool Triangle::intersection(V2d p, V2d v, float speed, double& tIn, V2d& normalIn)const {

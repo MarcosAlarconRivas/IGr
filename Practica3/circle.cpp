@@ -61,37 +61,31 @@ void Circle::circle_vertex(float radius, unsigned numVertex){
     }
 }
 
-V2d Circle::find_center(V2d A, V2d B, V2d C){
-//code from: http://stackoverflow.com/questions/4103405
-    float yDelta_a = B.y - A.y;
-    float xDelta_a = B.x - A.x;
-    float yDelta_b = C.y - B.y;
-    float xDelta_b = C.x - B.x;
-    V2d center = V2d(0,0);
-    float aSlope = yDelta_a/xDelta_a;
-    float bSlope = yDelta_b/xDelta_b;
+V2d Circle::find_center(V2d v0, V2d v1, V2d v2, int it){
+    if(it>2)return V2d((v0.x+v1.x+v2.x)/3, (v0.y+v1.y+v2.y)/3);
+    V2d l= v0|v1;
+    V2d m= ++(v1-l);
+    double k;
+    //FIXME (comprobar las cuentas)
+    // dist(v0, (l+m*k)) == dist(v2, (l+m*k))
+    // ===>
+    //[v0.x-(l.x+m.x*k)]² + [v0.y-(l.y+m.y*k)]² - [v2.x-(l.x+m.x*k)]² - [v2.y-(l.y+m.y*k)]² = 0
+    // ===>
+    // (m.x²)k² +(2*m.x*(l.x-v0.x))k + (v0.x-l.x)² +
+    // (m.y²)k² +(2*m.y*(l.y-v0.y))k + (v0.y-l.y)² +
+    //-(m.x²)k² -(2*m.x*(l.x-v2.x))k - (v2.x-l.x)² +
+    //-(m.y²)k² -(2*m.y*(l.y-v2.y))k - (v2.y-l.y)² = 0
+    // ===>
+    // 0*k² + 2*(m.x*[(l.x-v0.x)-(l.x-v2.x)] +m.y[(l.y-v0.y)-(l.y-v2.y)])*k =
+    // (v2.x-l.x)²-(v0.x-l.x)²+(v2.y-l.y)²-(v0.y-l.y)²
+    // ===>
+    // k= [(v2.x-l.x)²-(v0.x-l.x)²+(v2.y-l.y)²-(v0.y-l.y)²]/( 2*(m.x*[(l.x-v0.x)-(l.x-v2.x)]+m.y[(l.y-v0.y)-(l.y-v2.y)]) )
 
-    V2d AB_Mid = V2d((A.x+B.x)/2, (A.y+B.y)/2);
-    V2d BC_Mid = V2d((B.x+C.x)/2, (B.y+C.y)/2);
+    double div= 2*(m.x*((l.x-v0.x)-(l.x-v2.x)) + m.y*((l.y-v0.y)-(l.y-v2.y)));
 
-    if(!yDelta_a){
-        center.x = AB_Mid.x;
-        if (!xDelta_b)center.y = BC_Mid.y;
-        else center.y = BC_Mid.y + (BC_Mid.x-center.x)/bSlope;
-    }else if (!yDelta_b){
-        center.x = BC_Mid.x;
-        if (!xDelta_a) center.y = AB_Mid.y;
-        else center.y = AB_Mid.y + (AB_Mid.x-center.x)/aSlope;
-    }else if (!xDelta_a) {
-        center.y = AB_Mid.y;
-        center.x = bSlope*(BC_Mid.y-center.y) + BC_Mid.x;
-    }else if (!xDelta_b){
-        center.y = BC_Mid.y;
-        center.x = aSlope*(AB_Mid.y-center.y) + AB_Mid.x;
-    }else{
-        center.x = (aSlope*bSlope*(AB_Mid.y-BC_Mid.y) - aSlope*BC_Mid.x + bSlope*AB_Mid.x)/(bSlope-aSlope);
-        center.y = AB_Mid.y - (center.x - AB_Mid.x)/aSlope;
-    }
+    if(!div)return find_center(v1,v2,v0,it+1);
 
-    return center;
+    k= ((v2.x-l.x)*(v2.x-l.x) -(v0.x-l.x)*(v0.x-l.x) +(v2.y-l.y)*(v2.y-l.y) -(v0.y-l.y)*(v0.y-l.y)) / div;
+
+    return l + (m*k);
 }
