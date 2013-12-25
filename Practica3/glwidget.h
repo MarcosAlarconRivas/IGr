@@ -5,6 +5,7 @@
 #include <QKeyEvent>
 #include <list>
 #include "circle.h"
+#include "triangle.h"
 
 class GLWidget : public QGLWidget{
     Q_OBJECT

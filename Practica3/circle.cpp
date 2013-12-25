@@ -9,6 +9,7 @@ Circle::Circle(V2d center, float radius){
 void Circle::paint()const{
     glPushMatrix();
     glTranslatef(center.x, center.y, 0);
+    //glScalef(raduis, radius, 1);
     glBegin(GL_POLYGON);
         circle_vertex(radius);
     glEnd();
@@ -42,17 +43,17 @@ bool Circle::intersection(V2d p, V2d d, float s, double& tIn, V2d& normalIn)cons
     normalIn = ((p + v*tIn) - center)%1;
 
     return true;
-
 }
 
 void Circle::circle_vertex(float radius, unsigned numVertex){
     float theta = 2 * M_PI / numVertex;
-    float c = cos(theta), s = sin(theta);//precalculate the sine and cosine
+    //precalculate the sine and cosine
+    float c = cos(theta), s = sin(theta);
     float t;
-    float x = radius, y = 0;//we start at angle = 0
+    //we start at angle = 0
+    float x = radius, y = 0;
     for(unsigned i=0; i<numVertex; i++){
         glVertex2f(x,y);
-
         //apply the rotation matrix
         t = x;
         x = c * x - s * y;

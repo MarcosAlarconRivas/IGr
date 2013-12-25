@@ -17,6 +17,7 @@ GLWidget::GLWidget(QWidget *parent)
     //crear los objetos de las escena
     obstacle= std::list<Obstacle*>();
     obstacle.push_back( new Circle(V2d(-10,-20), 20) );
+    obstacle.push_back( new Triangle(V2d(0,0), V2d(50,300), V2d(300,50)) );
 
 }
 
@@ -36,17 +37,9 @@ void GLWidget::paintGL(){
      it!=obstacle.end(); ++it)
        (*it)->paint();
 
-    glColor3f(0,1,0);
-    glBegin(GL_POLYGON);
-        glVertex2f(0,0);
-        glVertex2f(100,500);
-        glVertex2f(500,100);
-    glEnd();
-
 }
 
 void GLWidget::resizeGL(int width, int height){
-
     //se actualiza puerto de vista
      glViewport(0,0,width,height);
 
