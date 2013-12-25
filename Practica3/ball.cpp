@@ -29,8 +29,8 @@ void Ball::paint()const{
     glEnd();
     //glRotatef(rotation, 0, 0, 1);
     glBegin(GL_LINE);
-        glVertex2f(center.x,center.y);
-        glVertex2f(center.x+1,center.y);
+        glVertex2f(0,0);
+        glVertex2f(0,1);
     glPopMatrix();
 }
 

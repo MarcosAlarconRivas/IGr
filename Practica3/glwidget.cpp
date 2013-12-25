@@ -15,10 +15,16 @@ GLWidget::GLWidget(QWidget *parent)
     zoom=1; x=0; y=0;
 
     //crear los objetos de las escena
+    selection=0;
+    pelota= std::list<Ball>();
     obstacle= std::list<Obstacle*>();
     obstacle.push_back( new Circle(V2d(-10,-20), 20) );
     obstacle.push_back( new Triangle(V2d(0,0), V2d(50,300), V2d(300,50)) );
 
+}
+
+GLWidget::~GLWidget(){
+    delete selection;
 }
 
 void GLWidget::step(){
@@ -32,10 +38,21 @@ void GLWidget::initializeGL(){
 void GLWidget::paintGL(){
     glClear(GL_COLOR_BUFFER_BIT);
 
+    // comandos para dibujar la escena
+    glColor3f(1,1,1);
+    for (std::list<Ball>::const_iterator it=pelota.begin();
+     it!=pelota.end(); ++it)
+       it->paint();
+
     glColor3f(1,0,0);
     for (std::list<Obstacle*>::const_iterator it=obstacle.begin();
      it!=obstacle.end(); ++it)
        (*it)->paint();
+
+    if(selection){
+          glColor3f(0,1,1);
+          selection->paint();
+    }
 
 }
 
@@ -98,7 +115,30 @@ void GLWidget::keyPressEvent(QKeyEvent *e){
     repaint();
 }
 
-void GLWidget::calcle(GLfloat& X, GLfloat& Y){
-    X= x - ( width()/2 -X)/zoom;
-    Y= y + (height()/2- Y)/zoom;
+V2d GLWidget::calcle(int X, int Y){
+    return V2d( x-( width()/2 -X)/zoom,
+                y+(height()/2- Y)/zoom);
+}
+
+void GLWidget::mousePressEvent(QMouseEvent * event){
+    if(! event->buttons() & Qt::LeftButton)return;
+    if(selection)return;
+    selection= new Selection(calcle(event->x(), event->y()));
+    repaint();
+}
+
+void GLWidget::mouseMoveEvent(QMouseEvent * event ){
+    if(! selection)return;
+    if(! event->buttons() & Qt::LeftButton)return;
+    selection->setV(calcle(event->x(), event->y()) );
+    repaint();
+}
+
+void GLWidget::mouseReleaseEvent(QMouseEvent * event ){
+    if(event->buttons())return;
+    if(!selection)return;
+    pelota.push_back(*selection);
+    delete selection;
+    selection=0;
+    repaint();
 }
