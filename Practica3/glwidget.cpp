@@ -28,7 +28,12 @@ GLWidget::~GLWidget(){
 }
 
 void GLWidget::step(){
-    //repaint();
+    if(pelota.empty())return;
+    std::list<Ball>::iterator it;
+    for (it =pelota.begin(); it !=pelota.end(); ++it)
+       it->advance();
+
+    repaint();
 }
 
 void GLWidget::initializeGL(){
@@ -130,7 +135,8 @@ void GLWidget::mousePressEvent(QMouseEvent * event){
 void GLWidget::mouseMoveEvent(QMouseEvent * event ){
     if(! selection)return;
     if(! event->buttons() & Qt::LeftButton)return;
-    selection->setV(calcle(event->x(), event->y()) );
+    selection->setV(calcle(event->x(), event->y()), .2 );
+        //el segundo argumento ajusta la velocidad
     repaint();
 }
 
