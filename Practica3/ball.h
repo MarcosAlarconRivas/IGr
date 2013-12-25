@@ -10,7 +10,7 @@ protected:
       V2d direction;
       float speed;
 public:
-    static const double radius= 10;
+    static constexpr double radius= 10;
 
     void advance(float how);
     bool hit(const Obstacle &toHit, double& tIn, V2d& normalIn);

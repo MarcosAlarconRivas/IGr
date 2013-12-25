@@ -14,9 +14,13 @@ GLWidget::GLWidget(QWidget *parent)
     //inicialización del volumen de vista
     zoom=1; x=0; y=0;
 
+    //crear los objetos de las escena
+    obstacle= std::list<Obstacle*>();
+    obstacle.push_back( new Circle(V2d(-10,-20), 20) );
+
 }
 
-void GLWidget::animate(){
+void GLWidget::step(){
     //repaint();
 }
 
@@ -28,6 +32,11 @@ void GLWidget::paintGL(){
     glClear(GL_COLOR_BUFFER_BIT);
 
     glColor3f(1,0,0);
+    for (std::list<Obstacle*>::const_iterator it=obstacle.begin();
+     it!=obstacle.end(); ++it)
+       (*it)->paint();
+
+    glColor3f(0,1,0);
     glBegin(GL_POLYGON);
         glVertex2f(0,0);
         glVertex2f(100,500);
@@ -94,4 +103,9 @@ void GLWidget::keyPressEvent(QKeyEvent *e){
             default:   return;
     }
     repaint();
+}
+
+void GLWidget::calcle(GLfloat& X, GLfloat& Y){
+    X= x - ( width()/2 -X)/zoom;
+    Y= y + (height()/2- Y)/zoom;
 }
