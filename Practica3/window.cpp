@@ -13,7 +13,7 @@ Window::Window(){
     setLayout(mainLayout);
 
     QTimer *timer = new QTimer(this);
-    connect(timer, SIGNAL(timeout()), openGL, SLOT(animate()));
+    connect(timer, SIGNAL(timeout()), openGL, SLOT(step()));
     timer->start(50);
 
 }

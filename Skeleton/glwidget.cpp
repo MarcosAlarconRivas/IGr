@@ -16,8 +16,9 @@ GLWidget::GLWidget(QWidget *parent)
 
 }
 
-void GLWidget::animate(){
-    repaint();
+void GLWidget::step(){
+    //somethig
+    //repaint();
 }
 
 void GLWidget::initializeGL(){
@@ -93,6 +94,5 @@ void GLWidget::keyPressEvent(QKeyEvent *e){
 
             default:   return;
     }
-    paintGL();
-
+    repaint();
 }

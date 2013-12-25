@@ -13,7 +13,7 @@ public:
     GLWidget(QWidget *parent);
 
 public slots:
-    void animate();
+    void step();
 
 protected:
     GLfloat x, y;
