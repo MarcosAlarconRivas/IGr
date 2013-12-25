@@ -15,7 +15,7 @@ public:
 
     //Geters
     inline double mod()const{
-      return sqrt(mod2());
+      return std::sqrt(mod2());
     }
 
     inline double mod2() const {

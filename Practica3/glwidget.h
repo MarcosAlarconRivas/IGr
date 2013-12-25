@@ -39,6 +39,7 @@ private:
     void aplyView();
     V2d calcle(int x, int y);
     void backward();
+    void step(Ball& pelota);
 };
 
 #endif

@@ -31,7 +31,7 @@ void GLWidget::step(){
     if(pelota.empty())return;
     std::list<Ball>::iterator it;
     for (it =pelota.begin(); it !=pelota.end(); ++it)
-       it->advance();
+       step(*it);
 
     repaint();
 }
@@ -154,6 +154,28 @@ void GLWidget::mouseReleaseEvent(QMouseEvent * event ){
 }
 
 void GLWidget::backward(){
-for (std::list<Ball>::iterator it=pelota.begin();it!=pelota.end(); ++it)
+    for (std::list<Ball>::iterator it=pelota.begin();it!=pelota.end(); ++it)
         it->inv_mov();
+}
+
+void GLWidget::step(Ball& pelota){
+    if(pelota.s()<zero)return;
+    double hitTime = 2;
+    V2d normal;
+
+    for(std::list<Obstacle*>::const_iterator it =obstacle.begin();
+       it !=obstacle.end(); ++it){
+           V2d Nor; double tIn;
+           if( pelota.hit(**it, tIn, Nor)&& tIn < hitTime && tIn > zero){
+                  normal= Nor; hitTime= tIn;
+             }
+    }
+
+     if(hitTime == 2){
+           pelota.advance();
+           return;
+     }
+
+     pelota.advance(hitTime);
+     pelota.revota(normal);
 }

@@ -12,10 +12,11 @@ protected:
 public:
     static constexpr double radius= 10;
 
-    void advance(float how=1);
     bool hit(const Obstacle &toHit, double& tIn, V2d& normalIn);
-    void inv_mov();
+    void advance(float how=1);
     void revota(V2d normal);
+    void inv_mov();
+
     inline V2d p(){return center;}
     inline V2d d(){return direction;}
     inline V2d m(){return direction*speed;}
