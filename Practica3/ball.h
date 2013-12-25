@@ -14,6 +14,8 @@ public:
 
     void advance(float how);
     bool hit(const Obstacle &toHit, double& tIn, V2d& normalIn);
+    void inv_mov();
+    void revota(V2d normal);
     inline V2d p(){return center;}
     inline V2d d(){return direction;}
     inline V2d m(){return direction*speed;}
