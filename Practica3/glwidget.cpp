@@ -121,7 +121,7 @@ V2d GLWidget::calcle(int X, int Y){
 }
 
 void GLWidget::mousePressEvent(QMouseEvent * event){
-    if(! event->buttons() & Qt::LeftButton)return;
+    if(event->button() != Qt::LeftButton)return;
     if(selection)return;
     selection= new Selection(calcle(event->x(), event->y()));
     repaint();
@@ -136,8 +136,8 @@ void GLWidget::mouseMoveEvent(QMouseEvent * event ){
 
 void GLWidget::mouseReleaseEvent(QMouseEvent * event ){
     if(event->buttons())return;
-    if(!selection)return;
-    pelota.push_back(*selection);
+    if(event->button()==Qt::LeftButton && selection)
+        pelota.push_back(*selection);
     delete selection;
     selection=0;
     repaint();
