@@ -115,6 +115,10 @@ void GLWidget::keyPressEvent(QKeyEvent *e){
                         aplyView();
                         break;
 
+            case Qt::Key_Space:
+                       backward();
+                       return;
+
             default:   return;
     }
     repaint();
@@ -147,4 +151,9 @@ void GLWidget::mouseReleaseEvent(QMouseEvent * event ){
     delete selection;
     selection=0;
     repaint();
+}
+
+void GLWidget::backward(){
+for (std::list<Ball>::iterator it=pelota.begin();it!=pelota.end(); ++it)
+        it->inv_mov();
 }
