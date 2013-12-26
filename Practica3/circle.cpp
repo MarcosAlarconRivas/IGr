@@ -61,12 +61,10 @@ void Circle::circle_vertex(float radius, unsigned numVertex){
     }
 }
 
-V2d Circle::find_center(V2d v0, V2d v1, V2d v2, int it){
-    if(it>2)return V2d((v0.x+v1.x+v2.x)/3, (v0.y+v1.y+v2.y)/3);
+V2d Circle::find_center(V2d v0, V2d v1, V2d v2){
     V2d l= v0|v1;
     V2d m= ++(v1-l);
     double k;
-    //FIXME (comprobar las cuentas)
     // dist(v0, (l+m*k)) == dist(v2, (l+m*k))
     // ===>
     //[v0.x-(l.x+m.x*k)]² + [v0.y-(l.y+m.y*k)]² - [v2.x-(l.x+m.x*k)]² - [v2.y-(l.y+m.y*k)]² = 0
@@ -83,7 +81,7 @@ V2d Circle::find_center(V2d v0, V2d v1, V2d v2, int it){
 
     double div= 2*(m.x*((l.x-v0.x)-(l.x-v2.x)) + m.y*((l.y-v0.y)-(l.y-v2.y)));
 
-    if(!div)return find_center(v1,v2,v0,it+1);
+    if(!div)return V2d((v0.x+v1.x+v2.x)/3, (v0.y+v1.y+v2.y)/3);
 
     k= ((v2.x-l.x)*(v2.x-l.x) -(v0.x-l.x)*(v0.x-l.x) +(v2.y-l.y)*(v2.y-l.y) -(v0.y-l.y)*(v0.y-l.y)) / div;
 
