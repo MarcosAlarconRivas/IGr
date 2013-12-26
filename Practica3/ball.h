@@ -7,10 +7,11 @@
 
 class Ball: public Circle{
 protected:
-      V2d direction;
-      float speed;
+      V2d direction; float speed;
+      int phase; bool rotation;
 public:
     static constexpr double radius= 10;
+    static constexpr int rot_speed= 45;
 
     Ball(V2d center, V2d movement);
 
