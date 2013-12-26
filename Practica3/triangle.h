@@ -7,7 +7,7 @@ private:
     V2d vertex[3];
     V2d norm[3];
 
-    V2d centro; float radio;
+    V2d centro; double radio;
     //estos se usan para descartar pelotas fuera de la circunferencia
 
     inline V2d bisectriz(int i)const{

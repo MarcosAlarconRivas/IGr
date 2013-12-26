@@ -21,26 +21,24 @@ void Triangle::paint()const {
     for(int i=0;i<3;i++)
         glVertex2f(vertex[i].x, vertex[i].y);
     glEnd();
-/*
     glPushMatrix();
     glTranslatef(centro.x, centro.y, 0);
     glBegin(GL_LINE_LOOP);
         Circle::circle_vertex(radio);
     glEnd();
     glPopMatrix();
-*/
 }
 
 bool Triangle::intersection(V2d p, V2d v, float speed, double& tIn, V2d& normalIn)const {
 
-    //descartar los lejanos
-    //if((p -centro).mod2() > (radio+speed)*(radio+speed))return 0;
+    double mierda=0;//<---¡¡¡Por alguna razon sin eso no revota!!!!!
+    if((p+v-centro).mod2() > (speed+radio)*(speed+radio) )return 0;
 
    //Compute the vectors dist, proj and sign;
    float proj[3], dist[3]; short sign[3];
    V2d vT = ++V2d(v);
    for(int i=0; i<3; i++){
-      V2d p_pi = V2d((vertex[i]- p));
+      V2d p_pi = vertex[i]- p;
       proj[i]= p_pi * v;
       dist[i]= p_pi * vT;
       sign[i]= dist[i]>0?1:dist[i]?-1:0;
