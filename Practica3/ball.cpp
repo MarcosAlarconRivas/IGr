@@ -8,7 +8,8 @@ Ball::Ball(V2d center, V2d movement):Circle(center, radius){
 }
 void Ball::advance(float t){
     center+= direction*speed*t;
-    phase += rotation ? rot_speed : -rot_speed;
+
+    phase= ((phase + (rotation ? 1 :-1)*rot_speed)) % 360;
 }
 
 bool Ball::hit(const Obstacle &toHit, double& tIn, V2d& normalIn){
@@ -19,13 +20,13 @@ void Ball::revota(V2d normal){
  //normal %= 1;
  normal = normal * -(normal * direction);
  direction += (normal*2);//% 1;
- phase += rotation ? rot_speed : -rot_speed;
+ rotation= !rotation;
 }
 
 void Ball::inv_mov(){
   direction.x = -direction.x;
   direction.y = -direction.y;
-  phase += rotation ? rot_speed : -rot_speed;
+  rotation= !rotation;
 }
 
 void Ball::paint()const{
