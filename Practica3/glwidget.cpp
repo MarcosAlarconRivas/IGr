@@ -20,6 +20,7 @@ GLWidget::GLWidget(QWidget *parent)
     obstacle= std::list<Obstacle*>();
     obstacle.push_back( new Circle(V2d(-10,-20), 20) );
     obstacle.push_back( new Triangle(V2d(0,0), V2d(50,300), V2d(300,50)) );
+    obstacle.push_back( new Ellipse(V2d(-45,45), 20, 50) );
 
 }
 

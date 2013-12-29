@@ -6,6 +6,7 @@
 #include <list>
 #include "triangle.h"
 #include "circle.h"
+#include "ellipse.h"
 #include "ball.h"
 #include "selection.h"
 
