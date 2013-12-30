@@ -8,10 +8,15 @@ class Ellipse : public Circle{
 protected:
     //double width, height, rotation;
     GLdouble transf[16];
+    double tr_inv[16];
+
 public:
     Ellipse(V2d center, double W, double H, double rot=0);
     virtual void paint()const;
     virtual bool intersection(V2d p, V2d d, float s, double& tIn, V2d& normalIn)const;
+
+private:
+    void transfV(float *v)const;
 };
 
 #endif // ELLIPSE_H

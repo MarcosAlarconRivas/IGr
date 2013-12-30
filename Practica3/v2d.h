@@ -13,6 +13,7 @@ public:
     V2d(const V2d & v) { x=v.x; y=v.y; }
     //V2d(const V2d && v) { x=v.x; y=v.y; }
     V2d(float x0, float y0) { x=x0; y=y0; }
+    V2d(float*v){x=v[0],y=v[1];}
 
     //Geters
     inline double mod()const{
