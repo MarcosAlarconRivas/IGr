@@ -7,6 +7,7 @@ Circle::Circle(V2d center, float radius){
 }
 
 void Circle::paint()const{
+    glMatrixMode(GL_MODELVIEW);
     glPushMatrix();
     glTranslatef(center.x, center.y, 0);
     //glScalef(raduis, radius, 1);
