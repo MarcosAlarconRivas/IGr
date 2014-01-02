@@ -20,9 +20,8 @@ void Circle::paint()const{
 bool Circle::intersection(V2d p, V2d d, float s, double& tIn, V2d& normalIn)const{
 
     //descartar los lejanos
-    //NO TIENE EN CUENTA EL RADIO DE LA PELOTA, HAY QUE SUMARLO
     V2d c_p= p -center;
-    double lng= radius + s/* + pelota.r */;
+    double lng= radius + s;// + pelota.r;
     if( c_p.mod2()> lng*lng)return false;
 
     V2d v = d *s;
