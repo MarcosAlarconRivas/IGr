@@ -37,12 +37,11 @@ bool Ellipse::intersection(V2d p, V2d d, float s, double& tIn, V2d& normalIn)con
     float dt[4]={d.x,d.y,0,0};
     pre_mult(tr_inv, pt);
     pre_mult(tr_inv, dt);
-    return Circle::intersection(V2d(pt),V2d(dt), s, tIn, normalIn);
-    /*if(! Circle::intersection(V2d(pt),V2d(dt), s, tIn, normalIn))return 0;
+    if(! Circle::intersection(V2d(pt),V2d(dt), s, tIn, normalIn))return 0;
     float nt[]= {normalIn.x, normalIn.y, 0, 0};
-    pre_mult(transf, nt);
+    post_mult(nt,tr_inv);
     normalIn=V2d(nt)%1;
-    return 1;*/
+    return 1;
 }
 
 void Ellipse::pre_mult(const double m[16], float v[4]){
@@ -51,4 +50,12 @@ void Ellipse::pre_mult(const double m[16], float v[4]){
     v[1]=x*m[4]+y*m[5]+z*m[6]+p*m[7];
     v[2]=x*m[8]+y*m[9]+z*m[10]+p*m[11];
     v[3]=x*m[12]+y*m[13]+z*m[14]+p*m[15];
+}
+
+void Ellipse::post_mult(float v[4], const double m[16]){
+    float x=v[0], y=v[1], z=v[2], p=v[3];
+    v[0]=x*m[0]+y*m[4]+z*m[8]+p*m[12];
+    v[1]=x*m[1]+y*m[5]+z*m[9]+p*m[13];
+    v[2]=x*m[2]+y*m[6]+z*m[10]+p*m[14];
+    v[3]=x*m[3]+y*m[7]+z*m[11]+p*m[15];
 }

@@ -14,6 +14,7 @@ public:
     virtual bool intersection(V2d p, V2d d, float s, double& tIn, V2d& normalIn)const;
 
     static inline void pre_mult(const double matrix[16], float v[4]);
+    static inline void post_mult(float v[4], const double matrix[16]);
 
 };
 
