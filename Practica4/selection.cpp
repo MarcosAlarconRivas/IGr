@@ -2,7 +2,7 @@
 #include <GL/gl.h>
 
 Selection::Selection(V2d centro){
- this.centro = p0 = pf = centro;
+ this->centro = p0 = pf = centro;
 }
 
 void Selection::setV0(V2d v0){
