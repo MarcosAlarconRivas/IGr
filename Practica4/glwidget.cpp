@@ -12,6 +12,8 @@ GLWidget::GLWidget(QWidget *parent)
     //inicialización del volumen de vista
     zoom=1; x=0; y=0;
 
+    //crear los objetos de la escena
+    selection=0;
 }
 
 void GLWidget::initializeGL(){
@@ -102,27 +104,28 @@ V2d GLWidget::calcle(int X, int Y){
 }
 
 void GLWidget::mousePressEvent(QMouseEvent * event){
-    if(event->button() != Qt::LeftButton)return;
     if(!selection){
-        selection= new Selection(calcle(event->x(), event->y()));
+        if(event->button() == Qt::LeftButton)
+            selection= new Selection(calcle(event->x(), event->y()));
         return;
     }
-    selection->setV0(calcle(event->x(), event->y()));
+    if(event->button() == Qt::RightButton)
+        selection->setV0(calcle(event->x(), event->y()));
     repaint();
-    return;
 }
 
 void GLWidget::mouseMoveEvent(QMouseEvent * event ){
     if(! selection)return;
-    if(! event->buttons() & Qt::LeftButton)return;
+    //if(! event->buttons() & Qt::LeftButton)return;
+    if(! event->buttons() & Qt::RightButton)return;
     selection->setVf(calcle(event->x(), event->y()));
     repaint();
 }
 
 void GLWidget::mouseReleaseEvent(QMouseEvent * event ){
     if(event->buttons())return;
-    if(event->button()==Qt::LeftButton && selection)
-        //girar imagen
+    if(event->button()==Qt::RightButton && selection)
+        ;//girar imagen
     delete selection;
     selection=0;
     repaint();

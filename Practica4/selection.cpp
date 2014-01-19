@@ -1,8 +1,8 @@
 #include "selection.h"
 #include <GL/gl.h>
 
-Selection::Selection(V2d centro){
- this->centro = p0 = pf = centro;
+Selection::Selection(V2d c){
+ centro = p0 = pf = c;
 }
 
 void Selection::setV0(V2d v0){

@@ -8,7 +8,7 @@ protected:
         V2d centro, p0, pf;
 public:
         Selection(V2d centro);
-        virtual void paint()const;
+        void paint()const;
         void setV0(V2d p0);
         void setVf(V2d pf);
 };

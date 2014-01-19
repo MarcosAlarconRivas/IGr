@@ -14,7 +14,7 @@ GLWidget::GLWidget(QWidget *parent)
     //inicialización del volumen de vista
     zoom=1; x=0; y=0;
 
-    //crear los objetos de las escena
+    //crear los objetos de la escena
     selection=0;
     pelota= std::list<Ball>();
     obstacle= std::list<Obstacle*>();
