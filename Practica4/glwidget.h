@@ -3,6 +3,7 @@
 
 #include <QGLWidget>
 #include <QKeyEvent>
+#include "selection.h"
 
 class GLWidget : public QGLWidget{
     Q_OBJECT
@@ -10,19 +11,22 @@ class GLWidget : public QGLWidget{
 public:
     GLWidget(QWidget *parent);
 
-public slots:
-    void step();
-
 protected:
     GLfloat x, y;
     GLfloat zoom;
+    Selection* selection;
+
     void initializeGL();
     void paintGL();
     void resizeGL(int width, int height);
     void keyPressEvent(QKeyEvent *event);
+    void mousePressEvent(QMouseEvent * event );
+    void mouseMoveEvent(QMouseEvent * event );
+    void mouseReleaseEvent(QMouseEvent * event );
 
 private:
     void aplyView();
+    V2d calcle(int x, int y);
 };
 
 #endif

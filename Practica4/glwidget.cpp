@@ -1,7 +1,5 @@
 #include "glwidget.h"
 
-#include <QTimer>
-
 GLWidget::GLWidget(QWidget *parent)
     : QGLWidget(QGLFormat(QGL::SampleBuffers), parent){
 
@@ -14,11 +12,6 @@ GLWidget::GLWidget(QWidget *parent)
     //inicialización del volumen de vista
     zoom=1; x=0; y=0;
 
-}
-
-void GLWidget::step(){
-    //somethig
-    //repaint();
 }
 
 void GLWidget::initializeGL(){
@@ -34,6 +27,11 @@ void GLWidget::paintGL(){
         glVertex2f(100,500);
         glVertex2f(500,100);
     glEnd();
+
+    if(selection){
+          glColor3f(0,1,1);
+          selection->paint();
+    }
 
 }
 
@@ -94,5 +92,38 @@ void GLWidget::keyPressEvent(QKeyEvent *e){
 
             default:   return;
     }
+    repaint();
+}
+
+
+V2d GLWidget::calcle(int X, int Y){
+    return V2d( x-( width()/2 -X)/zoom,
+                y+(height()/2- Y)/zoom);
+}
+
+void GLWidget::mousePressEvent(QMouseEvent * event){
+    if(event->button() != Qt::LeftButton)return;
+    if(!selection){
+        selection= new Selection(calcle(event->x(), event->y()));
+        return;
+    }
+    selection->setV0(calcle(event->x(), event->y()));
+    repaint();
+    return;
+}
+
+void GLWidget::mouseMoveEvent(QMouseEvent * event ){
+    if(! selection)return;
+    if(! event->buttons() & Qt::LeftButton)return;
+    selection->setVf(calcle(event->x(), event->y()));
+    repaint();
+}
+
+void GLWidget::mouseReleaseEvent(QMouseEvent * event ){
+    if(event->buttons())return;
+    if(event->button()==Qt::LeftButton && selection)
+        //girar imagen
+    delete selection;
+    selection=0;
     repaint();
 }
