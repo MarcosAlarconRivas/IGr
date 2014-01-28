@@ -6,6 +6,7 @@
 class Selection{
 protected:
         V2d centro, p0, pf;
+        bool seted;
 public:
         Selection(V2d centro);
         void paint()const;
