@@ -104,28 +104,21 @@ V2d GLWidget::calcle(int X, int Y){
 }
 
 void GLWidget::mousePressEvent(QMouseEvent * event){
-    if(!selection){
-        if(event->button() == Qt::LeftButton)
+    if(!selection && event->button() == Qt::LeftButton)
             selection= new Selection(calcle(event->x(), event->y()));
-        return;
-    }
-    if(event->button() == Qt::RightButton)
-        selection->setV0(calcle(event->x(), event->y()));
-    repaint();
 }
 
 void GLWidget::mouseMoveEvent(QMouseEvent * event ){
     if(! selection)return;
-    //if(! event->buttons() & Qt::LeftButton)return;
-    if(! event->buttons() & Qt::RightButton)return;
-    selection->setVf(calcle(event->x(), event->y()));
+    if(! event->buttons() & Qt::LeftButton)return;
+    selection->setV(calcle(event->x(), event->y()));
     repaint();
 }
 
 void GLWidget::mouseReleaseEvent(QMouseEvent * event ){
-    if(event->buttons())return;
-    if(event->button()==Qt::RightButton && selection)
-        ;//girar imagen
+    if(event->button()!=Qt::LeftButton || ! selection)return;
+
+        //girar imagen
     delete selection;
     selection=0;
     repaint();
