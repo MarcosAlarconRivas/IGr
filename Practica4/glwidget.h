@@ -15,6 +15,7 @@ protected:
     GLfloat x, y;
     GLfloat zoom;
     Selection* selection;
+    QImage *currentImage;
 
     void initializeGL();
     void paintGL();
@@ -27,6 +28,7 @@ protected:
 private:
     void aplyView();
     V2d calcle(int x, int y);
+    void loadImage();
 };
 
 #endif
