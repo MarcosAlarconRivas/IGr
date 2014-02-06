@@ -26,7 +26,7 @@ void GLWidget::paintGL(){
     glClear(GL_COLOR_BUFFER_BIT);
 
     if(currentImage)
-        glDrawPixels(currentImage->width(), currentImage->height(), GL_RGBA,
+        glDrawPixels(currentImage->width(), currentImage->height(), GL_BGRA,//GL_RGBA,
                  GL_UNSIGNED_BYTE, currentImage->bits());
 
     if(selection){
