@@ -13,6 +13,10 @@ void Selection::setV(V2d v){
   pib= centro; pib.x += rad;
 }
 
+float Selection::angle() {
+    return std::abs(360* atan2(curr.x - pib.x, curr.y - pib.y)/ M_PI);
+}
+
 void Selection::paint()const{
  glBegin(GL_LINES);
     glVertex2f(centro.x,centro.y);
