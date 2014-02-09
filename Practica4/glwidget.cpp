@@ -59,11 +59,21 @@ void GLWidget::aplyView(){
 }
 
 void GLWidget::loadImage(){
-    QString fileName = QFileDialog::getOpenFileName(this, tr("Open File"),"", tr("Files (*.*)"));
+    QString fileName = QFileDialog::getOpenFileName(this, tr("Open File"),"", tr("Images (*.*)"));
     currentImage = new RImage(fileName);
     resize(currentImage->size());
     ((QWidget*)parent())->setWindowTitle(fileName);
     ((QWidget*)parent())->resize(size());
+}
+
+void GLWidget::saveImage(){
+    QString fileName =QFileDialog::getSaveFileName(this, tr("Save Image"), "", tr("Images (*.*)"));
+    //save currentImage to flileName
+    if(currentImage->save(fileName)){
+        delete currentImage;
+        currentImage =0;
+        ((QWidget*)parent())->setWindowTitle("Practica 4");
+    }
 }
 
 void GLWidget::keyPressEvent(QKeyEvent *e){
@@ -101,6 +111,10 @@ void GLWidget::keyPressEvent(QKeyEvent *e){
 
             case Qt::Key_Insert :
                         loadImage();
+                        break;
+
+            case Qt::Key_S :
+                        saveImage();
                         break;
 
 

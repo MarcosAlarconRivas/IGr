@@ -23,3 +23,7 @@ void RImage::rotate(){
 void RImage::paint(){
     glDrawPixels(im->width(), im->height(), GL_BGRA,/*GL_RGBA,*/ GL_UNSIGNED_BYTE, im->bits());
 }
+
+bool RImage::save(const QString & fileName, const char * format, int quality){
+    return im->save(fileName, format, quality);
+}

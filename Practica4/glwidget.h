@@ -30,6 +30,7 @@ private:
     void aplyView();
     V2d calcle(int x, int y);
     void loadImage();
+    void saveImage();
 };
 
 #endif

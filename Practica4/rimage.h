@@ -10,6 +10,7 @@ public:
    ~RImage();
     void rotate();
     void paint();
+    bool save(const QString & fileName, const char * format = 0, int quality = -1 );
     QSize size();
 protected:
     float rotation;
