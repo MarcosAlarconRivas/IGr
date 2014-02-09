@@ -26,8 +26,7 @@ void GLWidget::paintGL(){
     glClear(GL_COLOR_BUFFER_BIT);
 
     if(currentImage)
-        glDrawPixels(currentImage->width(), currentImage->height(), GL_BGRA,//GL_RGBA,
-                 GL_UNSIGNED_BYTE, currentImage->bits());
+        currentImage->paint();
 
     if(selection){
           glColor3f(0,1,1);
@@ -60,11 +59,10 @@ void GLWidget::aplyView(){
 
 void GLWidget::loadImage(){
     QString fileName = QFileDialog::getOpenFileName(this, tr("Open File"),"", tr("Files (*.*)"));
-    //QPixmap qfxmp= QPixmap(fileName);
-    currentImage = new QImage(fileName);
-    this->resize(currentImage->size());
+    currentImage = new RImage(fileName);
+    resize(currentImage->size());
     ((QWidget*)parent())->setWindowTitle(fileName);
-    ((QWidget*)parent())->resize(this->size());
+    ((QWidget*)parent())->resize(size());
 }
 
 void GLWidget::keyPressEvent(QKeyEvent *e){

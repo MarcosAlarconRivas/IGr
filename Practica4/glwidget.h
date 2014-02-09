@@ -4,6 +4,7 @@
 #include <QGLWidget>
 #include <QKeyEvent>
 #include "selection.h"
+#include "rimage.h"
 
 class GLWidget : public QGLWidget{
     Q_OBJECT
@@ -15,7 +16,7 @@ protected:
     GLfloat x, y;
     GLfloat zoom;
     Selection* selection;
-    QImage *currentImage;
+    RImage *currentImage;
 
     void initializeGL();
     void paintGL();
