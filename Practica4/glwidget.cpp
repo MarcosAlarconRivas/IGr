@@ -67,7 +67,7 @@ void GLWidget::loadImage(){
 }
 
 void GLWidget::saveImage(){
-    QString fileName =QFileDialog::getSaveFileName(this, tr("Save Image"), "", tr("Images (*.*)"));
+    QString fileName =QFileDialog::getSaveFileName(this, tr("Save Image"), "", tr("Images (*.png)"));
     //save currentImage to flileName
     if(currentImage->save(fileName)){
         delete currentImage;
@@ -79,35 +79,6 @@ void GLWidget::saveImage(){
 void GLWidget::keyPressEvent(QKeyEvent *e){
     int key= e->key();
     switch(key){
-            case Qt::Key_Plus :
-                        zoom*=1.1;
-                        aplyView();
-                        break;
-
-            case Qt::Key_Minus :
-                        zoom/=1.1;
-                        aplyView();
-                        break;
-
-            case Qt::Key_Up :
-                        y+= 20/zoom;
-                        aplyView();
-                        break;
-
-            case Qt::Key_Down :
-                        y-= 20/zoom;
-                        aplyView();
-                        break;
-
-            case Qt::Key_Right :
-                        x+= 20/zoom;
-                        aplyView();
-                        break;
-
-            case Qt::Key_Left :
-                        x-= 20/zoom;
-                        aplyView();
-                        break;
 
             case Qt::Key_Insert :
                         loadImage();

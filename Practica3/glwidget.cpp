@@ -96,22 +96,22 @@ void GLWidget::keyPressEvent(QKeyEvent *e){
                         aplyView();
                         break;
 
-            case Qt::Key_W :
+            case Qt::Key_Up :
                         y+= 20/zoom;
                         aplyView();
                         break;
 
-            case Qt::Key_S :
+            case Qt::Key_Down :
                         y-= 20/zoom;
                         aplyView();
                         break;
 
-            case Qt::Key_D :
+            case Qt::Key_Right :
                         x+= 20/zoom;
                         aplyView();
                         break;
 
-            case Qt::Key_A :
+            case Qt::Key_Left :
                         x-= 20/zoom;
                         aplyView();
                         break;
