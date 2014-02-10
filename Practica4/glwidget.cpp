@@ -96,7 +96,6 @@ void GLWidget::keyPressEvent(QKeyEvent *e){
                         saveImage();
                         break;
 
-
             default:   return;
     }
     repaint();

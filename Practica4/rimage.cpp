@@ -1,5 +1,4 @@
 #include "rimage.h"
-#include <GL/gl.h>
 
 RImage::RImage(QImage* image, float angle0){
     im=image;
@@ -30,7 +29,6 @@ RImage::RImage(QString &path):RImage(new QImage(path)){}
 RImage::~RImage(){
     delete im;
     glDeleteTextures(1, &txt);
-    //delete pixmap;
 }
 
 QSize RImage::size(){
@@ -46,7 +44,6 @@ void RImage::rotate(float degr){
 }
 
 void RImage::paint(unsigned int w, unsigned int h){
-   //glDrawPixels(im->width(), im->height(), GL_BGRA/*GL_RGB*/, GL_UNSIGNED_BYTE, pixmap/*im->bits()*/);
 
     if(!w) w=im->width();
     if(!h) h=im->height();
