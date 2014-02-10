@@ -22,13 +22,14 @@ RImage::RImage(QImage* image, float angle0){
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, col, fil, 0, GL_BGRA, GL_UNSIGNED_BYTE, pixmap);
 
-
+    delete[] pixmap;
 }
 
 RImage::RImage(QString &path):RImage(new QImage(path)){}
 
 RImage::~RImage(){
     delete im;
+    glDeleteTextures(1, &txt);
     //delete pixmap;
 }
 
