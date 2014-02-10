@@ -36,7 +36,10 @@ void GLWidget::paintGL(){
     if(selection){
           glColor3f(0,1,1);
           selection->paint();
-          renderText(selection->pib.x, selection->pib.y, 0, QString::number(selection->angle(),0,3)+"º", QFont("Arial", 12, QFont::Bold, false) );
+          //degrees display
+          renderText(selection->pib.x, selection->pib.y, 0,
+                     QString::number(selection->angle(),0,3)+"º",
+                     QFont("Arial", 12, QFont::Bold, false) );
     }
 
 }

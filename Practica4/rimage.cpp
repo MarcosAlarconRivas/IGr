@@ -4,12 +4,24 @@
 RImage::RImage(QImage* image, float angle0){
     im=image;
     rotation=angle0;
-    pixmap= new QRgb [im->height()*im->width()];
+    QRgb *pixmap= new QRgb [im->height()*im->width()];
     int fil =im->height();
     int col =im->width();
     for(int f=0; f<fil; f++)
         for(int c=0; c<col; c++)
             pixmap[f*col+c]=im->pixel(c, fil-f-1);
+
+    // allocate a texture name
+    glGenTextures( 1, &txt );
+
+    // select our current texture
+    glBindTexture(GL_TEXTURE_2D, txt);
+
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, col, fil, 0, GL_BGRA, GL_UNSIGNED_BYTE, pixmap);
+
 
 }
 
@@ -17,7 +29,7 @@ RImage::RImage(QString &path):RImage(new QImage(path)){}
 
 RImage::~RImage(){
     delete im;
-    delete pixmap;
+    //delete pixmap;
 }
 
 QSize RImage::size(){
@@ -32,8 +44,32 @@ void RImage::rotate(float degr){
     rotation -= div*360;
 }
 
-void RImage::paint(){
-    glDrawPixels(im->width(), im->height(), GL_BGRA/*GL_RGB*/, GL_UNSIGNED_BYTE, pixmap/*im->bits()*/);
+void RImage::paint(unsigned int w, unsigned int h){
+   //glDrawPixels(im->width(), im->height(), GL_BGRA/*GL_RGB*/, GL_UNSIGNED_BYTE, pixmap/*im->bits()*/);
+
+    if(!w) w=im->width();
+    if(!h) h=im->height();
+    int x=w/2, y=h/2;
+    //glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    glEnable(GL_TEXTURE_2D);
+
+    // select our current texture
+    glBindTexture(GL_TEXTURE_2D, txt);
+    glPushMatrix();
+       glLoadIdentity();
+       glColor3f(1,1,1);
+       glRotated(rotation, 0, 0, 1);
+       glBegin(GL_QUADS);
+           glTexCoord2f(0,0); glVertex2f(-x,-y);
+           glTexCoord2f(1,0); glVertex2f( x,-y);
+           glTexCoord2f(1,1); glVertex2f( x, y);
+           glTexCoord2f(0,1); glVertex2f(-x, y);
+       glEnd();
+    glPopMatrix();
+
+    glDisable(GL_TEXTURE_2D);
+    glBindTexture(GL_TEXTURE_2D, 0);
 }
 
 bool RImage::save(const QString & fileName, const char * format, int quality){
