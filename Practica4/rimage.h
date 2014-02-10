@@ -13,6 +13,7 @@ public:
     void paint(unsigned wth=0, unsigned hth=0);
     bool save(const QString & fileName, const char * format = 0, int quality = -1 );
     QSize size();
+    inline float angle(){return rotation;}
 protected:
     double rotation;
     QImage *im;

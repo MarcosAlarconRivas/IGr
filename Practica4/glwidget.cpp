@@ -123,9 +123,10 @@ void GLWidget::mouseMoveEvent(QMouseEvent * event ){
 void GLWidget::mouseReleaseEvent(QMouseEvent * event ){
     if(event->button()!=Qt::LeftButton || ! selection)return;
 
-    if(currentImage)
+    if(currentImage){
         currentImage->rotate(selection->angle());
-
+        ((QWidget*)parent())->setWindowTitle(QString::number(currentImage->angle(),0,1)+"º");
+    }
     delete selection;
     selection=0;
     repaint();
