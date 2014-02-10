@@ -11,6 +11,7 @@ class GLWidget : public QGLWidget{
 
 public:
     GLWidget(QWidget *parent);
+   ~GLWidget();
 
 protected:
     GLfloat x, y;

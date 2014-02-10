@@ -18,6 +18,11 @@ GLWidget::GLWidget(QWidget *parent)
     selection=0; currentImage=0;
 }
 
+GLWidget::~GLWidget(){
+    delete selection;
+    delete currentImage;
+}
+
 void GLWidget::initializeGL(){
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 }
