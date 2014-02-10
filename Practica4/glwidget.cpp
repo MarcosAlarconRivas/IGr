@@ -61,9 +61,9 @@ void GLWidget::aplyView(){
 void GLWidget::loadImage(){
     QString fileName = QFileDialog::getOpenFileName(this, tr("Open File"),"", tr("Images (*.*)"));
     currentImage = new RImage(fileName);
-    resize(currentImage->size());
+    //resize(currentImage->size());
     ((QWidget*)parent())->setWindowTitle(fileName);
-    ((QWidget*)parent())->resize(size());
+    ((QWidget*)parent())->resize(/*this->*/currentImage->size());
 }
 
 void GLWidget::saveImage(){
@@ -115,7 +115,8 @@ void GLWidget::mouseMoveEvent(QMouseEvent * event ){
 void GLWidget::mouseReleaseEvent(QMouseEvent * event ){
     if(event->button()!=Qt::LeftButton || ! selection)return;
 
-    //TODO girar imagen
+    if(currentImage)
+        currentImage->rotate(selection->angle());
 
     delete selection;
     selection=0;
