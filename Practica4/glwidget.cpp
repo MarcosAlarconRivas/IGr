@@ -1,5 +1,6 @@
 #include "glwidget.h"
 #include <QFileDialog> //open file dialog
+#include "window.h"
 
 GLWidget::GLWidget(QWidget *parent)
     : QGLWidget(QGLFormat(QGL::SampleBuffers), parent){
@@ -70,10 +71,10 @@ void GLWidget::loadImage(){
     QString fileName = QFileDialog::getOpenFileName(this, tr("Open File"),"", tr("Images (*.*)"));
     currentImage = new RImage(fileName);
     QWidget* p= ((QWidget*)parent());
-    p->setWindowTitle(fileName);
-    QMargins m= p->contentsMargins();
     resize(currentImage->size());
-    p->resize(width()+m.right()+m.left(),height()+m.bottom()+m.top());
+    p->setWindowTitle(fileName);
+    //TODO automatice margins (currently 25px)
+    p->resize(width()+25,height()+25);
 }
 
 void GLWidget::saveImage(){
