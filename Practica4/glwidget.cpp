@@ -69,9 +69,11 @@ void GLWidget::aplyView(){
 void GLWidget::loadImage(){
     QString fileName = QFileDialog::getOpenFileName(this, tr("Open File"),"", tr("Images (*.*)"));
     currentImage = new RImage(fileName);
-    //resize(currentImage->size());
-    ((QWidget*)parent())->setWindowTitle(fileName);
-    ((QWidget*)parent())->resize(/*this->*/currentImage->size());
+    QWidget* p= ((QWidget*)parent());
+    p->setWindowTitle(fileName);
+    QMargins m= p->contentsMargins();
+    resize(currentImage->size());
+    p->resize(width()+m.right()+m.left(),height()+m.bottom()+m.top());
 }
 
 void GLWidget::saveImage(){
