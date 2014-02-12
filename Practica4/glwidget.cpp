@@ -91,7 +91,8 @@ void GLWidget::keyPressEvent(QKeyEvent *e){
     int key= e->key();
     switch(key){
 
-            case Qt::Key_Insert :
+            case Qt::Key_Insert:
+            case Qt::Key_L:
                         loadImage();
                         break;
 
