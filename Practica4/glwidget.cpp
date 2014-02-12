@@ -16,7 +16,7 @@ GLWidget::GLWidget(QWidget *parent)
     zoom=1; x=0; y=0;
 
     //crear los objetos de la escena
-    selection=0; currentImage=0;
+    selection=0; currentImage=0; frame=0;
 }
 
 GLWidget::~GLWidget(){
@@ -41,6 +41,27 @@ void GLWidget::paintGL(){
           renderText(selection->pib.x, selection->pib.y, 0,
                      QString::number(selection->angle(),0,3)+"º",
                      QFont("Arial", 12, QFont::Bold, false) );
+    }
+
+    if(frame){
+        glColor3f(0,1,0);
+        float w= width(), h=height();
+        glBegin(GL_LINES);
+            glVertex2f( w, 0);
+            glVertex2f(-w, 0);
+            glVertex2f( 0, h);
+            glVertex2f( 0,-h);
+        glEnd();
+        if(currentImage){
+            w= currentImage->size().width()/2;
+            h= currentImage->size().height()/2;
+            glBegin(GL_LINE_LOOP);
+                glVertex2f(-w,-h);
+                glVertex2f( w,-h);
+                glVertex2f( w, h);
+                glVertex2f(-w, h);
+            glEnd();
+        }
     }
 
 }
@@ -97,6 +118,10 @@ void GLWidget::keyPressEvent(QKeyEvent *e){
 
             case Qt::Key_S :
                         saveImage();
+                        break;
+
+            case Qt::Key_Space :
+                        frame = !frame;
                         break;
 
             default:   return;

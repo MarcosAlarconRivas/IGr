@@ -18,6 +18,7 @@ protected:
     GLfloat zoom;
     Selection* selection;
     RImage *currentImage;
+    bool frame;
 
     void initializeGL();
     void paintGL();

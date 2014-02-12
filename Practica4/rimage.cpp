@@ -66,8 +66,10 @@ bool RImage::save(const QString & fileName, const char * format, int quality){
     unsigned nCols= im->width(), nRows = im->height();
     int x= -nRows/2, y= -nCols/2;
 
-    glPixelStorei(GL_PACK_ALIGNMENT, //Cómo se leen los píxeles
-                                   1); //sin padding entre filas
+    //glReadBuffer(GL_BACK);
+
+    //glPixelStorei(GL_PACK_ALIGNMENT, //Cómo se leen los píxeles
+                                   //1); //sin padding entre filas
     for(unsigned f=0; f<nRows; f++){
 
         uchar* fila= im->scanLine(f);
