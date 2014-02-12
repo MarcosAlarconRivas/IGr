@@ -63,5 +63,22 @@ void RImage::paint(unsigned int w, unsigned int h){
 }
 
 bool RImage::save(const QString & fileName, const char * format, int quality){
+    unsigned nCols= im->width(), nRows = im->height();
+    int x= -nRows/2, y= -nCols/2;
+
+    glPixelStorei(GL_PACK_ALIGNMENT, //Cómo se leen los píxeles
+                                   1); //sin padding entre filas
+    for(unsigned f=0; f<nRows; f++){
+
+        uchar* fila= im->scanLine(f);
+
+        glReadPixels(x, y+f, //esquina inferior‐izquierda del bloque,
+                           //usando coordenadas OpenGL de la ventana
+                    nCols, 1, //tamaño del bloque
+                    GL_BGRA, //datos a leer: buffer de color, de
+                            //profundidad, componente alpha...
+                    GL_UNSIGNED_BYTE, //tipo de los datos
+                    fila); //destino
+    }
     return im->save(fileName, format, quality);
 }
