@@ -16,7 +16,7 @@ GLWidget::GLWidget(QWidget *parent)
     zoom=1; x=0; y=0;
 
     //crear los objetos de la escena
-    selection=0; currentImage=0; frame=0;
+    selection=0; currentImage=0; frame=0; fixed_size=0;
 }
 
 GLWidget::~GLWidget(){
@@ -31,8 +31,12 @@ void GLWidget::initializeGL(){
 void GLWidget::paintGL(){
     glClear(GL_COLOR_BUFFER_BIT);
 
-    if(currentImage)
-        currentImage->paint();
+    if(currentImage){
+        if(fixed_size)
+            currentImage->paint();
+        else
+            currentImage->paint(width(), height());
+    }
 
     if(selection){
           glColor3f(0,1,1);
@@ -100,7 +104,6 @@ void GLWidget::loadImage(QString fileName){
 
 void GLWidget::saveImage(){
     QString fileName =QFileDialog::getSaveFileName(this, tr("Save Image"), "output.png", tr("Images (*.png)"));
-    //save currentImage to flileName
     if(currentImage->save(fileName))
         loadImage(fileName);
 }
@@ -122,6 +125,17 @@ void GLWidget::keyPressEvent(QKeyEvent *e){
 
             case Qt::Key_Space :
                         frame = !frame;
+                        break;
+
+            case Qt::Key_Shift :
+                        fixed_size = !fixed_size;
+                        break;
+
+            case Qt::Key_0 :
+                        if(currentImage && currentImage->angle()){
+                            currentImage->setAngle(0);
+                            ((QWidget*)parent())->setWindowTitle(tr("Practica4"));
+                        }
                         break;
 
             default:   return;

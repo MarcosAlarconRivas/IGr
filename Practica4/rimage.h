@@ -10,6 +10,7 @@ public:
     RImage(QString &path);
    ~RImage();
     void rotate(float angle);
+    void setAngle(float angle);
     void paint(unsigned wth=0, unsigned hth=0);
     bool save(const QString & fileName, const char * format = 0, int quality = -1 );
     QSize size();

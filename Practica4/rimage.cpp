@@ -35,6 +35,13 @@ void RImage::rotate(float degr){
     rotation -= div*360;
 }
 
+void RImage::setAngle(float degr){
+    int div= degr/360;
+    degr -= div*360;
+    rotation = degr;
+}
+
+
 void RImage::paint(unsigned int w, unsigned int h){
 
     if(!w) w=im->width();
