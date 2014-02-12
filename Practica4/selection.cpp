@@ -13,8 +13,16 @@ void Selection::setV(V2d v){
   pib= centro; pib.x += rad;
 }
 
-float Selection::angle() {
+float Selection::angle()const{
     return std::abs(360* atan2(curr.x - pib.x, curr.y - pib.y)/ M_PI);
+}
+
+V2d Selection::pibt()const{
+    return pib;
+}
+
+V2d Selection::cent()const{
+    return centro;
 }
 
 void Selection::paint()const{

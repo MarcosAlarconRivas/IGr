@@ -42,7 +42,8 @@ void GLWidget::paintGL(){
           glColor3f(0,1,1);
           selection->paint();
           //degrees display
-          renderText(selection->pib.x, selection->pib.y, 0,
+          V2d pib= selection->pibt();
+          renderText(pib.x, pib.y, 0,
                      QString::number(selection->angle(),0,3)+"º",
                      QFont("Arial", 12, QFont::Bold, false) );
     }
