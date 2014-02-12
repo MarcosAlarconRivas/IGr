@@ -67,8 +67,8 @@ void GLWidget::aplyView(){
              y-(height()/2)/zoom, y+(height()/2)/zoom, -1, 1);
 }
 
-void GLWidget::loadImage(){
-    QString fileName = QFileDialog::getOpenFileName(this, tr("Open File"),"", tr("Images (*.*)"));
+void GLWidget::loadImage(QString fileName){
+    delete currentImage;
     currentImage = new RImage(fileName);
     QWidget* p= ((QWidget*)parent());
     resize(currentImage->size());
@@ -78,13 +78,10 @@ void GLWidget::loadImage(){
 }
 
 void GLWidget::saveImage(){
-    QString fileName =QFileDialog::getSaveFileName(this, tr("Save Image"), "", tr("Images (*.png)"));
+    QString fileName =QFileDialog::getSaveFileName(this, tr("Save Image"), "output.png", tr("Images (*.png)"));
     //save currentImage to flileName
-    if(currentImage->save(fileName)){
-        delete currentImage;
-        currentImage =0;
-        ((QWidget*)parent())->setWindowTitle("Practica 4");
-    }
+    if(currentImage->save(fileName))
+        loadImage(fileName);
 }
 
 void GLWidget::keyPressEvent(QKeyEvent *e){
@@ -93,7 +90,9 @@ void GLWidget::keyPressEvent(QKeyEvent *e){
 
             case Qt::Key_Insert:
             case Qt::Key_L:
-                        loadImage();
+                        loadImage(QFileDialog::getOpenFileName(this,
+                                    tr("Open File"),"",tr("Images (*.*)"))
+                                  );
                         break;
 
             case Qt::Key_S :
@@ -102,6 +101,8 @@ void GLWidget::keyPressEvent(QKeyEvent *e){
 
             default:   return;
     }
+    delete selection;
+    selection=0;
     repaint();
 }
 
