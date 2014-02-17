@@ -154,7 +154,7 @@ void GLWidget::keyPressEvent(QKeyEvent *e){
                         if(!currentImage)
                             currentImage= new RImage(width(), height());
 
-                        currentImage->updateBuff(GL_BACK);
+
                         break;
             }
 

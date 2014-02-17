@@ -77,10 +77,8 @@ void RImage::readBuffer(unsigned width, unsigned height, V2d center){
     int x= -nRows/2 + center.x, y= -nCols/2 + center.y;
 
     for(unsigned f=0; f<nRows; f++){
-
         uchar* fila= im->scanLine(f);
-
-        glReadPixels(x, y+f, //esquina inferior‐izquierda del bloque,
+        glReadPixels(x, y,//+f //esquina inferior‐izquierda del bloque,
                            //usando coordenadas OpenGL de la ventana
                     nCols, 1, //tamaño del bloque
                     GL_RGBA, //datos a leer: buffer de color, de
@@ -100,7 +98,11 @@ void RImage::updateBuff(int glBuff, unsigned width, unsigned height, V2d center)
     glReadBuffer(glBuff);
         readBuffer(width, height, center);
     glReadBuffer(b);
+
     setup();
+    /*QImage *updated= im;
+    im =0;
+    (*this) = RImage(updated);*/
 }
 
 bool RImage::save(const QString & fileName, const char * format, int quality){
