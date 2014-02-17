@@ -1,6 +1,7 @@
 #include "glwidget.h"
 #include <QFileDialog> //open file dialog
 #include "window.h"
+#include "pitagorast.h"
 
 GLWidget::GLWidget(QWidget *parent)
     : QGLWidget(QGLFormat(QGL::SampleBuffers), parent){
@@ -68,7 +69,6 @@ void GLWidget::paintGL(){
             glEnd();
         }
     }
-
 }
 
 void GLWidget::resizeGL(int width, int height){
@@ -101,6 +101,7 @@ void GLWidget::loadImage(QString fileName){
     p->setWindowTitle(fileName);
     //TODO automatice margins (currently 25px)
     p->resize(width()+25,height()+25);
+    fixed_size=1;
 }
 
 void GLWidget::saveImage(){
@@ -138,6 +139,17 @@ void GLWidget::keyPressEvent(QKeyEvent *e){
                             ((QWidget*)parent())->setWindowTitle(tr("Practica4"));
                         }
                         break;
+
+            case Qt::Key_T :{
+                        PitagorasT tree = PitagorasT(-width()/9, -height()*.42, width()/9, -height()*.42);
+                        tree.grow(9);
+                        tree.paint();
+                        if(!currentImage)
+                            currentImage= new RImage(width(), height());
+                        currentImage->readBuffer();
+                        break;
+
+            }
 
             default:   return;
     }

@@ -1,16 +1,10 @@
 #include "rimage.h"
 
 RImage::RImage(QImage* image, float angle0){
-    /*if(image){
-        im= new QImage(image->convertToFormat(QImage::Format_RGB32));
-        delete image;
-    }*/
     im= image;
     rotation=angle0;
 
-    // allocate a texture name
     glGenTextures( 1, &txt );
-
     glBindTexture(GL_TEXTURE_2D, txt);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
@@ -19,6 +13,8 @@ RImage::RImage(QImage* image, float angle0){
 }
 
 RImage::RImage(QString &path):RImage(new QImage(path)){}
+
+RImage::RImage(unsigned w, unsigned h):RImage(new QImage(w, h, QImage::Format_ARGB32)){}
 
 RImage::~RImage(){
     delete im;
@@ -71,9 +67,13 @@ void RImage::paint(unsigned int w, unsigned int h){
     glBindTexture(GL_TEXTURE_2D, 0);
 }
 
-bool RImage::save(const QString & fileName, const char * format, int quality){
-    unsigned nCols= im->width(), nRows = im->height();
-    int x= -nRows/2, y= -nCols/2;
+void RImage::readBuffer(unsigned width, unsigned height, V2d center){
+    //if(!im)im= new QImage(width, height);
+    unsigned nCols= width ? width  : im->width();
+    unsigned nRows= height? height : im->height();
+    int x= -nRows/2 + center.x, y= -nCols/2 + center.y;
+
+    //glReadBuffer(GL_BACK);
 
     for(unsigned f=0; f<nRows; f++){
 
@@ -87,5 +87,10 @@ bool RImage::save(const QString & fileName, const char * format, int quality){
                     GL_UNSIGNED_BYTE, //tipo de los datos
                     fila); //destino
     }
+
+}
+
+bool RImage::save(const QString & fileName, const char * format, int quality){
+    readBuffer();
     return im->save(fileName, format, quality);
 }
