@@ -1,15 +1,9 @@
 #include "rimage.h"
 
 RImage::RImage(QImage* image, float angle0){
-    im= image;
     rotation=angle0;
-
-    glGenTextures( 1, &txt );
-    glBindTexture(GL_TEXTURE_2D, txt);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, im->width(), im->height(), 0, GL_BGRA, GL_UNSIGNED_BYTE, im->bits());
-    glBindTexture(GL_TEXTURE_2D,0);
+    im=image;
+    setup();
 }
 
 RImage::RImage(QString &path):RImage(new QImage(path)){}
@@ -19,6 +13,16 @@ RImage::RImage(unsigned w, unsigned h):RImage(new QImage(w, h, QImage::Format_AR
 RImage::~RImage(){
     delete im;
     glDeleteTextures(1, &txt);
+}
+
+void RImage::setup(){
+    glDeleteTextures(1, &txt);
+    glGenTextures( 1, &txt );
+    glBindTexture(GL_TEXTURE_2D, txt);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, im->width(), im->height(), 0, GL_BGRA, GL_UNSIGNED_BYTE, im->bits());
+    glBindTexture(GL_TEXTURE_2D,0);
 }
 
 QSize RImage::size(){
@@ -68,12 +72,9 @@ void RImage::paint(unsigned int w, unsigned int h){
 }
 
 void RImage::readBuffer(unsigned width, unsigned height, V2d center){
-    //if(!im)im= new QImage(width, height);
     unsigned nCols= width ? width  : im->width();
     unsigned nRows= height? height : im->height();
     int x= -nRows/2 + center.x, y= -nCols/2 + center.y;
-
-    //glReadBuffer(GL_BACK);
 
     for(unsigned f=0; f<nRows; f++){
 
@@ -87,7 +88,19 @@ void RImage::readBuffer(unsigned width, unsigned height, V2d center){
                     GL_UNSIGNED_BYTE, //tipo de los datos
                     fila); //destino
     }
+}
 
+void RImage::updateBuff(int glBuff, unsigned width, unsigned height, V2d center){
+    if(im&&!width)width=im->width();
+    if(im&&!height)height=im->height();
+    if(im)delete im;
+    im= new QImage(width, height, QImage::Format_ARGB32);
+    int b;
+    glGetIntegerv(GL_READ_BUFFER, &b);
+    glReadBuffer(glBuff);
+        readBuffer(width, height, center);
+    glReadBuffer(b);
+    setup();
 }
 
 bool RImage::save(const QString & fileName, const char * format, int quality){

@@ -12,13 +12,15 @@ public:
    ~RImage();
     void rotate(float angle);
     void setAngle(float angle);
-    void paint(unsigned wth=0, unsigned hth=0);
+    void paint(unsigned width=0, unsigned height=0);
     void readBuffer(unsigned width=0, unsigned height=0, V2d center=V2d());
+    void updateBuff(int glBuff=1029, unsigned width=0, unsigned height=0, V2d center=V2d());
     bool save(const QString& fileName, const char* format =0, int quality =-1);
     QSize size();
     inline float angle(){return rotation;}
 protected:
     RImage(QImage* image=0, float rotation=0);
+    void setup();
     double rotation;
     QImage *im;
     GLuint txt;

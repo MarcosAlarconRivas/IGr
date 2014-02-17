@@ -114,7 +114,6 @@ void GLWidget::keyPressEvent(QKeyEvent *e){
     int key= e->key();
     switch(key){
 
-            case Qt::Key_Insert:
             case Qt::Key_L:
                         loadImage(QFileDialog::getOpenFileName(this,
                                     tr("Open File"),"",tr("Images (*.*)"))
@@ -143,13 +142,30 @@ void GLWidget::keyPressEvent(QKeyEvent *e){
             case Qt::Key_T :{
                         PitagorasT tree = PitagorasT(-width()/9, -height()*.42, width()/9, -height()*.42);
                         tree.grow(9);
-                        tree.paint();
+
+                        /*int b;
+                        //GL_BACK=1029;
+                        //GL_FRONT=1028;
+                        glGetIntegerv(GL_DRAW_BUFFER, &b);
+                        glDrawBuffer(GL_BACK);*/
+                            tree.paint();
+                        //glDrawBuffer(b);
+
                         if(!currentImage)
                             currentImage= new RImage(width(), height());
-                        currentImage->readBuffer();
-                        break;
 
+                        currentImage->updateBuff(GL_BACK);
+                        break;
             }
+
+            case Qt::Key_Delete :
+                    if(currentImage){
+                        delete currentImage;
+                        currentImage =0;
+                        ((QWidget*)parent())->setWindowTitle(tr("Practica4"));
+                    }
+                    break;
+
 
             default:   return;
     }
