@@ -47,15 +47,13 @@ void TImage::rotate(float degr, V2d o){
         glLoadMatrixf(transf);
         glTranslatef(o.x, o.y, 0);
         glRotatef(degr, 0, 0, 1);
-        glTranslatef(-o.x, -o.y, 0);
+       // glTranslatef(-o.x, -o.y, 0);
         glGetFloatv(GL_MODELVIEW, transf);
     glPopMatrix();
 
-
-    /*std::printf("\n\n\n");
     for(int i=0; i<16; i++)
-        std::printf("%f%s", transf[i], i%4?",":"\n");
-    std::printf("\n\n\n");*/
+        std::printf("%f%s", transf[i], (i+1)%4?",":"\n");
+    std::printf("\n");
 
 }
 
@@ -77,10 +75,7 @@ void TImage::paint(unsigned int w, unsigned int h){
     glBindTexture(GL_TEXTURE_2D, txt);
     glColor3f(1,1,1);
     glPushMatrix();
-
-       glRotatef(rotation, 0, 0, 1);
-       //glMultMatrixf(transf);
-
+       glMultMatrixf(transf);
        glBegin(GL_QUADS);
            glTexCoord2f(0,1); glVertex2f(-x,-y);
            glTexCoord2f(1,1); glVertex2f( x,-y);
