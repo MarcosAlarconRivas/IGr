@@ -1,6 +1,6 @@
-#include "rimage.h"
+#include "timage.h"
 
-RImage::RImage(QImage* image, float angle0){
+TImage::TImage(QImage* image, float angle0){
     rotation=angle0;
     if(image->format()==QImage::Format_ARGB32)
         im=image;
@@ -11,16 +11,16 @@ RImage::RImage(QImage* image, float angle0){
     setup();
 }
 
-RImage::RImage(QString &path):RImage(new QImage(path)){}
+TImage::TImage(QString &path):TImage(new QImage(path)){}
 
-RImage::RImage(unsigned w, unsigned h):RImage(new QImage(w, h, QImage::Format_ARGB32)){}
+TImage::TImage(unsigned w, unsigned h):TImage(new QImage(w, h, QImage::Format_ARGB32)){}
 
-RImage::~RImage(){
+TImage::~TImage(){
     delete im;
     glDeleteTextures(1, &txt);
 }
 
-void RImage::setup(){
+void TImage::setup(){
     glDeleteTextures(1, &txt);
     glGenTextures( 1, &txt );
     glBindTexture(GL_TEXTURE_2D, txt);
@@ -30,26 +30,27 @@ void RImage::setup(){
     glBindTexture(GL_TEXTURE_2D,0);
 }
 
-QSize RImage::size(){
+QSize TImage::size(){
     if(im)return im->size();
     return QSize(0,0);
 }
 
-void RImage::rotate(float degr){
+void TImage::rotate(float degr, V2d o){
     rotation += degr;
     //rotation %= 360;
     int div= rotation/360;
     rotation -= div*360;
+
+
 }
 
-void RImage::setAngle(float degr){
-    int div= degr/360;
-    degr -= div*360;
-    rotation = degr;
+void TImage::resetPosition(){
+    rotation = 0;
+
 }
 
 
-void RImage::paint(unsigned int w, unsigned int h){
+void TImage::paint(unsigned int w, unsigned int h){
 
     if(!w) w=im->width();
     if(!h) h=im->height();
@@ -63,7 +64,7 @@ void RImage::paint(unsigned int w, unsigned int h){
     glPushMatrix();
        glLoadIdentity();
        glColor3f(1,1,1);
-       glRotated(rotation, 0, 0, 1);
+       //glMultMatrixf(transf);
        glBegin(GL_QUADS);
            glTexCoord2f(0,1); glVertex2f(-x,-y);
            glTexCoord2f(1,1); glVertex2f( x,-y);
@@ -76,7 +77,7 @@ void RImage::paint(unsigned int w, unsigned int h){
     glBindTexture(GL_TEXTURE_2D, 0);
 }
 
-void RImage::readBuffer(unsigned width, unsigned height, V2d orig){
+void TImage::readBuffer(unsigned width, unsigned height, V2d orig){
     unsigned nCols= width ? width  : im->width();
     unsigned nRows= height? height : im->height();
     //int x= -nRows/2 + center.x, y= -nCols/2 + center.y;
@@ -92,7 +93,7 @@ void RImage::readBuffer(unsigned width, unsigned height, V2d orig){
     }
 }
 
-void RImage::updateBuff(int glBuff, unsigned width, unsigned height, V2d center){
+void TImage::updateBuff(int glBuff, unsigned width, unsigned height, V2d center){
     if(im&&!width)width=im->width();
     if(im&&!height)height=im->height();
     if(im)delete im;
@@ -104,12 +105,9 @@ void RImage::updateBuff(int glBuff, unsigned width, unsigned height, V2d center)
     glReadBuffer(b);
 
     setup();
-    /*QImage *updated= im;
-    im =0;
-    (*this) = RImage(updated);*/
 }
 
-bool RImage::save(const QString & fileName, const char * format, int quality){
+bool TImage::save(const QString & fileName, const char * format, int quality){
     readBuffer();
     return im->save(fileName, format, quality);
 }

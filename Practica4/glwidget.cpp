@@ -95,7 +95,7 @@ void GLWidget::aplyView(){
 
 void GLWidget::loadImage(QString fileName){
     delete currentImage;
-    currentImage = new RImage(fileName);
+    currentImage = new TImage(fileName);
     QWidget* p= ((QWidget*)parent());
     resize(currentImage->size());
     p->setWindowTitle(fileName);
@@ -134,7 +134,7 @@ void GLWidget::keyPressEvent(QKeyEvent *e){
 
             case Qt::Key_0 :
                         if(currentImage && currentImage->angle()){
-                            currentImage->setAngle(0);
+                            currentImage->resetPosition();
                             ((QWidget*)parent())->setWindowTitle(tr("Practica4"));
                         }
                         break;
@@ -155,7 +155,7 @@ void GLWidget::keyPressEvent(QKeyEvent *e){
 
                         //if(!currentImage)
                         delete currentImage;
-                        currentImage= new RImage(width(), height());
+                        currentImage= new TImage(width(), height());
                         currentImage->updateBuff();
 
                         break;
