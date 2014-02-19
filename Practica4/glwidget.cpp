@@ -140,20 +140,9 @@ void GLWidget::keyPressEvent(QKeyEvent *e){
                         break;
 
             case Qt::Key_T :{
-                        PitagorasT tree = PitagorasT(-width()/9, -height()*.42, width()/9, -height()*.42);
+                        PitagorasT tree = PitagorasT(-width()*.1, -height()*.44, width()*.1, -height()*.44);
                         tree.grow(9);
-
-                        /*int b;
-                        //GL_BACK=1029;
-                        //GL_FRONT=1028;
-                        glGetIntegerv(GL_DRAW_BUFFER, &b);
-                        glDrawBuffer(GL_BACK);*/
-
                         tree.paint();
-
-                        //glDrawBuffer(b);
-
-                        //if(!currentImage)
                         delete currentImage;
                         currentImage= new TImage(width(), height());
                         currentImage->updateBuff();
@@ -199,7 +188,7 @@ void GLWidget::mouseReleaseEvent(QMouseEvent * event ){
     if(event->button()!=Qt::LeftButton || ! selection)return;
 
     if(currentImage){
-        currentImage->rotate(selection->angle());
+        currentImage->rotate(selection->angle(), selection->cent());
         ((QWidget*)parent())->setWindowTitle(QString::number(currentImage->angle(),0,1)+"º");
     }
     delete selection;

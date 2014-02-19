@@ -19,7 +19,7 @@ public:
     QSize size();
     inline float angle(){return rotation;}
 protected:
-    TImage(QImage* image=0, float rotation=0);
+    TImage(QImage* image=0);
     void setup();
     double rotation;
     float* transf;

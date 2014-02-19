@@ -1,7 +1,9 @@
 #include "timage.h"
 
-TImage::TImage(QImage* image, float angle0){
-    rotation=angle0;
+TImage::TImage(QImage* image){
+    transf=0;
+    resetPosition();
+
     if(image->format()==QImage::Format_ARGB32)
         im=image;
     else{
@@ -37,16 +39,30 @@ QSize TImage::size(){
 
 void TImage::rotate(float degr, V2d o){
     rotation += degr;
-    //rotation %= 360;
     int div= rotation/360;
     rotation -= div*360;
 
+    glMatrixMode(GL_MODELVIEW);
+    glPushMatrix();
+        glLoadMatrixf(transf);
+        glTranslatef(o.x, o.y, 0);
+        glRotatef(degr, 0, 0, 1);
+        glTranslatef(-o.x, -o.y, 0);
+        glGetFloatv(GL_MODELVIEW, transf);
+    glPopMatrix();
+
+
+    /*std::printf("\n\n\n");
+    for(int i=0; i<16; i++)
+        std::printf("%f%s", transf[i], i%4?",":"\n");
+    std::printf("\n\n\n");*/
 
 }
 
 void TImage::resetPosition(){
-    rotation = 0;
-
+    rotation=0;
+    if(transf)delete[] transf;
+    transf= new float[16]{1,0,0,0, 0,1,0,0, 0,0,1,0, 0,0,0,1};
 }
 
 
@@ -58,13 +74,13 @@ void TImage::paint(unsigned int w, unsigned int h){
     //glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     glEnable(GL_TEXTURE_2D);
-
-    // select our current texture
     glBindTexture(GL_TEXTURE_2D, txt);
+    glColor3f(1,1,1);
     glPushMatrix();
-       glLoadIdentity();
-       glColor3f(1,1,1);
+
+       glRotatef(rotation, 0, 0, 1);
        //glMultMatrixf(transf);
+
        glBegin(GL_QUADS);
            glTexCoord2f(0,1); glVertex2f(-x,-y);
            glTexCoord2f(1,1); glVertex2f( x,-y);
@@ -72,15 +88,14 @@ void TImage::paint(unsigned int w, unsigned int h){
            glTexCoord2f(0,0); glVertex2f(-x, y);
        glEnd();
     glPopMatrix();
-
     glDisable(GL_TEXTURE_2D);
-    glBindTexture(GL_TEXTURE_2D, 0);
+    //glBindTexture(GL_TEXTURE_2D, 0);
 }
 
 void TImage::readBuffer(unsigned width, unsigned height, V2d orig){
     unsigned nCols= width ? width  : im->width();
     unsigned nRows= height? height : im->height();
-    //int x= -nRows/2 + center.x, y= -nCols/2 + center.y;
+
     int x = orig.x, y = orig.y;
     for(unsigned f=0; f<nRows; ++f){
         uchar* fila= im->scanLine(nRows-f-1);
