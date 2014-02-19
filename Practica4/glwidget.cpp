@@ -148,12 +148,15 @@ void GLWidget::keyPressEvent(QKeyEvent *e){
                         //GL_FRONT=1028;
                         glGetIntegerv(GL_DRAW_BUFFER, &b);
                         glDrawBuffer(GL_BACK);*/
-                            tree.paint();
+
+                        tree.paint();
+
                         //glDrawBuffer(b);
 
-                        if(!currentImage)
-                            currentImage= new RImage(width(), height());
-
+                        //if(!currentImage)
+                        delete currentImage;
+                        currentImage= new RImage(width(), height());
+                        currentImage->updateBuff();
 
                         break;
             }

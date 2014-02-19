@@ -13,7 +13,7 @@ public:
     void rotate(float angle);
     void setAngle(float angle);
     void paint(unsigned width=0, unsigned height=0);
-    void readBuffer(unsigned width=0, unsigned height=0, V2d center=V2d());
+    void readBuffer(unsigned width=0, unsigned height=0, V2d orig=V2d());
     void updateBuff(int glBuff=1029, unsigned width=0, unsigned height=0, V2d center=V2d());
     bool save(const QString& fileName, const char* format =0, int quality =-1);
     QSize size();

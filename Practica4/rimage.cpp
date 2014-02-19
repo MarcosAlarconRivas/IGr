@@ -2,7 +2,12 @@
 
 RImage::RImage(QImage* image, float angle0){
     rotation=angle0;
-    im=image;
+    if(image->format()==QImage::Format_ARGB32)
+        im=image;
+    else{
+        im= new QImage(image->convertToFormat(QImage::Format_ARGB32));
+        delete image;
+    }
     setup();
 }
 
@@ -71,17 +76,16 @@ void RImage::paint(unsigned int w, unsigned int h){
     glBindTexture(GL_TEXTURE_2D, 0);
 }
 
-void RImage::readBuffer(unsigned width, unsigned height, V2d center){
+void RImage::readBuffer(unsigned width, unsigned height, V2d orig){
     unsigned nCols= width ? width  : im->width();
     unsigned nRows= height? height : im->height();
-    int x= -nRows/2 + center.x, y= -nCols/2 + center.y;
-
-    for(unsigned f=0; f<nRows; f++){
-        uchar* fila= im->scanLine(f);
-        glReadPixels(x, y,//+f //esquina inferior‐izquierda del bloque,
-                           //usando coordenadas OpenGL de la ventana
+    //int x= -nRows/2 + center.x, y= -nCols/2 + center.y;
+    int x = orig.x, y = orig.y;
+    for(unsigned f=0; f<nRows; ++f){
+        uchar* fila= im->scanLine(nRows-f-1);
+        glReadPixels(x, y+f, //esquina inferior‐izquierda del bloque,
                     nCols, 1, //tamaño del bloque
-                    GL_RGBA, //datos a leer: buffer de color, de
+                    GL_BGRA, //datos a leer: buffer de color, de
                             //profundidad, componente alpha...
                     GL_UNSIGNED_BYTE, //tipo de los datos
                     fila); //destino
