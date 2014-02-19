@@ -94,6 +94,7 @@ void GLWidget::aplyView(){
 }
 
 void GLWidget::loadImage(QString fileName){
+    if(fileName=="")return;
     delete currentImage;
     currentImage = new TImage(fileName);
     QWidget* p= ((QWidget*)parent());
@@ -106,6 +107,7 @@ void GLWidget::loadImage(QString fileName){
 
 void GLWidget::saveImage(){
     QString fileName =QFileDialog::getSaveFileName(this, tr("Save Image"), "output.png", tr("Images (*.png)"));
+    if(fileName=="")return;
     if(currentImage->save(fileName))
         loadImage(fileName);
 }
