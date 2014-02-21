@@ -99,7 +99,7 @@ void GLWidget::loadImage(QString fileName){
     currentImage = new TImage(fileName);
     QWidget* p= ((QWidget*)parent());
     resize(currentImage->size());
-    p->setWindowTitle(fileName);
+    p->setWindowTitle(fileName);//setTitle(fileName);
     //TODO automatice margins (currently 25px)
     p->resize(width()+25,height()+25);
     fixed_size=1;
@@ -110,6 +110,10 @@ void GLWidget::saveImage(){
     if(fileName=="")return;
     if(currentImage->save(fileName))
         loadImage(fileName);
+}
+
+void GLWidget::setTitle(QString s){
+    ((QWidget*)parent())->setWindowTitle(s);
 }
 
 void GLWidget::keyPressEvent(QKeyEvent *e){
@@ -137,7 +141,7 @@ void GLWidget::keyPressEvent(QKeyEvent *e){
             case Qt::Key_0 :
                         if(currentImage && currentImage->angle()){
                             currentImage->resetPosition();
-                            ((QWidget*)parent())->setWindowTitle(tr("Practica4"));
+                            setTitle();
                         }
                         break;
 
@@ -148,7 +152,7 @@ void GLWidget::keyPressEvent(QKeyEvent *e){
                         delete currentImage;
                         currentImage= new TImage(width(), height());
                         currentImage->updateBuff();
-
+                        setTitle();
                         break;
             }
 
@@ -156,7 +160,7 @@ void GLWidget::keyPressEvent(QKeyEvent *e){
                     if(currentImage){
                         delete currentImage;
                         currentImage =0;
-                        ((QWidget*)parent())->setWindowTitle(tr("Practica4"));
+                        setTitle();
                     }
                     break;
 
@@ -191,7 +195,7 @@ void GLWidget::mouseReleaseEvent(QMouseEvent * event ){
 
     if(currentImage){
         currentImage->rotate(selection->angle(), selection->cent());
-        ((QWidget*)parent())->setWindowTitle(QString::number(currentImage->angle(),0,1)+"º");
+        setTitle(QString::number(currentImage->angle(),0,1)+"º");
     }
     delete selection;
     selection=0;

@@ -6,6 +6,8 @@
 #include "selection.h"
 #include "timage.h"
 
+#define PROG_NAME "Practica4"
+
 class GLWidget : public QGLWidget{
     Q_OBJECT
 
@@ -29,6 +31,8 @@ protected:
     void mouseReleaseEvent(QMouseEvent * event );
 
 private:
+    QString deffParntTit;
+    void setTitle(QString s=PROG_NAME);
     void aplyView();
     V2d calcle(int x, int y);
     void loadImage(QString name);

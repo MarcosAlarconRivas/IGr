@@ -4,7 +4,7 @@
 #include <QtOpenGL>
 
 Window::Window(){
-    setWindowTitle(tr("Practica4"));
+    setWindowTitle(PROG_NAME);
 
     GLWidget *openGL = new GLWidget(this);
     QHBoxLayout *mainLayout = new QHBoxLayout;
