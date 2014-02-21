@@ -1,4 +1,17 @@
 #include "timage.h"
+#include <cmath>
+
+static float* multMx(float m1[16], float m2[16]){
+    float* r = new float[16];
+    int pos=0;
+    for(int f=0; f<16; f+=4)
+        for(int c=0; c<4; c++)
+            r[pos++]= m1[f]*m2[c] +m1[f+1]*m2[c+4] +m1[f+2]*m2[c+8] +m1[f+3]*m2[c+12];
+
+    delete m1;
+    delete m2;
+    return r;
+}
 
 TImage::TImage(QImage* image){
     transf=0;
@@ -37,19 +50,26 @@ QSize TImage::size(){
     return QSize(0,0);
 }
 
-void TImage::rotate(float degr, V2d o){
-    rotation += degr;
+void TImage::rotate(float deg, V2d o){
+    rotation += deg;
     int div= rotation/360;
     rotation -= div*360;
 
-    glMatrixMode(GL_MODELVIEW);
+    double rad= M_PI * deg/180;
+    float x = o.x, y = o.y;
+    float s= sin(rad), c= cos(rad);
+
+    /*glMatrixMode(GL_MODELVIEW);
     glPushMatrix();
         glLoadMatrixf(transf);
         glTranslatef(o.x, o.y, 0);
         glRotatef(degr, 0, 0, 1);
-       // glTranslatef(-o.x, -o.y, 0);
+        glTranslatef(-o.x, -o.y, 0);
         glGetFloatv(GL_MODELVIEW, transf);
-    glPopMatrix();
+    glPopMatrix();*/
+
+    transf = multMx(transf, new float[16]{c,-s,0,x, s,c,0,y, 0,0,1,0, 0,0,0,1});
+    transf = multMx(transf, new float[16]{1,0,0,-x, 0,1,0,-y, 0,0,1,0, 0,0,0,1});
 
     for(int i=0; i<16; i++)
         std::printf("%f%s", transf[i], (i+1)%4?",":"\n");
@@ -75,16 +95,28 @@ void TImage::paint(unsigned int w, unsigned int h){
     glBindTexture(GL_TEXTURE_2D, txt);
     glColor3f(1,1,1);
     glPushMatrix();
-       glMultMatrixf(transf);
-       glBegin(GL_QUADS);
+
+    //glMultMatrixf(transf);
+    glMultTransposeMatrixf(transf);
+    /*glTranslatef(-100,-100,0);
+    glRotatef(60,0,0,1);
+    glTranslatef(100,100,0);*/
+        glBegin(GL_QUADS);
            glTexCoord2f(0,1); glVertex2f(-x,-y);
            glTexCoord2f(1,1); glVertex2f( x,-y);
            glTexCoord2f(1,0); glVertex2f( x, y);
            glTexCoord2f(0,0); glVertex2f(-x, y);
        glEnd();
     glPopMatrix();
+
     glDisable(GL_TEXTURE_2D);
     //glBindTexture(GL_TEXTURE_2D, 0);
+
+    /*glColor3f(1,1,1);
+    glBegin(GL_LINES);
+     glVertex2f(0,0);
+     glVertex2f(-100,-100);
+    glEnd();*/
 }
 
 void TImage::readBuffer(unsigned width, unsigned height, V2d orig){
