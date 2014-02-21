@@ -56,27 +56,14 @@ void TImage::rotate(float deg, V2d o){
     rotation -= div*360;
 
     double rad= M_PI * deg/180;
-    float x = o.x, y = o.y;
+    float x= o.x, y= o.y;
     float s= sin(rad), c= cos(rad);
 
-    /*glMatrixMode(GL_MODELVIEW);
-    glPushMatrix();
-        glLoadMatrixf(transf);
-        glTranslatef(o.x, o.y, 0);
-        glRotatef(degr, 0, 0, 1);
-        glTranslatef(-o.x, -o.y, 0);
-        glGetFloatv(GL_MODELVIEW, transf);
-    glPopMatrix();*/
-
-    transf = multMx(transf, new float[16]
-            {   c,  -s,  0,  x -x*c +y*s,
-                s,   c,  0,  y -x*s -y*c,
-                0,   0,  1,  0,
-                0,   0,  0,  1          });
-
-    /*for(int i=0; i<16; i++)
-        std::printf("%f%s", transf[i], (i+1)%4?",":"\n");
-    std::printf("\n");*/
+    transf = multMx(new float[16]
+                {c,  -s,  0,  x -x*c +y*s,
+                 s,   c,  0,  y -x*s -y*c,
+                 0,   0,  1,  0,
+                 0,   0,  0,  1            }, transf);
 
 }
 
@@ -119,10 +106,9 @@ void TImage::readBuffer(unsigned width, unsigned height, V2d orig){
     int x = orig.x, y = orig.y;
     for(unsigned f=0; f<nRows; ++f){
         uchar* fila= im->scanLine(nRows-f-1);
-        glReadPixels(x, y+f, //esquina inferior‐izquierda del bloque,
+        glReadPixels(x, y+f, //esquina inferior‐izquierda del bloque
                     nCols, 1, //tamaño del bloque
-                    GL_BGRA, //datos a leer: buffer de color, de
-                            //profundidad, componente alpha...
+                    GL_BGRA, //formato
                     GL_UNSIGNED_BYTE, //tipo de los datos
                     fila); //destino
     }
