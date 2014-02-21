@@ -68,12 +68,15 @@ void TImage::rotate(float deg, V2d o){
         glGetFloatv(GL_MODELVIEW, transf);
     glPopMatrix();*/
 
-    transf = multMx(transf, new float[16]{c,-s,0,x, s,c,0,y, 0,0,1,0, 0,0,0,1});
-    transf = multMx(transf, new float[16]{1,0,0,-x, 0,1,0,-y, 0,0,1,0, 0,0,0,1});
+    transf = multMx(transf, new float[16]
+            {   c,  -s,  0,  x -x*c +y*s,
+                s,   c,  0,  y -x*s -y*c,
+                0,   0,  1,  0,
+                0,   0,  0,  1          });
 
-    for(int i=0; i<16; i++)
+    /*for(int i=0; i<16; i++)
         std::printf("%f%s", transf[i], (i+1)%4?",":"\n");
-    std::printf("\n");
+    std::printf("\n");*/
 
 }
 
@@ -95,12 +98,7 @@ void TImage::paint(unsigned int w, unsigned int h){
     glBindTexture(GL_TEXTURE_2D, txt);
     glColor3f(1,1,1);
     glPushMatrix();
-
-    //glMultMatrixf(transf);
-    glMultTransposeMatrixf(transf);
-    /*glTranslatef(-100,-100,0);
-    glRotatef(60,0,0,1);
-    glTranslatef(100,100,0);*/
+        glMultTransposeMatrixf(transf);
         glBegin(GL_QUADS);
            glTexCoord2f(0,1); glVertex2f(-x,-y);
            glTexCoord2f(1,1); glVertex2f( x,-y);
@@ -112,11 +110,6 @@ void TImage::paint(unsigned int w, unsigned int h){
     glDisable(GL_TEXTURE_2D);
     //glBindTexture(GL_TEXTURE_2D, 0);
 
-    /*glColor3f(1,1,1);
-    glBegin(GL_LINES);
-     glVertex2f(0,0);
-     glVertex2f(-100,-100);
-    glEnd();*/
 }
 
 void TImage::readBuffer(unsigned width, unsigned height, V2d orig){
