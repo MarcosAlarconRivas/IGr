@@ -121,39 +121,37 @@ void GLWidget::keyPressEvent(QKeyEvent *e){
     switch(key){
 
             case Qt::Key_L:
-                        loadImage(QFileDialog::getOpenFileName(this,
-                                    tr("Open File"),"",tr("Images (*.*)"))
-                                  );
-                        break;
+                    loadImage(QFileDialog::getOpenFileName(this,tr("Open File"),"",tr("Images (*.*)")));
+                    break;
 
             case Qt::Key_S :
-                        saveImage();
-                        break;
+                    saveImage();
+                    break;
 
             case Qt::Key_Space :
-                        frame = !frame;
-                        break;
+                    frame = !frame;
+                    break;
 
             case Qt::Key_Shift :
-                        fixed_size = !fixed_size;
-                        break;
+                    fixed_size = !fixed_size;
+                    break;
 
             case Qt::Key_0 :
-                        if(currentImage && currentImage->angle()){
-                            currentImage->resetPosition();
-                            setTitle();
-                        }
-                        break;
+                    if(currentImage && currentImage->angle()){
+                        currentImage->resetPosition();
+                        setTitle();
+                    }
+                    break;
 
             case Qt::Key_T :{
-                        PitagorasT tree = PitagorasT(-width()*.1, -height()*.44, width()*.1, -height()*.44);
-                        tree.grow(9);
-                        tree.paint();
-                        delete currentImage;
-                        currentImage= new TImage(width(), height());
-                        currentImage->updateBuff();
-                        setTitle();
-                        break;
+                    PitagorasT tree = PitagorasT(-width()*.1, -height()*.44, width()*.1, -height()*.44);
+                    tree.grow(9);
+                    tree.paint();
+                    delete currentImage;
+                    currentImage= new TImage(width(), height());
+                    currentImage->updateBuff();
+                    setTitle();
+                    break;
             }
 
             case Qt::Key_Delete :
@@ -164,6 +162,30 @@ void GLWidget::keyPressEvent(QKeyEvent *e){
                     }
                     break;
 
+            case Qt::Key_Plus :{
+                    QString f=QFileDialog::getOpenFileName(this,tr("Open File"),"",tr("Images (*.*)"));
+                    if(f=="")return;
+
+                    if(!currentImage){
+                        loadImage(f);
+                        break;
+                    }
+                    currentImage->add(QImage(f));
+                    setTitle();
+                    break;
+            }
+
+            case Qt::Key_Minus :{
+                    if(!currentImage)return;
+                    QString f=QFileDialog::getOpenFileName(this,tr("Open File"),"",tr("Images (*.*)"));
+                    if(f=="")return;
+                    currentImage->sub(QImage(f));
+                    break;
+            }
+
+            case Qt::Key_G :
+                    if(currentImage)currentImage->gaussianFilter();
+                    break;
 
             default:   return;
     }
