@@ -1,18 +1,6 @@
 #include "timage.h"
 #include <cmath>
 
-static float* multMx(float m1[16], float m2[16]){
-    float* r = new float[16];
-    int pos=0;
-    for(int f=0; f<16; f+=4)
-        for(int c=0; c<4; c++)
-            r[pos++]= m1[f]*m2[c] +m1[f+1]*m2[c+4] +m1[f+2]*m2[c+8] +m1[f+3]*m2[c+12];
-
-    delete m1;
-    delete m2;
-    return r;
-}
-
 TImage::TImage(QImage* image){
     transf=0;
     resetPosition();
@@ -52,20 +40,40 @@ QSize TImage::size(){
 
 void TImage::rotate(float deg, V2d o){
     rotation += deg;
-    int div= rotation/360;
-    rotation -= div*360;
+    rotation -= 360*((int)rotation/360);
 
     double rad= M_PI * deg/180;
     float x= o.x, y= o.y;
     float s= sin(rad), c= cos(rad);
 
-    transf = multMx(new float[16]
+    /*transf = multMx(new float[16]
                 {c,  -s,  0,  x -x*c +y*s,
                  s,   c,  0,  y -x*s -y*c,
                  0,   0,  1,  0,
-                 0,   0,  0,  1            }, transf);
+                 0,   0,  0,  1            }, transf);*/
+
+    float t00=transf[0], t01=transf[1], t03=transf[3];
+    float t10=transf[4], t11=transf[5], t13=transf[7];
+    transf[0]=t00*c -t10*s;
+    transf[1]=t01*c -t11*s;
+    transf[4]=t00*s +t10*c;
+    transf[5]=t01*s +t11*c;
+    transf[3]=t03*c -t13*s +x-x*c+y*s;
+    transf[7]=t03*s +t13*c +y-x*s-y*c;
 
 }
+
+/*static float* multMx(float m1[16], float m2[16]){
+    float* r = new float[16];
+    int pos=0;
+    for(int f=0; f<16; f+=4)
+        for(int c=0; c<4; c++)
+            r[pos++]= m1[f]*m2[c] +m1[f+1]*m2[c+4] +m1[f+2]*m2[c+8] +m1[f+3]*m2[c+12];
+
+    delete m1;
+    delete m2;
+    return r;
+}*/
 
 void TImage::resetPosition(){
     rotation=0;
