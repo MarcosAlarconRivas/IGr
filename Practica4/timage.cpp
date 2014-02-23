@@ -141,18 +141,57 @@ bool TImage::save(const QString & fileName, const char * format, int quality){
 }
 
 void TImage::add(QImage i){
+    i.alphaChannel();
 
+}
 
+static uchar Yvalue(unsigned rgb){
+  if(!rgb)return rgb;
+  uchar r= rgb & 0xff;
+  uchar g= rgb & 0xff00;
+  uchar b= rgb & 0xff0000;
+  return (uchar)( 0.299*r + 0.586*g + 0.114*b);
+}
+
+static unsigned getSUB(unsigned i1, unsigned i2){
+    int diff= ((int)Yvalue(i1)) - ((int)Yvalue(i2));
+    uchar y = diff<0 ? -diff : diff;
+    return (unsigned) (y | y << 8 | y << 16);
 }
 
 void TImage::sub(QImage i){
-    QImage a= im->convertToFormat(QImage::Format_Indexed8);
-    i = i.convertToFormat(QImage::Format_Indexed8);
+    unsigned w1=im->width(), w2=i.width();
+    unsigned h1=im->height(), h2=i.height();
 
+    unsigned width, x1, x2;
+    if(w1<w2){
+        width= w1;
+        x1= 0;
+        x2= (w2-w1)/2;
+    }else{
+        width= w2;
+        x2= 0;
+        x1= (w1-w2)/2;
+    }
 
+    unsigned height, y1 ,y2;
+    if(h1<h2){
+        height= h1;
+        y1= 0;
+        y2= (h2-h1)/2;
+    }else{
+        height= h2;
+        y2= 0;
+        y1= (h1-h2)/2;
+    }
+
+    for(unsigned x=0, c1=x1, c2=x2; x<width; x++, c1++, c2++)
+        for(unsigned y=0, r1=y1, r2=y2; y<height; y++, r1++, r2++)
+            im->setPixel(c1, r1, getSUB(im->pixel(c1,r1), i.pixel(c2,r2)));
+    setup();
 }
 
-static QRgb getGAUSS(const QImage &orig, unsigned rage, int x, int y){
+static QRgb getGAUSS(const QImage &orig, unsigned rage, unsigned x, unsigned y){
     unsigned r=0, g=0, b=0, k=0;
     int iL= x-rage, iR= x+rage, iB= y-rage, iT= y+rage;
     unsigned left= iL<0 ?0 : iL, right= iR<orig.width() ?iR :orig.width()-1;
@@ -171,9 +210,9 @@ static QRgb getGAUSS(const QImage &orig, unsigned rage, int x, int y){
 
 void TImage::gaussianFilter(unsigned rage){
     QImage* copy= new QImage(im->copy());
-    int width= copy->width(), height= copy->height();
-    for(int x=0; x<width; x++)
-        for(int y=0; y<height; y++)
+    unsigned width= copy->width(), height= copy->height();
+    for(unsigned x=0; x<width; x++)
+        for(unsigned y=0; y<height; y++)
                 copy->setPixel(x, y, getGAUSS(*im, rage, x, y));
     delete im;
     im= copy;
