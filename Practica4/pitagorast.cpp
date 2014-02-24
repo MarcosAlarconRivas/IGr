@@ -1,8 +1,8 @@
 #include "pitagorast.h"
 #include <GL/gl.h>
 
-const float PitagorasT::colR[]={0.5,0.12,0};
-const float PitagorasT::colH[]={0,0.8,0};
+const float PitagorasT::colR[]={0.3,0.1,0};
+const float PitagorasT::colH[]={0,1,0};
 
 PitagorasT::PitagorasT(float x0, float y0, float x1, float y1){
     vector<cuadrado> rootLvl;

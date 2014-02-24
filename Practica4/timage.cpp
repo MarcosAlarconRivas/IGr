@@ -181,7 +181,8 @@ void TImage::op(QImage i, unsigned(*f)(unsigned, unsigned)){
         for(unsigned y=0, r1=y1, r2=y2; y<height; y++, r1++, r2++)
             im->setPixel(c1, r1, f(im->pixel(c1,r1), i.pixel(c2,r2)));
     setup();
-
+    delete auxIm;
+    auxIm=0;
 }
 
 static unsigned getAVG(unsigned c1, unsigned c2){
@@ -231,6 +232,8 @@ void TImage::gaussianFilter(unsigned rage){
     delete im;
     im= copy;
     setup();
+    delete auxIm;
+    auxIm=0;
 }
 
 QImage* TImage::edges(){
