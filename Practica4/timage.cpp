@@ -29,7 +29,7 @@ void TImage::setup(){
     glBindTexture(GL_TEXTURE_2D, txt);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, im->width(), im->height(), 0, GL_BGRA, GL_UNSIGNED_BYTE, im->bits());
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, im->width(), im->height(), 0, GL_BGRA, GL_UNSIGNED_BYTE, im->bits());
     glBindTexture(GL_TEXTURE_2D,0);
 }
 
@@ -81,7 +81,7 @@ void TImage::resetPosition(){
     transf= new float[16]{1,0,0,0, 0,1,0,0, 0,0,1,0, 0,0,0,1};
 }
 
-void TImage::paint(unsigned int w, unsigned int h){
+void TImage::paint(unsigned int w, unsigned int h, float alpha){
 
     if(!w) w=im->width();
     if(!h) h=im->height();
@@ -89,8 +89,9 @@ void TImage::paint(unsigned int w, unsigned int h){
     //glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     glEnable(GL_TEXTURE_2D);
+    glEnable(GL_BLEND);
     glBindTexture(GL_TEXTURE_2D, txt);
-    glColor3f(1,1,1);
+    glColor4f(1,1,1,alpha);
     glPushMatrix();
         glMultTransposeMatrixf(transf);
         glBegin(GL_QUADS);
@@ -100,7 +101,7 @@ void TImage::paint(unsigned int w, unsigned int h){
            glTexCoord2f(0,0); glVertex2f(-x, y);
        glEnd();
     glPopMatrix();
-
+    glDisable(GL_BLEND);
     glDisable(GL_TEXTURE_2D);
     //glBindTexture(GL_TEXTURE_2D, 0);
 
@@ -140,11 +141,6 @@ bool TImage::save(const QString & fileName, const char * format, int quality){
     return im->save(fileName, format, quality);
 }
 
-void TImage::add(QImage i){
-    i.alphaChannel();
-
-}
-
 static uchar Yvalue(unsigned rgb){
   if(!rgb)return rgb;
   uchar r= rgb & 0xff;
@@ -153,13 +149,7 @@ static uchar Yvalue(unsigned rgb){
   return (uchar)( 0.299*r + 0.586*g + 0.114*b);
 }
 
-static unsigned getSUB(unsigned i1, unsigned i2){
-    int diff= ((int)Yvalue(i1)) - ((int)Yvalue(i2));
-    uchar y = diff<0 ? -diff : diff;
-    return (unsigned) (y | y << 8 | y << 16);
-}
-
-void TImage::sub(QImage i){
+void TImage::op(QImage i, unsigned(*f)(unsigned, unsigned)){
     unsigned w1=im->width(), w2=i.width();
     unsigned h1=im->height(), h2=i.height();
 
@@ -187,8 +177,30 @@ void TImage::sub(QImage i){
 
     for(unsigned x=0, c1=x1, c2=x2; x<width; x++, c1++, c2++)
         for(unsigned y=0, r1=y1, r2=y2; y<height; y++, r1++, r2++)
-            im->setPixel(c1, r1, getSUB(im->pixel(c1,r1), i.pixel(c2,r2)));
+            im->setPixel(c1, r1, f(im->pixel(c1,r1), i.pixel(c2,r2)));
     setup();
+
+}
+
+static unsigned getAVG(unsigned c1, unsigned c2){
+   unsigned r= (((c1 & 0xff)+(c2 & 0xff))/2)&0xff;
+   unsigned g= (((c1 & 0xff00)+(c2 & 0xff00))/2)&0xff00;
+   unsigned b= (((c1 & 0xff0000)+(c2 & 0xff0000))/2)&0xff0000;
+   return r | g | b;
+}
+
+void TImage::add(QImage i){
+    op(i,getAVG);
+}
+
+static unsigned getSUB(unsigned i1, unsigned i2){
+    int diff= ((int)Yvalue(i1)) - ((int)Yvalue(i2));
+    uchar y = diff<0 ? -diff : diff;
+    return (unsigned) (y | y << 8 | y << 16);
+}
+
+void TImage::sub(QImage i){
+    op(i,getSUB);
 }
 
 static QRgb getGAUSS(const QImage &orig, unsigned rage, unsigned x, unsigned y){

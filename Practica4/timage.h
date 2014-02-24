@@ -12,7 +12,7 @@ public:
    ~TImage();
     void rotate(float angle, V2d center=V2d());
     void resetPosition();
-    void paint(unsigned width=0, unsigned height=0);
+    void paint(unsigned width=0, unsigned height=0, float alpha=1);
     bool save(const QString& fileName, const char* format =0, int quality =-1);
     void readBuffer(unsigned width=0, unsigned height=0, V2d orig=V2d());
     void updateBuff(int glBuff=1029, unsigned width=0, unsigned height=0, V2d center=V2d());
@@ -20,6 +20,7 @@ public:
     QSize size();
     inline float angle(){return rotation;}
 
+    void op(QImage i, unsigned(*f)(unsigned, unsigned));
     void add(QImage i);
     void sub(QImage i);
     void gaussianFilter(unsigned rage=1);
