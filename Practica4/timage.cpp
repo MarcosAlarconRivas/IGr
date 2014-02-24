@@ -2,6 +2,7 @@
 #include <cmath>
 
 TImage::TImage(QImage* image){
+    auxIm=0;
     transf=0;
     resetPosition();
 
@@ -20,6 +21,7 @@ TImage::TImage(unsigned w, unsigned h):TImage(new QImage(w, h, QImage::Format_AR
 
 TImage::~TImage(){
     delete im;
+    delete auxIm;
     glDeleteTextures(1, &txt);
 }
 
@@ -81,7 +83,7 @@ void TImage::resetPosition(){
     transf= new float[16]{1,0,0,0, 0,1,0,0, 0,0,1,0, 0,0,0,1};
 }
 
-void TImage::paint(unsigned int w, unsigned int h, float alpha){
+void TImage::paint(unsigned int w, unsigned int h){
 
     if(!w) w=im->width();
     if(!h) h=im->height();
@@ -91,7 +93,7 @@ void TImage::paint(unsigned int w, unsigned int h, float alpha){
     glEnable(GL_TEXTURE_2D);
     glEnable(GL_BLEND);
     glBindTexture(GL_TEXTURE_2D, txt);
-    glColor4f(1,1,1,alpha);
+    glColor3f(1,1,1);
     glPushMatrix();
         glMultTransposeMatrixf(transf);
         glBegin(GL_QUADS);
@@ -228,5 +230,29 @@ void TImage::gaussianFilter(unsigned rage){
                 copy->setPixel(x, y, getGAUSS(*im, rage, x, y));
     delete im;
     im= copy;
+    setup();
+}
+
+QImage* TImage::edges(){
+   int w=im->width(), h=im->height();
+   QImage* edg= new QImage(w,h, QImage::Format_ARGB32);
+   for(int x=0; x<w; x++){
+       int x1=x>1?x-1:0,x2= x<w-1?x+1:x;
+       for(int y=0; y<h; y++){
+         int y1=y>1?y-1:0,y2= y<h-1?y+1:y;
+         unsigned p = im->pixel(x,y);
+         p = ((getSUB( p,im->pixel(x1,y) )& getSUB( p,im->pixel(x2,y)) )
+             |(getSUB( p,im->pixel(x,y1) )& getSUB( p,im->pixel(x,y2)) ));
+         edg->setPixel(x,y, p?0:0xffffff);
+       }
+   }
+   return edg;
+}
+
+void TImage::switchToEdges(){
+    if(!auxIm) auxIm= edges();
+    QImage* x= auxIm;
+    auxIm= im;
+    im= x;
     setup();
 }

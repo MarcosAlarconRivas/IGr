@@ -187,6 +187,10 @@ void GLWidget::keyPressEvent(QKeyEvent *e){
                     if(currentImage)currentImage->gaussianFilter();
                     break;
 
+            case Qt::Key_E :
+                    if(currentImage)currentImage->switchToEdges();
+                    break;
+
             default:   return;
     }
     delete selection;
