@@ -25,7 +25,7 @@ TImage::~TImage(){
     glDeleteTextures(1, &txt);
 }
 
-void TImage::setup(){
+void TImage::setup(bool clearAux){
     glDeleteTextures(1, &txt);
     glGenTextures( 1, &txt );
     glBindTexture(GL_TEXTURE_2D, txt);
@@ -33,6 +33,10 @@ void TImage::setup(){
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, im->width(), im->height(), 0, GL_BGRA, GL_UNSIGNED_BYTE, im->bits());
     glBindTexture(GL_TEXTURE_2D,0);
+    if(clearAux){
+        delete auxIm;
+        auxIm=0;
+    }
 }
 
 QSize TImage::size(){
@@ -91,7 +95,6 @@ void TImage::paint(unsigned int w, unsigned int h){
     //glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     glEnable(GL_TEXTURE_2D);
-    glEnable(GL_BLEND);
     glBindTexture(GL_TEXTURE_2D, txt);
     glColor3f(1,1,1);
     glPushMatrix();
@@ -103,7 +106,6 @@ void TImage::paint(unsigned int w, unsigned int h){
            glTexCoord2f(0,0); glVertex2f(-x, y);
        glEnd();
     glPopMatrix();
-    glDisable(GL_BLEND);
     glDisable(GL_TEXTURE_2D);
     //glBindTexture(GL_TEXTURE_2D, 0);
 
@@ -181,8 +183,6 @@ void TImage::op(QImage i, unsigned(*f)(unsigned, unsigned)){
         for(unsigned y=0, r1=y1, r2=y2; y<height; y++, r1++, r2++)
             im->setPixel(c1, r1, f(im->pixel(c1,r1), i.pixel(c2,r2)));
     setup();
-    delete auxIm;
-    auxIm=0;
 }
 
 static unsigned getAVG(unsigned c1, unsigned c2){
@@ -232,8 +232,6 @@ void TImage::gaussianFilter(unsigned rage){
     delete im;
     im= copy;
     setup();
-    delete auxIm;
-    auxIm=0;
 }
 
 QImage* TImage::edges(uchar d){
@@ -257,5 +255,5 @@ void TImage::switchToEdges(){
     QImage* x= auxIm;
     auxIm= im;
     im= x;
-    setup();
+    setup(0);
 }

@@ -188,6 +188,7 @@ void GLWidget::keyPressEvent(QKeyEvent *e){
                     break;
 
             case Qt::Key_E :
+            case Qt::Key_Tab :
                     if(currentImage)currentImage->switchToEdges();
                     break;
 

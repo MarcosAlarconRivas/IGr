@@ -28,7 +28,7 @@ public:
     void switchToEdges();
 protected:
     TImage(QImage* image=0);
-    void setup();
+    void setup(bool clearAux=1);
 
     float rotation;
     float* transf;
