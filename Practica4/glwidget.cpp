@@ -187,9 +187,12 @@ void GLWidget::keyPressEvent(QKeyEvent *e){
                     if(currentImage)currentImage->gaussianFilter();
                     break;
 
-            case Qt::Key_E :
             case Qt::Key_Tab :
                     if(currentImage)currentImage->switchToEdges();
+                    break;
+
+            case Qt::Key_E:
+                    if(currentImage)currentImage->seeBorder();
                     break;
 
             default:   return;

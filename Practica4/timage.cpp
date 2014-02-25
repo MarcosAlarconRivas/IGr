@@ -257,3 +257,18 @@ void TImage::switchToEdges(){
     im= x;
     setup(0);
 }
+
+void TImage::seeBorder(){
+    if(!auxIm)auxIm= (edges(0xfc));
+    QImage* orig= im;
+    im =new QImage(im->copy());
+
+    unsigned w= im->width(), h = im->height();
+    for(unsigned x=0; x<w; x++)
+        for(unsigned y=0; y<h; y++)
+            if(!auxIm->pixel(x,y)&0xffffff)
+                im->setPixel(x,y,0xffffff);
+    setup(0);
+    delete im;
+    im = orig;
+}

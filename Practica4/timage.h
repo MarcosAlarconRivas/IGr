@@ -26,6 +26,7 @@ public:
     void sub(QImage i);
     void gaussianFilter(unsigned rage=1);
     void switchToEdges();
+    void seeBorder();
 protected:
     TImage(QImage* image=0);
     void setup(bool clearAux=1);
