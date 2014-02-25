@@ -19,7 +19,7 @@ public:
 
     QSize size();
     inline float angle(){return rotation;}
-    QImage* edges();
+    QImage* edges(uchar d=0xff);
 
     void op(QImage i, unsigned(*f)(unsigned, unsigned));
     void add(QImage i);

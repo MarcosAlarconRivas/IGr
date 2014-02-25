@@ -236,7 +236,7 @@ void TImage::gaussianFilter(unsigned rage){
     auxIm=0;
 }
 
-QImage* TImage::edges(){
+QImage* TImage::edges(uchar d){
    int w=im->width(), h=im->height();
    QImage* edg= new QImage(w,h, QImage::Format_ARGB32);
    for(int x=0; x<w; x++){
@@ -246,14 +246,14 @@ QImage* TImage::edges(){
          unsigned p = im->pixel(x,y);
          p = ((getSUB( p,im->pixel(x1,y) )& getSUB( p,im->pixel(x2,y)) )
              |(getSUB( p,im->pixel(x,y1) )& getSUB( p,im->pixel(x,y2)) ));
-         edg->setPixel(x,y, p?0:0xffffff);
+         edg->setPixel(x,y, p&d ? 0 : 0xffffff);
        }
    }
    return edg;
 }
 
 void TImage::switchToEdges(){
-    if(!auxIm) auxIm= edges();
+    if(!auxIm) auxIm= edges(0xfc);
     QImage* x= auxIm;
     auxIm= im;
     im= x;
