@@ -145,9 +145,9 @@ bool TImage::save(const QString & fileName, const char * format, int quality){
 
 static uchar Yvalue(unsigned rgb){
   if(!rgb)return rgb;
-  uchar r= rgb & 0xff;
-  uchar g= rgb & 0xff00;
-  uchar b= rgb & 0xff0000;
+  uchar b= rgb & 0xff;
+  uchar g= (rgb & 0xff00)>>8;
+  uchar r= (rgb & 0xff0000)>>16;
   return (uchar)( 0.299*r + 0.586*g + 0.114*b);
 }
 
@@ -199,7 +199,7 @@ void TImage::add(QImage i){
 static unsigned getSUB(unsigned i1, unsigned i2){
     int diff= ((int)Yvalue(i1)) - ((int)Yvalue(i2));
     uchar y = diff<0 ? -diff : diff;
-    return (unsigned) (y | y << 8 | y << 16);
+    return (unsigned) (y | y << 8 | y << 16 /* |0xff000000 */);
 }
 
 void TImage::sub(QImage i){
