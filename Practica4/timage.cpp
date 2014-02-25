@@ -143,11 +143,11 @@ bool TImage::save(const QString & fileName, const char * format, int quality){
     return im->save(fileName, format, quality);
 }
 
-static uchar Yvalue(unsigned rgb){
-  if(!rgb)return rgb;
-  uchar b= rgb & 0xff;
-  uchar g= (rgb & 0xff00)>>8;
-  uchar r= (rgb & 0xff0000)>>16;
+static uchar Yvalue(unsigned bgr){
+  if(!bgr)return bgr;
+  uchar r= bgr & 0xff;
+  uchar g= (bgr & 0xff00)>>8;
+  uchar b= (bgr & 0xff0000)>>16;
   return (uchar)( 0.299*r + 0.586*g + 0.114*b);
 }
 
