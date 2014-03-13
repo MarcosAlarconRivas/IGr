@@ -3,6 +3,7 @@
 
 #include <QGLWidget>
 #include <QKeyEvent>
+#include <GL/glu.h>
 
 class GLWidget : public QGLWidget{
     Q_OBJECT
@@ -12,20 +13,17 @@ public:
    ~GLWidget();
 
 protected:
-    GLfloat x, y;
-    GLfloat zoom;
+    GLdouble eye[3], look[3], up[3]; //Camara
+    GLdouble zoom, N, F;  //Volumen de vista
+    GLUquadricObj* esfera;  //Esfera inicial de la escena
 
     void initializeGL();
     void paintGL();
     void resizeGL(int width, int height);
     void keyPressEvent(QKeyEvent *event);
-    void mousePressEvent(QMouseEvent * event );
-    void mouseMoveEvent(QMouseEvent * event );
-    void mouseReleaseEvent(QMouseEvent * event );
 
 private:
     void aplyView();
-    void calcle(float &x, float &y);
 };
 
 #endif
