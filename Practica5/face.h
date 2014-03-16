@@ -6,19 +6,24 @@
 #include "v3d.h"
 using namespace std;
 
-typedef shared_ptr<V3D> vtx;
+typedef struct{
+    V3D vert;
+    V3D norm;
+}vtx;
 
-class Face : public vector<vtx>{
+typedef shared_ptr<vtx> vtx_p;
+
+class Face : public vector<vtx_p>{
     public:
-        vtx  normal;
 
-        Face(unsigned numVert):vector<vtx>(numVert){normal=0;}
+        Face(unsigned numVert):vector<vtx_p>(numVert){}
 
         void paint(bool fill)const{
             glBegin(fill?GL_POLYGON:GL_LINE_LOOP);
                 for(auto v= begin(); v != end(); v++){
-                    glNormal3fv(*normal);
-                    glVertex3fv(**v);
+                    vtx p= **v;
+                    glNormal3fv(p.norm);
+                    glNormal3fv(p.vert);
                 }
             glEnd();
         }

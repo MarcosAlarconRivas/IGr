@@ -8,8 +8,7 @@ class Mesh{
 
     protected:
         vector<Face> face;
-        vector<vtx> vertex;
-        vector<vtx> normal;
+        vector<vtx_p> vertex;
 };
 
 #endif // MESH_H
