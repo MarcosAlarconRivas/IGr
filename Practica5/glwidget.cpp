@@ -76,8 +76,14 @@ void GLWidget::resizeGL(int width, int height){
     aplyView();
 
     glMatrixMode(GL_MODELVIEW);
-     glLoadIdentity();
-     paintGL();
+    glLoadIdentity();
+    paintGL();
+}
+
+void GLWidget::step(){
+    //move
+
+    repaint();
 }
 
 void GLWidget::keyPressEvent(QKeyEvent *e){

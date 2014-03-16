@@ -12,6 +12,9 @@ public:
     GLWidget(QWidget *parent);
    ~GLWidget();
 
+public slots:
+    void step();
+
 protected:
     GLdouble eye[3], look[3], up[3]; //Camara
     GLdouble zoom, N, F;  //Volumen de vista

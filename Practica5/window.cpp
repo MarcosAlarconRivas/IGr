@@ -12,6 +12,10 @@ Window::Window(){
     mainLayout->addWidget(openGL);
     setLayout(mainLayout);
 
+
+    QTimer *timer = new QTimer(this);
+    connect(timer, SIGNAL(timeout()), openGL, SLOT(step()));
+    timer->start(100);
 }
 
 QSize Window::sizeHint() const{
