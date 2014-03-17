@@ -14,19 +14,19 @@ typedef struct{
 typedef shared_ptr<vtx> vtx_p;
 
 class Face : public vector<vtx_p>{
-    public:
+public:
 
-        Face(unsigned numVert):vector<vtx_p>(numVert){}
+    Face(unsigned numVert):vector<vtx_p>(numVert){}
 
-        void paint(bool fill)const{
-            glBegin(fill?GL_POLYGON:GL_LINE_LOOP);
-                for(auto v= begin(); v != end(); v++){
-                    vtx p= **v;
-                    glNormal3fv(p.norm);
-                    glNormal3fv(p.vert);
-                }
-            glEnd();
-        }
+    void paint(bool fill)const{
+        glBegin(fill?GL_POLYGON:GL_LINE_LOOP);
+            for(auto v= begin(); v != end(); v++){
+                vtx p= **v;
+                glNormal3fv(p.norm.v);
+                glNormal3fv(p.vert.v);
+            }
+        glEnd();
+    }
 };
 
 #endif // FACE_H

@@ -3,12 +3,12 @@
 #include "face.h"
 
 class Mesh{
-    public:
-        void paint(bool fill=1)const;
+public:
+    void paint(bool fill=1)const;
 
-    protected:
-        vector<Face> face;
-        vector<vtx_p> vertex;
+protected:
+    vector<Face> face;
+    vector<vtx_p> vertex;
 };
 
 #endif // MESH_H
