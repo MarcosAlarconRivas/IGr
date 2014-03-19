@@ -8,10 +8,11 @@ GLWidget::GLWidget(QWidget *parent)
     setFocus();
 
     //crear los objetos de la escena
-
+    tubo = new Extrusion(2, 6, V3D(0,0,0,1), V3D(0,0,20,1));
 }
 
 GLWidget::~GLWidget(){
+    delete tubo;
 }
 
 void GLWidget::initializeGL(){
@@ -23,6 +24,9 @@ void GLWidget::initializeGL(){
     //   glEnable(GL_DEPTH_TEST);
     glEnable(GL_NORMALIZE);
     glShadeModel(GL_SMOOTH);   //Defecto
+
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     //Cámara
     eye[0]=eye[1]=eye[2] =100;
@@ -53,25 +57,27 @@ void GLWidget::paintGL(){
           glColor4f(1, 0, 0, 1);
           glVertex3f(  0, 0, 0);
           glVertex3f(100, 0, 0);
-          glColor4f(0, 1, 1, 1);
+          glColor4f(1, 0, 0, .2);
           glVertex3f(   0, 0, 0);
           glVertex3f(-100, 0, 0);
 
           glColor4f(0, 1, 0, 1);
           glVertex3f( 0,   0, 0);
           glVertex3f( 0, 100, 0);
-          glColor4f(1, 0, 1, 1);
+          glColor4f(0, 1, 0, .2);
           glVertex3f( 0,    0, 0);
           glVertex3f( 0, -100, 0);
 
           glColor4f(0, 0, 1, 1);
           glVertex3f( 0, 0,  0);
           glVertex3f( 0, 0, 100);
-          glColor4f(1, 1, 0, 1);
+          glColor4f(0, 0, 1, .2);
           glVertex3f( 0, 0, 0);
           glVertex3f( 0, 0, -100);
     glEnd();
 
+    glColor4f(0, 0, 0, .6);
+    tubo->paint(1);
 
 }
 

@@ -3,15 +3,23 @@
 //private fuction to make a regular poligon of @sides points and @rad size
 static vector<v2d>& poligon(unsigned rad, unsigned sides){
     static vector<v2d> pol= vector<v2d>(sides);
-    double inc = 2*M_PI/sides;
-    double alpha=0;
-    for(unsigned i=0; i<sides; i++, alpha+=inc)
-      pol[i]= v2d{ sin(alpha)*rad, cos(alpha)*rad};
 
+    float theta = 2 * M_PI / sides;
+    //precalculate the sine and cosine
+    double c = cos(theta), s = sin(theta);
+    //we start at angle = 0
+    double x =rad, y = 0;
+    for(unsigned i=0; i<sides; i++){
+        pol[i]= v2d{(float) x*rad, (float)y*rad};
+        //apply the rotation matrix
+        double t = x;
+        x = c * x - s * y;
+        y = s * t + c * y;
+    }
     return pol;
 }
 
-static vector<v2d>& normals(const vector<v2d>& cut){
+static vector<v2d>& normals(const vector<v2d>& cut){//TODEBUG
     //calculo de las normales
     unsigned s = cut.size();
     vector<v2d> norm = vector<v2d>(s);
@@ -22,7 +30,7 @@ static vector<v2d>& normals(const vector<v2d>& cut){
         float dx= t.x-p.x + t.x-n.x;
         float dy= t.y-p.y + t.y-n.y;
         float mod= sqrt(dx*dx +dy*dy);
-        norm[i]= v2d{dx/mod, dy/mod};
+        norm[i]= mod ? v2d{dx/mod, dy/mod}: v2d{0,0};
     }
     return norm;
 }
@@ -114,7 +122,7 @@ Extrusion::Extrusion(vector<v2d> cut, V3D t0, V3D tf){
     }
 
     //build faces
-    face= vector<Face>(s);//FIXME
+    face= vector<Face>(s);
     for(unsigned i=0; i<s; i++){
         unsigned j= (i+1)%s;
         Face fa= Face(4);
@@ -124,7 +132,6 @@ Extrusion::Extrusion(vector<v2d> cut, V3D t0, V3D tf){
         fa[3]= vertex[i+s];
         face[i]= fa;
     }
-
 }
 
 

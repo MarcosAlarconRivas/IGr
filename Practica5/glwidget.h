@@ -19,6 +19,7 @@ public slots:
 protected:
     GLdouble eye[3], look[3], up[3]; //Camara
     GLdouble zoom, N, F;  //Volumen de vista
+    Extrusion *tubo;
 
     void initializeGL();
     void paintGL();
