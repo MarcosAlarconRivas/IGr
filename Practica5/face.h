@@ -23,7 +23,7 @@ public:
             for(auto v= begin(); v != end(); v++){
                 vtx p= **v;
                 glNormal3fv(p.norm.v);
-                glNormal3fv(p.vert.v);
+                glVertex3fv(p.vert.v);
             }
         glEnd();
     }
