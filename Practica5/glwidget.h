@@ -4,6 +4,7 @@
 #include <QGLWidget>
 #include <QKeyEvent>
 #include <GL/glu.h>
+#include "extrusion.h"
 
 class GLWidget : public QGLWidget{
     Q_OBJECT
@@ -18,7 +19,6 @@ public slots:
 protected:
     GLdouble eye[3], look[3], up[3]; //Camara
     GLdouble zoom, N, F;  //Volumen de vista
-    GLUquadricObj* esfera;  //Esfera inicial de la escena
 
     void initializeGL();
     void paintGL();

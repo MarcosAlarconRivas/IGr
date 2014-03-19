@@ -1,5 +1,4 @@
 #include "glwidget.h"
-#include "window.h"
 
 GLWidget::GLWidget(QWidget *parent)
     : QGLWidget(QGLFormat(QGL::SampleBuffers), parent){
@@ -8,15 +7,11 @@ GLWidget::GLWidget(QWidget *parent)
     setFocusPolicy(Qt::ClickFocus);
     setFocus();
 
-    //Color de fondo de la ventana
-    glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-
     //crear los objetos de la escena
-    esfera=gluNewQuadric();
+
 }
 
 GLWidget::~GLWidget(){
-    gluDeleteQuadric(esfera);
 }
 
 void GLWidget::initializeGL(){
@@ -25,7 +20,7 @@ void GLWidget::initializeGL(){
 
     glEnable(GL_COLOR_MATERIAL);
     glMaterialf(GL_FRONT, GL_SHININESS, 0.1);
-    glEnable(GL_DEPTH_TEST);
+    //   glEnable(GL_DEPTH_TEST);
     glEnable(GL_NORMALIZE);
     glShadeModel(GL_SMOOTH);   //Defecto
 
@@ -53,37 +48,70 @@ void GLWidget::initializeGL(){
 void GLWidget::paintGL(){
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+    //Dibujo de los ejes
+    glBegin(GL_LINES);
+          glColor4f(1.0, 0.0, 0.0, 1.0);
+          glVertex3f(0.0, 0.0, 0.0);
+          glVertex3f(10.0, 0.0, 0.0);
+
+          glColor4f(0.0, 1.0, 0.0, 1.0);
+          glVertex3f(0.0, 0.0, 0.0);
+          glVertex3f(0.0, 10.0, 0.0);
+
+          glColor4f(0.0, 0.0, 1.0, 1.0);
+          glVertex3f(0.0, 0.0, 0.0);
+          glVertex3f(0.0, 0.0, 10.0);
+    glEnd();
+
     //Dibujo de la esfera blanca
-    glColor3f(1.0, 1.0, 1.0);
+    auto esfera= gluNewQuadric();
     gluQuadricDrawStyle(esfera, GLU_FILL);
+
+    glColor3f(1,0,0);
+    glPushMatrix();
+    glTranslated(33,0,0);
     gluSphere(esfera, 3, 30, 30);
+    glPopMatrix();
+
+    glColor3f(0,1,0);
+    glPushMatrix();
+    glTranslated(0,33,0);
+    gluSphere(esfera, 3, 30, 30);
+    glPopMatrix();
+
+    glColor3f(0,0,1);
+    glPushMatrix();
+    glTranslated(0,0,33);
+    gluSphere(esfera, 3, 30, 30);
+    glPopMatrix();
+
+    glColor3f(1,1,1);
+    gluSphere(esfera, 3, 30, 30);
+    gluDeleteQuadric(esfera);
 
 }
 
 void GLWidget::aplyView(){
-    glMatrixMode(GL_PROJECTION);
-    glLoadIdentity();
-    GLdouble x= .5*width()/zoom, y= .5*height()/zoom;
-    glOrtho(-x, x, -y, y, N, F);
+     glMatrixMode(GL_PROJECTION);
+     glLoadIdentity();
+
+     float z= 2*zoom;
+     GLdouble x= width()/z, y= height()/z;
+     glOrtho(-x, x,-y, y, N, F);
+     glMatrixMode(GL_MODELVIEW);
 }
 
 void GLWidget::resizeGL(int width, int height){
-
     //se actualiza puerto de vista
     glViewport(0,0,width,height);
 
-    // se actualiza el volumen de vista
     aplyView();
-
-    glMatrixMode(GL_MODELVIEW);
-    glLoadIdentity();
-    paintGL();
 }
 
 void GLWidget::step(){
     //move
 
-    repaint();
+    //repaint();
 }
 
 void GLWidget::keyPressEvent(QKeyEvent *e){
