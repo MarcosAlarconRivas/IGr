@@ -33,7 +33,7 @@ void GLWidget::initializeGL(){
     gluLookAt(eye[0], eye[1], eye[2], look[0], look[1], look[2], up[0], up[1], up[2]);
 
     //Volumen de vista
-    N=1; F=1000; zoom=20;
+    N=1; F=1000; zoom=12;
 
     //Luz0
     glEnable(GL_LIGHT0);
@@ -48,46 +48,30 @@ void GLWidget::initializeGL(){
 void GLWidget::paintGL(){
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    //Dibujo de los ejes
+    //Axis draw
     glBegin(GL_LINES);
-          glColor4f(1.0, 0.0, 0.0, 1.0);
-          glVertex3f(0.0, 0.0, 0.0);
-          glVertex3f(10.0, 0.0, 0.0);
+          glColor4f(1, 0, 0, 1);
+          glVertex3f(  0, 0, 0);
+          glVertex3f(100, 0, 0);
+          glColor4f(0, 1, 1, 1);
+          glVertex3f(   0, 0, 0);
+          glVertex3f(-100, 0, 0);
 
-          glColor4f(0.0, 1.0, 0.0, 1.0);
-          glVertex3f(0.0, 0.0, 0.0);
-          glVertex3f(0.0, 10.0, 0.0);
+          glColor4f(0, 1, 0, 1);
+          glVertex3f( 0,   0, 0);
+          glVertex3f( 0, 100, 0);
+          glColor4f(1, 0, 1, 1);
+          glVertex3f( 0,    0, 0);
+          glVertex3f( 0, -100, 0);
 
-          glColor4f(0.0, 0.0, 1.0, 1.0);
-          glVertex3f(0.0, 0.0, 0.0);
-          glVertex3f(0.0, 0.0, 10.0);
+          glColor4f(0, 0, 1, 1);
+          glVertex3f( 0, 0,  0);
+          glVertex3f( 0, 0, 100);
+          glColor4f(1, 1, 0, 1);
+          glVertex3f( 0, 0, 0);
+          glVertex3f( 0, 0, -100);
     glEnd();
 
-    //Dibujo de la esfera blanca
-    auto esfera= gluNewQuadric();
-    gluQuadricDrawStyle(esfera, GLU_FILL);
-
-    glColor3f(1,0,0);
-    glPushMatrix();
-    glTranslated(33,0,0);
-    gluSphere(esfera, 3, 30, 30);
-    glPopMatrix();
-
-    glColor3f(0,1,0);
-    glPushMatrix();
-    glTranslated(0,33,0);
-    gluSphere(esfera, 3, 30, 30);
-    glPopMatrix();
-
-    glColor3f(0,0,1);
-    glPushMatrix();
-    glTranslated(0,0,33);
-    gluSphere(esfera, 3, 30, 30);
-    glPopMatrix();
-
-    glColor3f(1,1,1);
-    gluSphere(esfera, 3, 30, 30);
-    gluDeleteQuadric(esfera);
 
 }
 
