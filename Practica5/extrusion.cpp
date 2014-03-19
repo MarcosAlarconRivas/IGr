@@ -27,6 +27,39 @@ static vector<v2d>& normals(const vector<v2d>& cut){
     return norm;
 }
 
+//returns a perpendicular vector to v,, |v|=1
+static V3D perpen(V3D v){
+    if(v[0]){
+        float k = -(v[1]+v[2])/v[0];
+        float m = sqrt(k*k+2);
+        float u = 1/m;
+        return V3D{k/m, u, u, 0};
+    }
+    if(v[1]){
+        float k = -(v[0]+v[2])/v[1];
+        float m = sqrt(k*k+2);
+        float u = 1/m;
+        return V3D{u, k/m, u, 0};
+    }
+    if(v[2]){
+        float k = -(v[0]+v[1])/v[2];
+        float m = sqrt(k*k+2);
+        float u = 1/m;
+        return V3D{u, u, k/m, 0};
+    }
+    return V3D(0,0,0,0);
+}
+
+//returns a perpendicular vector to u & v,, |w|=1
+static V3D perpen(V3D u, V3D v){
+    float x= (u[1]*v[2] - u[2]*v[1]);
+    float y= (v[0]*u[2] - u[0]*v[2]);
+    float z= (u[0]*v[1] - u[1]*v[0]);
+    float m= sqrt(x*x+y*y+z*z);
+    if(!m) return V3D(0,0,0,0);
+    return V3D{x/m, y/m, z/m, 0};
+}
+
 Extrusion::Extrusion(unsigned r, unsigned s, V3D(*f)(double), unsigned n, double t0, double tf)
     :Extrusion(poligon(r,s), f, n, t0, tf){}
 
@@ -49,17 +82,48 @@ Extrusion::Extrusion(unsigned r, unsigned s, V3D t0, V3D tf)
 Extrusion::Extrusion(vector<v2d> cut, V3D t0, V3D tf){
     V3D n= tf-t0;
     vector<v2d> norm = normals(cut);
+    unsigned s = cut.size();
+    vertex= vector<vtx_p>(2*s);
 
-    //TODO
-    //translate to t0
-    //rotate to n
+    V3D px= perpen(n);
+    V3D py= perpen(n,px);
+    float M[16]=
+       {px[0], py[0], n[0], t0[0],
+        px[1], py[1], n[1], t0[1],
+        px[2], py[2], n[2], t0[2],
+        0,     0,     0,    1   };
     //get cut0
+    for(unsigned i=0; i<s; i++){
+        float x= cut[i].x;
+        float y= cut[i].y;
+        V3D p = V3D(x*M[0]+y*M[1]+M[3], x*M[4]+y*M[5]+M[7], x*M[8]+y*M[9]+M[11], 1.0);
+        x= norm[i].x;
+        y= norm[i].y;
+        V3D v = V3D(x*M[0]+y*M[1], x*M[4]+y*M[5], x*M[8]+y*M[9], 0.0);
+        vertex[i]= make_shared<vtx>(vtx{p,v});
+    }
 
-    //translate to tf
-    //rotate to n
+    M[3]=tf[0]; M[7]=tf[1]; M[11]=tf[2];
     //get cutf
+    for(unsigned i=0; i<s; i++){
+        float x= cut[i].x;
+        float y= cut[i].y;
+        V3D p = V3D{x*M[0]+y*M[1]+M[3], x*M[4]+y*M[5]+M[7], x*M[8]+y*M[9]+M[11], 1.0};
+        V3D v = vertex[i]->norm;
+        vertex[s+i]= make_shared<vtx>(vtx{p,v});
+    }
 
     //build faces
+    face= vector<Face>(s);//FIXME
+    for(unsigned i=0; i<s; i++){
+        unsigned j= (i+1)%s;
+        Face fa= Face(4);
+        fa[0]= vertex[i];
+        fa[1]= vertex[j];
+        fa[2]= vertex[j+s];
+        fa[3]= vertex[i+s];
+        face[i]= fa;
+    }
 
 }
 

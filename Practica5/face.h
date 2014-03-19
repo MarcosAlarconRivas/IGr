@@ -15,7 +15,7 @@ typedef shared_ptr<vtx> vtx_p;
 
 class Face : public vector<vtx_p>{
 public:
-
+    Face(){}
     Face(unsigned numVert):vector<vtx_p>(numVert){}
 
     void paint(bool fill)const{
