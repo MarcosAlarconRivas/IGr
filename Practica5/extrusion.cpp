@@ -19,8 +19,8 @@ static vector<v2d>& poligon(unsigned rad, unsigned sides){
     return pol;
 }
 
-static vector<v2d>& normals(const vector<v2d>& cut){//TODEBUG
-    //calculo de las normales
+//returns normals for a 2d poligon
+static vector<v2d>& normals(const vector<v2d>& cut){
     unsigned s = cut.size();
     vector<v2d> norm = vector<v2d>(s);
     for(unsigned i=0; i<s; i++){
@@ -58,16 +58,6 @@ static V3D perpen(V3D v){
     return V3D(0,0,0,0);
 }
 
-//returns a perpendicular vector to u & v,, |w|=1
-static V3D perpen(V3D u, V3D v){
-    float x= (u[1]*v[2] - u[2]*v[1]);
-    float y= (v[0]*u[2] - u[0]*v[2]);
-    float z= (u[0]*v[1] - u[1]*v[0]);
-    float m= sqrt(x*x+y*y+z*z);
-    if(!m) return V3D(0,0,0,0);
-    return V3D{x/m, y/m, z/m, 0};
-}
-
 Extrusion::Extrusion(unsigned r, unsigned s, V3D(*f)(double), unsigned n, double t0, double tf)
     :Extrusion(poligon(r,s), f, n, t0, tf){}
 
@@ -94,7 +84,7 @@ Extrusion::Extrusion(vector<v2d> cut, V3D t0, V3D tf){
     vertex= vector<vtx_p>(2*s);
 
     V3D px= perpen(n);
-    V3D py= perpen(n,px);
+    V3D py= px ^ n;
     float M[16]=
        {px[0], py[0], n[0], t0[0],
         px[1], py[1], n[1], t0[1],

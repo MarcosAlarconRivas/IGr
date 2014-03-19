@@ -1,5 +1,6 @@
 #ifndef V3D_H
 #define V3D_H
+#include <math.h>
 
 class V3D {
 public:
@@ -23,12 +24,34 @@ public:
         return v[i];
     }
 
+    inline double mod()const{
+        float x=v[0], y=v[1], z=v[2];
+        return sqrt(x*x+y*y+z*z);
+    }
+
+    inline V3D operator % (double m)const{
+        double md= mod();
+        if(md) m/=md;
+        return V3D(v[0]*m, v[1]*m, v[2]*m, v[3]?1:0);
+    }
+
     inline V3D operator + (const V3D w)const{
         return V3D(v[0]+w[0], v[1]+w[1], v[2]+w[2],!(v[3]&&w[3])&&(v[3]||w[3]));
     }
 
     inline V3D operator - (const V3D w)const{
         return V3D( v[0]-w[0], v[1]-w[1], v[2]-w[2],!(v[3]&&w[3])&&(v[3]||w[3]));
+    }
+
+    inline V3D operator ^ (const V3D w)const{
+        return V3D(v[1]*w[2] - v[2]*w[1],
+                   w[0]*v[2] - v[0]*w[2],
+                   v[0]*w[1] - v[1]*w[0],
+                             0          )%1;
+    }
+
+    inline double operator * (const V3D w)const{
+        return v[0]*w[0]+v[1]*w[1]+v[2]*w[2];
     }
 
 

@@ -8,7 +8,7 @@ GLWidget::GLWidget(QWidget *parent)
     setFocus();
 
     //crear los objetos de la escena
-    tubo = new Extrusion(2, 6, V3D(0,0,0,1), V3D(0,0,20,1));
+    tubo = new Extrusion(2, 8, V3D(33,15,0,1), V3D(0,-10,20,1));
 }
 
 GLWidget::~GLWidget(){
@@ -76,8 +76,8 @@ void GLWidget::paintGL(){
           glVertex3f( 0, 0, -100);
     glEnd();
 
-    glColor4f(0, 0, 0, .6);
-    tubo->paint(1);
+    glColor4f(0, 0, 0, 1);
+    tubo->paint(0);
 
 }
 
@@ -101,7 +101,7 @@ void GLWidget::resizeGL(int width, int height){
 void GLWidget::step(){
     //move
 
-    //repaint();
+    repaint();
 }
 
 void GLWidget::keyPressEvent(QKeyEvent *e){
