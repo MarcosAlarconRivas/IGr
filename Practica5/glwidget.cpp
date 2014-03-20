@@ -1,5 +1,27 @@
 #include "glwidget.h"
 
+static const double k = 2;
+
+static V3D vivain0(double t){
+    return V3D(1+cos(t), sin(t), 2*sin(t/2), 1)*k;
+}
+static V3D vivain1(double t){
+    return V3D(-sin(t), cos(t), cos(t/2), 1)*k;
+}
+static V3D vivain2(double t){
+    return V3D(-cos(t), -sin(t), sin(t/2)/2, 1)*k;
+}
+static V3D rusa0(double t){
+    return V3D(3*cos(t), 2*cos(1.5*t), 3*sin(t))*k;
+}
+static V3D rusa1(double t){
+    return V3D(-3*sin(t), -3*sin(1.5*t), 3*cos(t))*k;
+}
+static V3D rusa2(double t){
+    return V3D(-3*cos(t), -4.5*cos(1.5*t), -3*sin(t))*k;
+}
+
+
 GLWidget::GLWidget(QWidget *parent)
     : QGLWidget(QGLFormat(QGL::SampleBuffers), parent){
 
@@ -8,7 +30,7 @@ GLWidget::GLWidget(QWidget *parent)
     setFocus();
 
     //crear los objetos de la escena
-    tubo = new Extrusion(2, 8, V3D(33,15,0,1), V3D(0,-10,20,1));
+    tubo = new Extrusion(3, 6, &rusa0, &rusa1, &rusa2, 66, 0, 4*M_PI);
 }
 
 GLWidget::~GLWidget(){
@@ -57,23 +79,12 @@ void GLWidget::paintGL(){
           glColor4f(1, 0, 0, 1);
           glVertex3f(  0, 0, 0);
           glVertex3f(100, 0, 0);
-          glColor4f(1, 0, 0, .2);
-          glVertex3f(   0, 0, 0);
-          glVertex3f(-100, 0, 0);
-
           glColor4f(0, 1, 0, 1);
           glVertex3f( 0,   0, 0);
           glVertex3f( 0, 100, 0);
-          glColor4f(0, 1, 0, .2);
-          glVertex3f( 0,    0, 0);
-          glVertex3f( 0, -100, 0);
-
           glColor4f(0, 0, 1, 1);
           glVertex3f( 0, 0,  0);
           glVertex3f( 0, 0, 100);
-          glColor4f(0, 0, 1, .2);
-          glVertex3f( 0, 0, 0);
-          glVertex3f( 0, 0, -100);
     glEnd();
 
     glColor4f(0, 0, 0, 1);

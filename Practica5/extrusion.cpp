@@ -58,20 +58,70 @@ static V3D perpen(V3D v){
     return V3D(0,0,0,0);
 }
 
-Extrusion::Extrusion(unsigned r, unsigned s, V3D(*f)(double), unsigned n, double t0, double tf)
-    :Extrusion(poligon(r,s), f, n, t0, tf){}
+static void frenet(float* M, V3D C, V3D dC, V3D ddC){
+    V3D T= dC %1, B= dC ^ ddC, N= T ^ B;
+                            //this half matrix is not used
+    M[0]= N[0]; M[1]= N[1]; //M[2]= N[2]; M[3]= 0;
+    M[4]= B[0]; M[5]= B[1]; //M[6]= B[2]; M[7]= 0;
+    M[8]= T[0]; M[9]= T[1]; //M[10]=T[2]; M[11]=0;
+    M[12]=C[0]; M[13]=C[1]; //M[14]=C[2]; M[15]=1;
+}
 
-Extrusion::Extrusion(vector<v2d> cut, V3D(*f)(double), unsigned num, double t0, double tf){
-    if(tf<t0){double x=t0; t0=tf; tf=x;} //begin < end
-    //unsigned s= cut.size();  //num of sides in each cut
+Extrusion::Extrusion(unsigned r, unsigned s, V3D(*d0)(double),V3D(*d1)(double),
+                     V3D(*d2)(double), unsigned n, double t0, double tf)
+    :Extrusion(poligon(r,s), d0, d1, d2, n, t0, tf){}
+
+Extrusion::Extrusion(vector<v2d> cut, V3D(*d0)(double),V3D(*d1)(double),V3D(*d2)(double),
+                     unsigned num, double t0, double tf){
+    unsigned s= cut.size();  //num of sides in each cut
     double step= (tf-t0)/num;//inc in each step of curve
     vector<v2d> norm = normals(cut);
 
+
+    //paint curve
+    face= vector<Face>(1);
+    face[0]= Face(num);
     double t=t0;
-    for(unsigned i=0; i<num; i++, t+=step){
-        //TODO
+    for(unsigned c=0; c<num; c++, t+=step){
+        face[0][c]= make_shared<vtx>(vtx{d0(t),V3D(1,1,0,0)});
+    }
+    return;//*
+
+/*
+    float M[16]= {1,0,0,0,
+                  0,1,0,0,
+                  0,0,1,0,
+                  0,0,0,1};
+    vertex= vector<vtx_p>(s*num);
+    //build vertex
+    double t=t0;
+    for(unsigned c=0; c<num; c++, t+=step){
+        frenet(M, d0(t), d1(t), d2(t));
+        for(unsigned i=0; i<s; i++){
+            float x= cut[i].x;
+            float y= cut[i].y;
+            V3D p = V3D(x*M[0]+y*M[1]+M[3], x*M[4]+y*M[5]+M[7], x*M[8]+y*M[9]+M[11], 1.0);
+            x= norm[i].x;
+            y= norm[i].y;
+            V3D v = V3D(x*M[0]+y*M[1], x*M[4]+y*M[5], x*M[8]+y*M[9], 0.0);
+            vertex[i]= make_shared<vtx>(vtx{p,v});
+        }
     }
 
+    //build faces
+    face= vector<Face>(s*num);
+    for(unsigned c=0; c<num; c++)
+        for(unsigned i=0; i<s; i++){
+            unsigned j= c*s + i;
+            unsigned k= c*s +(i+1)%s;
+            Face fa= Face(4);
+            fa[0]= vertex[j];
+            fa[1]= vertex[k];
+            fa[2]= vertex[k+s];
+            fa[3]= vertex[j+s];
+            face[j]= fa;
+        }
+*/
 }
 
 Extrusion::Extrusion(unsigned r, unsigned s, V3D t0, V3D tf)

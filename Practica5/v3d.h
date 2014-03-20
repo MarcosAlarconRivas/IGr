@@ -32,7 +32,7 @@ public:
     inline V3D operator % (double m)const{
         double md= mod();
         if(md) m/=md;
-        return V3D(v[0]*m, v[1]*m, v[2]*m, v[3]?1:0);
+        return (*this)*m;
     }
 
     inline V3D operator + (const V3D w)const{
@@ -52,6 +52,14 @@ public:
 
     inline double operator * (const V3D w)const{
         return v[0]*w[0]+v[1]*w[1]+v[2]*w[2];
+    }
+
+    inline V3D operator * (double k)const{
+        return V3D(v[0]*k, v[1]*k, v[2]*k, v[3]);
+    }
+
+    inline V3D operator / (double k)const{
+        return V3D(v[0]/k, v[1]/k, v[2]/k, v[3]);
     }
 
 
