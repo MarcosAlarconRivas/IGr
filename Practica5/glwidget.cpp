@@ -1,6 +1,6 @@
 #include "glwidget.h"
 
-static const double k = 2;
+static const double k = 4;
 
 static V3D vivain0(double t){
     return V3D(1+cos(t), sin(t), 2*sin(t/2), 1)*k;
@@ -29,8 +29,11 @@ GLWidget::GLWidget(QWidget *parent)
     setFocusPolicy(Qt::ClickFocus);
     setFocus();
 
+    t=0;
     //crear los objetos de la escena
-    tubo = new Extrusion(3, 6, &rusa0, &rusa1, &rusa2, 66, 0, 4*M_PI);
+    //tubo= new Extrusion(3, 6, &vivain0, &vivain1, &vivain2, 33);
+    tubo= new Extrusion(3, 6, &rusa0, &rusa1, &rusa2, 66, 0, 4*M_PI);
+    //tubo= new Extrusion(3, 6, &rusa0, 66, 0, 4*M_PI);
 }
 
 GLWidget::~GLWidget(){
@@ -90,6 +93,22 @@ void GLWidget::paintGL(){
     glColor4f(0, 0, 0, 1);
     tubo->paint(0);
 
+    auto esfera=gluNewQuadric();
+    glColor4f(1, 1, 0, .3);
+    glPushMatrix();
+        V3D tr= rusa0(t);
+        glTranslatef(tr[0], tr[1], tr[2]);
+        gluQuadricDrawStyle(esfera, GLU_FILL);
+        gluSphere(esfera, .3, 30, 30);
+    glPopMatrix();
+/*    glColor4f(0, 0, 1, .3);
+    glPushMatrix();
+        tr= vivain0(t);
+        glTranslatef(tr[0], tr[1], tr[2]);
+        gluQuadricDrawStyle(esfera, GLU_FILL);
+        gluSphere(esfera, .3, 30, 30);
+    glPopMatrix();*/
+    gluDeleteQuadric(esfera);
 }
 
 void GLWidget::aplyView(){
@@ -110,8 +129,8 @@ void GLWidget::resizeGL(int width, int height){
 }
 
 void GLWidget::step(){
-    //move
-
+    t+=.01;
+    if(t>4*M_PI)t-=4*M_PI;
     repaint();
 }
 
@@ -127,6 +146,49 @@ void GLWidget::keyPressEvent(QKeyEvent *e){
             case Qt::Key_Minus :
                         zoom/=1.1;
                         aplyView();
+                        break;
+
+            case Qt::Key_4 :
+                        //glMatrixMode(GL_MODELVIEW);
+                        glLoadIdentity();
+                        gluLookAt(eye[0]-=20, eye[1], eye[2], look[0], look[1], look[2], up[0], up[1], up[2]);
+                        break;
+
+            case Qt::Key_5 :
+                        //glMatrixMode(GL_MODELVIEW);
+                        glLoadIdentity();
+                        gluLookAt(eye[0]+=20, eye[1], eye[2], look[0], look[1], look[2], up[0], up[1], up[2]);
+                        break;
+
+            case Qt::Key_6 :
+                        //glMatrixMode(GL_MODELVIEW);
+                        glLoadIdentity();
+                        gluLookAt(eye[0]-=20, eye[1]-=20, eye[2], look[0], look[1], look[2], up[0], up[1], up[2]);
+                        break;
+
+            case Qt::Key_7 :
+                        //glMatrixMode(GL_MODELVIEW);
+                        glLoadIdentity();
+                        gluLookAt(eye[0]+=20, eye[1]+=20, eye[2], look[0], look[1], look[2], up[0], up[1], up[2]);
+                        break;
+
+            case Qt::Key_8 :
+                        //glMatrixMode(GL_MODELVIEW);
+                        glLoadIdentity();
+                        gluLookAt(eye[0]-=20, eye[1], eye[2]-=20, look[0], look[1], look[2], up[0], up[1], up[2]);
+                        break;
+
+            case Qt::Key_9 :
+                        //glMatrixMode(GL_MODELVIEW);
+                        glLoadIdentity();
+                        gluLookAt(eye[0], eye[1], eye[2]+=20, look[0], look[1], look[2], up[0], up[1], up[2]);
+                        break;
+
+            case Qt::Key_0 :
+                        //glMatrixMode(GL_MODELVIEW);
+                        glLoadIdentity();
+                        eye[0]=eye[1]=eye[2]=100;
+                        gluLookAt(eye[0], eye[1], eye[2], look[0], look[1], look[2], up[0], up[1], up[2]);
                         break;
 
             default:   return;

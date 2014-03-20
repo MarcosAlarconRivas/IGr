@@ -15,7 +15,7 @@ Window::Window(){
 
     QTimer *timer = new QTimer(this);
     connect(timer, SIGNAL(timeout()), openGL, SLOT(step()));
-    timer->start(100);
+    timer->start(30);
 }
 
 QSize Window::sizeHint() const{

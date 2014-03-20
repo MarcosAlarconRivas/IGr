@@ -20,6 +20,7 @@ protected:
     GLdouble eye[3], look[3], up[3]; //Camara
     GLdouble zoom, N, F;  //Volumen de vista
     Extrusion *tubo;
+    double t;
 
     void initializeGL();
     void paintGL();

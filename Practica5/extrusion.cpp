@@ -85,7 +85,7 @@ Extrusion::Extrusion(vector<v2d> cut, V3D(*d0)(double),V3D(*d1)(double),V3D(*d2)
     for(unsigned c=0; c<num; c++, t+=step){
         face[0][c]= make_shared<vtx>(vtx{d0(t),V3D(1,1,0,0)});
     }
-    return;//*
+    //*/
 
 /*
     float M[16]= {1,0,0,0,
@@ -121,8 +121,58 @@ Extrusion::Extrusion(vector<v2d> cut, V3D(*d0)(double),V3D(*d1)(double),V3D(*d2)
             fa[3]= vertex[j+s];
             face[j]= fa;
         }
-*/
+//*/
 }
+
+Extrusion::Extrusion(unsigned r, unsigned s, V3D(*f)(double), unsigned n, double t0, double tf):
+    Extrusion(poligon(r,s), f, n, t0, tf){}
+
+Extrusion::Extrusion(vector<v2d> cut, V3D(*f)(double), unsigned num, double t0, double tf){
+    unsigned s= cut.size();  //num of sides in each cut
+    double step= (tf-t0)/num;//inc in each step of curve
+    vector<v2d> norm = normals(cut);
+
+    vertex= vector<vtx_p>(s*num);
+    //build vertex
+    double t=t0;
+    V3D _p = f(t0-step), p = f(t0), p_ = f(t0+step);
+    vertex= vector<vtx_p>(s*num);
+    for(unsigned c=0; c<num; c++, _p=p, p=p_, p_=f(t+=step)){
+        V3D d0= (p- _p + p-p_)%1;
+        V3D d1= perpen(d0);
+        V3D d2= d0 ^ d1;
+        float M[16]={d2[0],d1[0],d0[0],p[0],
+                     d2[1],d1[1],d0[1],p[0],
+                     d2[2],d1[2],d0[2],p[0],
+                      0,    0,    0,    1  };
+
+        for(unsigned i=0; i<s; i++){
+            float x= cut[i].x;
+            float y= cut[i].y;
+            V3D p = V3D(x*M[0]+y*M[1]+M[3], x*M[4]+y*M[5]+M[7], x*M[8]+y*M[9]+M[11], 1.0);
+            x= norm[i].x;
+            y= norm[i].y;
+            V3D v = V3D(x*M[0]+y*M[1], x*M[4]+y*M[5], x*M[8]+y*M[9], 0.0);
+            vertex[i]= make_shared<vtx>(vtx{p,v});
+        }
+    }
+
+    //build faces
+    face= vector<Face>(s*num);
+    for(unsigned c=0; c<num; c++)
+        for(unsigned i=0; i<s; i++){
+            unsigned j= c*s + i;
+            unsigned k= c*s +(i+1)%s;
+            Face fa= Face(4);
+            fa[0]= vertex[j];
+            fa[1]= vertex[k];
+            fa[2]= vertex[k+s];
+            fa[3]= vertex[j+s];
+            face[j]= fa;
+        }
+
+}
+
 
 Extrusion::Extrusion(unsigned r, unsigned s, V3D t0, V3D tf)
         :Extrusion(poligon(r,s), t0, tf){}
