@@ -78,7 +78,7 @@ Extrusion::Extrusion(vector<v2d> cut, V3D(*d0)(double),V3D(*d1)(double),V3D(*d2)
     vector<v2d> norm = normals(cut);
 
 
-    //paint curve
+    /*//paint curve
     face= vector<Face>(1);
     face[0]= Face(num);
     double t=t0;
@@ -87,7 +87,6 @@ Extrusion::Extrusion(vector<v2d> cut, V3D(*d0)(double),V3D(*d1)(double),V3D(*d2)
     }
     //*/
 
-/*
     float M[16]= {1,0,0,0,
                   0,1,0,0,
                   0,0,1,0,

@@ -10,7 +10,7 @@ public:
         v[0]=v[1]=v[2]=v[3]=0.0;
     }
 
-    V3D(float x, float y, float z, bool point=0){
+    V3D(float x, float y, float z, bool point=1){
       v[0]=x; v[1]=y; v[2]=z; v[3]=point ? 1.0: 0.0;
     }
 
