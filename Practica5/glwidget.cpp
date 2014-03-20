@@ -18,7 +18,7 @@ static V3D rusa1(double t){
     return V3D(-3*sin(t), -3*sin(1.5*t), 3*cos(t))*k;
 }
 static V3D rusa2(double t){
-    return V3D(-3*cos(t), -4.5*cos(1.5*t), -3*sin(t))*k;
+     return V3D(-3*cos(t), -4.5*cos(1.5*t), -3*sin(t))*k;
 }
 
 
@@ -32,8 +32,10 @@ GLWidget::GLWidget(QWidget *parent)
     t=0;
     //crear los objetos de la escena
     //tubo= new Extrusion(3, 6, &vivain0, &vivain1, &vivain2, 33);
-    tubo= new Extrusion(3, 6, &rusa0, &rusa1, &rusa2, 66, 0, 4*M_PI);
+    //tubo= new Extrusion(3, 6, &rusa0, &rusa1, &rusa2, 66, 0, 4*M_PI);
+    tubo= new Extrusion(1, 8, V3D(10,20,0), V3D(-10,-10,-10));
     //tubo= new Extrusion(3, 6, &rusa0, 66, 0, 4*M_PI);
+    //tubo= new Extrusion(3, 6, &toro, &toro, &toro, 33);
 }
 
 GLWidget::~GLWidget(){
@@ -101,9 +103,9 @@ void GLWidget::paintGL(){
         gluQuadricDrawStyle(esfera, GLU_FILL);
         gluSphere(esfera, .3, 30, 30);
     glPopMatrix();
-/*    glColor4f(0, 0, 1, .3);
+    /*glColor4f(0, 0, 1, .3);
     glPushMatrix();
-        tr= vivain0(t);
+        tr= toro(t);
         glTranslatef(tr[0], tr[1], tr[2]);
         gluQuadricDrawStyle(esfera, GLU_FILL);
         gluSphere(esfera, .3, 30, 30);
