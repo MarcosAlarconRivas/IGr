@@ -1,7 +1,8 @@
 #include "extrusion.h"
+#include <cmath>
 
 //private fuction to make a regular poligon of @sides points and @rad size
-static vector<v2d>& poligon(unsigned rad, unsigned sides){
+static vector<v2d>& poligon(double rad, unsigned sides){
     static vector<v2d> pol= vector<v2d>(sides);
 
     float theta = 2 * M_PI / sides;
@@ -10,7 +11,7 @@ static vector<v2d>& poligon(unsigned rad, unsigned sides){
     //we start at angle = 0
     double x =rad, y = 0;
     for(unsigned i=0; i<sides; i++){
-        pol[i]= v2d{(float) x*rad, (float)y*rad};
+        pol[i]= v2d{(float) x, (float)y};
         //apply the rotation matrix
         double t = x;
         x = c * x - s * y;
@@ -22,14 +23,15 @@ static vector<v2d>& poligon(unsigned rad, unsigned sides){
 //returns normals for a 2d poligon
 static vector<v2d>& normals(const vector<v2d>& cut){
     unsigned s = cut.size();
-    vector<v2d> norm = vector<v2d>(s);
+    static vector<v2d> norm = vector<v2d>(s);
     for(unsigned i=0; i<s; i++){
         v2d p= cut[(i+s-1)%s];
         v2d t= cut[i];
         v2d n= cut[(i + 1)%s];
         float dx= t.x-p.x + t.x-n.x;
         float dy= t.y-p.y + t.y-n.y;
-        float mod= sqrt(dx*dx +dy*dy);
+        float a=dx*dx, b=dy*dy;
+        float mod= sqrt(a+b);
         norm[i]= mod ? v2d{dx/mod, dy/mod}: v2d{0,0};
     }
     return norm;
@@ -67,7 +69,7 @@ static void frenet(float* M, V3D C, V3D dC, V3D ddC){
     M[12]=C[0]; M[13]=C[1]; //M[14]=C[2]; M[15]=1;
 }
 
-Extrusion::Extrusion(unsigned r, unsigned s, V3D(*d0)(double),V3D(*d1)(double),
+Extrusion::Extrusion(double r, unsigned s, V3D(*d0)(double),V3D(*d1)(double),
                      V3D(*d2)(double), unsigned n, double t0, double tf)
     :Extrusion(poligon(r,s), d0, d1, d2, n, t0, tf){}
 
@@ -103,27 +105,27 @@ Extrusion::Extrusion(vector<v2d> cut, V3D(*d0)(double),V3D(*d1)(double),V3D(*d2)
             x= norm[i].x;
             y= norm[i].y;
             V3D v = V3D(x*M[0]+y*M[1], x*M[4]+y*M[5], x*M[8]+y*M[9], 0.0);
-            vertex[i]= make_shared<vtx>(vtx{p,v});
+            vertex[c*s+i]= make_shared<vtx>(vtx{p,v});
         }
     }
 
     //build faces
     face= vector<Face>(s*num);
     for(unsigned c=0; c<num; c++)
-        for(unsigned i=0; i<s; i++){
-            unsigned j= c*s + i;
-            unsigned k= c*s +(i+1)%s;
+        for(unsigned p=0; p<s; p++){
+            unsigned cs=c*s, c1s = ((c+1)%num)*s;
+            unsigned p1 = (p+1)%s;
             Face fa= Face(4);
-            fa[0]= vertex[j];
-            fa[1]= vertex[k];
-            fa[2]= vertex[k+s];
-            fa[3]= vertex[j+s];
-            face[j]= fa;
+            fa[0]= vertex[p + cs];
+            fa[1]= vertex[p1+ cs];
+            fa[2]= vertex[p1+c1s];
+            fa[3]= vertex[p +c1s];
+            face[cs+p]= fa;
         }
 //*/
 }
 
-Extrusion::Extrusion(unsigned r, unsigned s, V3D(*f)(double), unsigned n, double t0, double tf):
+Extrusion::Extrusion(double r, unsigned s, V3D(*f)(double), unsigned n, double t0, double tf):
     Extrusion(poligon(r,s), f, n, t0, tf){}
 
 Extrusion::Extrusion(vector<v2d> cut, V3D(*f)(double), unsigned num, double t0, double tf){
@@ -151,29 +153,29 @@ Extrusion::Extrusion(vector<v2d> cut, V3D(*f)(double), unsigned num, double t0, 
             V3D p = V3D(x*M[0]+y*M[1]+M[3], x*M[4]+y*M[5]+M[7], x*M[8]+y*M[9]+M[11], 1.0);
             x= norm[i].x;
             y= norm[i].y;
-            V3D v = V3D(x*M[0]+y*M[1], x*M[4]+y*M[5], x*M[8]+y*M[9], 0.0);
-            vertex[i]= make_shared<vtx>(vtx{p,v});
+            V3D v = V3D(x*M[0]+y*M[1], x*M[4]+y*M[5], x*M[8]+y*M[9], 0.0);//FIXME %1
+            vertex[c*s+i]= make_shared<vtx>(vtx{p,v});
         }
     }
 
     //build faces
     face= vector<Face>(s*num);
     for(unsigned c=0; c<num; c++)
-        for(unsigned i=0; i<s; i++){
-            unsigned j= c*s + i;
-            unsigned k= c*s +(i+1)%s;
+        for(unsigned p=0; p<s; p++){
+            unsigned cs=c*s, c1s = ((c+1)%num)*s;
+            unsigned p1 = (p+1)%s;
             Face fa= Face(4);
-            fa[0]= vertex[j];
-            fa[1]= vertex[k];
-            fa[2]= vertex[k+s];
-            fa[3]= vertex[j+s];
-            face[j]= fa;
+            fa[0]= vertex[p + cs];
+            fa[1]= vertex[p1+ cs];
+            fa[2]= vertex[p1+c1s];
+            fa[3]= vertex[p +c1s];
+            face[cs+p]= fa;
         }
 
 }
 
 
-Extrusion::Extrusion(unsigned r, unsigned s, V3D t0, V3D tf)
+Extrusion::Extrusion(double r, unsigned s, V3D t0, V3D tf)
         :Extrusion(poligon(r,s), t0, tf){}
 
 Extrusion::Extrusion(vector<v2d> cut, V3D t0, V3D tf){

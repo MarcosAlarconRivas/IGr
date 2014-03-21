@@ -1,16 +1,16 @@
 #include "glwidget.h"
 
-static const double k = 4;
+static const double k = 10;
 
-static V3D vivain0(double t){
-    return V3D(1+cos(t), sin(t), 2*sin(t/2), 1)*k;
+/*static V3D vivain0(double t){
+    return V3D(1+cos(t), sin(t), 2*sin(t/2))*k;
 }
 static V3D vivain1(double t){
-    return V3D(-sin(t), cos(t), cos(t/2), 1)*k;
+    return V3D(-sin(t), cos(t), cos(t/2))*k;
 }
 static V3D vivain2(double t){
-    return V3D(-cos(t), -sin(t), sin(t/2)/2, 1)*k;
-}
+    return V3D(-cos(t), -sin(t), sin(t/2)/2)*k;
+}*/
 static V3D rusa0(double t){
     return V3D(3*cos(t), 2*cos(1.5*t), 3*sin(t))*k;
 }
@@ -34,9 +34,9 @@ GLWidget::GLWidget(QWidget *parent)
     Rot[1]=Rot[2]=Rot[3]=Rot[4]=Rot[6]=Rot[7]=Rot[8]=Rot[9]=Rot[11]=Rot[12]=Rot[13]=Rot[14]=0;
     //crear los objetos de la escena
     //tubo= new Extrusion(3, 6, &vivain0, &vivain1, &vivain2, 33);
-    //tubo= new Extrusion(3, 6, &rusa0, &rusa1, &rusa2, 66, 0, 4*M_PI);
-    tubo= new Extrusion(1, 8, V3D(0,0,0), V3D(10,10,10));
-    //tubo= new Extrusion(3, 6, &rusa0, 66, 0, 4*M_PI);
+    //tubo= new Extrusion(1, 6, &rusa0, &rusa1, &rusa2, 66, 0, 4*M_PI);
+    //tubo= new Extrusion(1, 8, V3D(10,0,0), V3D(10,10,10));
+    tubo= new Extrusion(.5, 6, &rusa0, 66, 0, 4*M_PI);
     //tubo= new Extrusion(3, 6, &toro, &toro, &toro, 33);
 }
 
@@ -94,11 +94,14 @@ void GLWidget::paintGL(){
           glVertex3f( 0, 0, 100);
     glEnd();
 
-    glPushMatrix();
+   // glPushMatrix();
        /* glRotated(gX, 1,0,0);
         glRotated(gY, 0,1,0);
         glRotated(gZ, 0,0,1);*/
-        glMultTransposeMatrixf(Rot);
+        //glLoadTransposeMatrixf(Rot);
+   //     glMultTransposeMatrixf(Rot);
+        //glMultMatrixf(Rot);
+        //glLoadMatrixf(Rot);
 
         glColor4f(0.3, 0.3, 0.3, 1);
         tubo->paint(full);
@@ -119,7 +122,7 @@ void GLWidget::paintGL(){
             gluSphere(esfera, .3, 30, 30);
         glPopMatrix();*/
         gluDeleteQuadric(esfera);
-       glPopMatrix();
+    //glPopMatrix();
 }
 
 void GLWidget::aplyView(){
@@ -152,44 +155,36 @@ static void multM(float* M, float*N,float*R){
     R[13]=M[12]*N[1]+ M[13]*N[5]+ M[14]*N[9] +M[15]*N[13];
     R[14]=M[12]*N[2]+ M[13]*N[6]+ M[14]*N[10]+M[15]*N[14];
     R[15]=M[12]*N[3]+ M[13]*N[7]+ M[14]*N[11]+M[15]*N[15];
-
 }
 
 void GLWidget::buildRot(int i){
     double _2pi= 2*M_PI;
-    if(!i){
-        if(gX>_2pi)gX-=_2pi;
-        if(gX<0)gX+=_2pi;
 
-        float cx=cos(gX), sx=sin(gX);
+    if(gX>_2pi)gX-=_2pi;
+    if(gX<0)gX+=_2pi;
+    if(gY>_2pi)gY-=_2pi;
+    if(gY<0)gY+=_2pi;
+    if(gZ>_2pi)gZ-=_2pi;
+    if(gZ<0)gZ+=_2pi;
 
-      Rx[16]={1, 0, 0, 0,
-              0,cx,sx, 0,
-              0,-sx,cx,0,
-              0, 0, 0, 1};
+    float cx=cos(gX), sx=sin(gX);
+    float cy=cos(gY), sy=sin(gY);
+    float cz=cos(gZ), sz=sin(gZ);
 
-        else if(i==1){
-            if(gY>_2pi)gY-=_2pi;
-            if(gY<0)gY+=_2pi;
+    float Rx[16]={1, 0, 0, 0,
+                  0,cx,sx, 0,
+                  0,-sx,cx,0,
+                  0, 0, 0, 1};
 
-            float cy=cos(gY), sy=sin(gY);
+    float Ry[16]={cy, 0, sy, 0,
+                   0, 1,  0, 0,
+                 -sy, 0, cy, 0,
+                   0, 0, 0, 1};
 
-            Ry[16]={cy, 0, sy, 0,
-                    0, 1,  0, 0,
-                   -sy,0, cy, 0,
-                    0, 0, 0, 1};
-
-        }else if(i=2){
-            if(gZ>_2pi)gZ-=_2pi;
-            if(gZ<0)gZ+=_2pi;
-
-            float cz=cos(gZ), sz=sin(gZ);
-
-           Rz[16]={cz, sz, 0, 0,
+    float Rz[16]={cz, sz, 0, 0,
                  -sz, cz, 0, 0,
                    0,  0, 0, 0,
                    0,  0, 0, 1};
-        }
 
     float I[16]={1,0,0,0,
                  0,1,0,0,
@@ -232,37 +227,37 @@ void GLWidget::keyPressEvent(QKeyEvent *e){
             case Qt::Key_Up :
                         //gX+=5;
                         gX+=.05;
-                        buildRot();
+                        buildRot(0);
                         break;
 
             case Qt::Key_Down :
                         //gX-=5;
                         gX-=.05;
-                        buildRot();
+                        buildRot(0);
                         break;
 
             case Qt::Key_Right :
                         //gY+=5;
                         gY+=.05;
-                        buildRot();
+                        buildRot(1);
                         break;
 
             case Qt::Key_Left :
                         //gY-=5;
                         gY-=.05;
-                        buildRot();
+                        buildRot(1);
                         break;
 
             case Qt::Key_A :
                         //gZ+=5;
                         gZ+=.05;
-                        buildRot();
+                        buildRot(2);
                         break;
 
             case Qt::Key_Z :
                         //gZ-=5;
                         gZ-=.05;
-                        buildRot();
+                        buildRot(2);
                         break;
 
             case Qt::Key_H :

@@ -1,6 +1,6 @@
 #ifndef V3D_H
 #define V3D_H
-#include <math.h>
+#include <cmath>
 
 class V3D {
 public:
