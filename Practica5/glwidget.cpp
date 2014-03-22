@@ -114,6 +114,8 @@ void GLWidget::paintGL(){
 
         glColor4f(0.3, 0.3, 0.3, 1);
         tubo->paint(full);
+        glColor4f(0,1,1,.5);
+        if(showN)tubo->paintNormals();
 
         auto esfera=gluNewQuadric();
         glColor4f(1, 1, 0, .3);
@@ -275,7 +277,15 @@ void GLWidget::keyPressEvent(QKeyEvent *e){
 
             case Qt::Key_G :
                         full=0;
-                break;
+                        break;
+
+            case Qt::Key_J :
+                        showN=1;
+                        break;
+
+            case Qt::Key_K :
+                        showN=0;
+                        break;
 
             default:   return;
     }

@@ -5,6 +5,7 @@
 class Mesh{
 public:
     void paint(bool fill=1)const;
+    void paintNormals()const;
 
 protected:
     vector<Face> face;
