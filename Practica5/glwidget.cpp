@@ -50,12 +50,21 @@ void GLWidget::initializeGL(){
 
     glEnable(GL_COLOR_MATERIAL);
     glMaterialf(GL_FRONT, GL_SHININESS, 0.1);
-    //   glEnable(GL_DEPTH_TEST);
+
+    glClearDepth(1.0f);
+    glEnable(GL_DEPTH_TEST);
+    glDepthFunc(GL_LEQUAL);
+
     glEnable(GL_NORMALIZE);
-    glShadeModel(GL_SMOOTH);   //Defecto
+    glShadeModel(GL_SMOOTH);//normal por vertice
+    //glShadeModel(GL_FLAT);//normal por cara
 
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+    //no pintar caras traseras
+    /*glCullFace(GL_BACK);
+    glEnable(GL_CULL_FACE);*/
 
     //Cámara
     eye[0]=eye[1]=eye[2] =100;
