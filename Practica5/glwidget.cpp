@@ -1,16 +1,7 @@
 #include "glwidget.h"
 
-static const double k = 1;
+static const double k = 2;
 
-/*static V3D vivain0(double t){
-    return V3D(1+cos(t), sin(t), 2*sin(t/2))*k;
-}
-static V3D vivain1(double t){
-    return V3D(-sin(t), cos(t), cos(t/2))*k;
-}
-static V3D vivain2(double t){
-    return V3D(-cos(t), -sin(t), sin(t/2)/2)*k;
-}*/
 static V3D rusa0(double t){
     return V3D(3*cos(t), 2*cos(1.5*t), 3*sin(t))*k;
 }
@@ -34,11 +25,7 @@ GLWidget::GLWidget(QWidget *parent)
         /*Rot[i]=*/Rx[i]=Ry[i]=Rz[i]=I[i];
 
     //crear los objetos de la escena
-    //tubo= new Extrusion(3, 6, &vivain0, &vivain1, &vivain2, 33);
-    tubo= new Extrusion(1, 8, &rusa0, &rusa1, &rusa2, 66, 0, 4*M_PI);
-    //tubo= new Extrusion(1, 8, V3D(10,0,0), V3D(10,10,10));
-    //tubo= new Extrusion(1, 8, &rusa0, 66, 0, 4*M_PI);
-    //tubo= new Extrusion(3, 6, &toro, &toro, &toro, 33);
+    tubo= new Extrusion(1, 16, &rusa0, &rusa1, &rusa2, 100, 0, 4*M_PI);
 }
 
 GLWidget::~GLWidget(){
@@ -76,7 +63,7 @@ void GLWidget::initializeGL(){
     gluLookAt(eye[0], eye[1], eye[2], look[0], look[1], look[2], up[0], up[1], up[2]);
 
     //Volumen de vista
-    N=1; F=1000; zoom=12;
+    N=1; F=1000; zoom=25;
 
     //Luz0
     glEnable(GL_LIGHT0);
@@ -123,7 +110,7 @@ void GLWidget::paintGL(){
             V3D tr= rusa0(t);
             glTranslatef(tr[0], tr[1], tr[2]);
             gluQuadricDrawStyle(esfera, GLU_FILL);
-            gluSphere(esfera, .3, 30, 30);
+            gluSphere(esfera, 1, 30, 30);
         glPopMatrix();
         gluDeleteQuadric(esfera);
     glPopMatrix();
