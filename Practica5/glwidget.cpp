@@ -241,19 +241,11 @@ void GLWidget::keyPressEvent(QKeyEvent *e){
                         break;
 
             case Qt::Key_H :
-                        full=1;
-                        break;
-
-            case Qt::Key_G :
-                        full=0;
+                        full= !full;
                         break;
 
             case Qt::Key_J :
-                        showN=1;
-                        break;
-
-            case Qt::Key_K :
-                        showN=0;
+                        showN= !showN;
                         break;
 
             default:   return;
