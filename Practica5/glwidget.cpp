@@ -1,6 +1,6 @@
 #include "glwidget.h"
 
-static const double k = 10;
+static const double k = 1;
 
 /*static V3D vivain0(double t){
     return V3D(1+cos(t), sin(t), 2*sin(t/2))*k;
@@ -21,7 +21,6 @@ static V3D rusa2(double t){
      return V3D(-3*cos(t), -4.5*cos(1.5*t), -3*sin(t))*k;
 }
 
-
 GLWidget::GLWidget(QWidget *parent)
     : QGLWidget(QGLFormat(QGL::SampleBuffers), parent){
 
@@ -36,7 +35,7 @@ GLWidget::GLWidget(QWidget *parent)
 
     //crear los objetos de la escena
     //tubo= new Extrusion(3, 6, &vivain0, &vivain1, &vivain2, 33);
-    tubo= new Extrusion(1, 6, &rusa0, &rusa1, &rusa2, 2, 0, 0.5);//4*M_PI);
+    tubo= new Extrusion(1, 6, &rusa0, &rusa1, &rusa2, 2, 0, 1);//4*M_PI);
     //tubo= new Extrusion(1, 8, V3D(10,0,0), V3D(10,10,10));
     //tubo= new Extrusion(.5, 6, &rusa0, 66, 0, 4*M_PI);
     //tubo= new Extrusion(3, 6, &toro, &toro, &toro, 33);
@@ -109,7 +108,10 @@ void GLWidget::paintGL(){
         glMultTransposeMatrixf(Rx);
         glMultTransposeMatrixf(Ry);
         glMultTransposeMatrixf(Rz);
-
+    /*  glRotated(gX, 1,0,0);
+        glRotated(gY, 0,1,0);
+        glRotated(gZ, 0,0,1);
+    */
         glColor4f(0.3, 0.3, 0.3, 1);
         tubo->paint(full);
         glColor4f(0,1,1,.5);
@@ -178,10 +180,9 @@ void GLWidget::buildRot(int i){
         Rz[4] = sz; Rz[5] =  cz;
     }
 
-    //Calcular Rot=Rx*Ry*Rz
+    //TODO Calcular Rot=Rx*Ry*Rz
 
 }
-
 
 void GLWidget::resizeGL(int width, int height){
     //se actualiza puerto de vista
