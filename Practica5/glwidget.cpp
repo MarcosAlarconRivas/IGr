@@ -35,9 +35,9 @@ GLWidget::GLWidget(QWidget *parent)
 
     //crear los objetos de la escena
     //tubo= new Extrusion(3, 6, &vivain0, &vivain1, &vivain2, 33);
-    tubo= new Extrusion(1, 6, &rusa0, &rusa1, &rusa2, 2, 0, 1);//4*M_PI);
+    tubo= new Extrusion(1, 8, &rusa0, &rusa1, &rusa2, 66, 0, 4*M_PI);
     //tubo= new Extrusion(1, 8, V3D(10,0,0), V3D(10,10,10));
-    //tubo= new Extrusion(.5, 6, &rusa0, 66, 0, 4*M_PI);
+    //tubo= new Extrusion(1, 8, &rusa0, 66, 0, 4*M_PI);
     //tubo= new Extrusion(3, 6, &toro, &toro, &toro, 33);
 }
 
@@ -64,8 +64,8 @@ void GLWidget::initializeGL(){
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     //no pintar caras traseras
-    /*glCullFace(GL_BACK);
-    glEnable(GL_CULL_FACE);*/
+    glCullFace(GL_BACK);
+    glEnable(GL_CULL_FACE);
 
     //Cámara
     eye[0]=eye[1]=eye[2] =100;

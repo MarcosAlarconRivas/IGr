@@ -63,11 +63,12 @@ static V3D perpen(V3D v){
 //builds the fernet frame for the curve point
 static void frenet(float* M, V3D C, V3D dC, V3D ddC){
     V3D T= dC %1, B= dC ^ ddC, N= T ^ B;
-                            //this half matrix is not used
-    M[0]= N[0]; M[1]= N[1]; //M[2]= N[2]; M[3]= 0;
-    M[4]= B[0]; M[5]= B[1]; //M[6]= B[2]; M[7]= 0;
-    M[8]= T[0]; M[9]= T[1]; //M[10]=T[2]; M[11]=0;
-    M[12]=C[0]; M[13]=C[1]; //M[14]=C[2]; M[15]=1;
+
+    M[0] = N[0]; M[1] = B[0]; /*M[2]= T[0];*/ M[3]= C[0];
+    M[4] = N[1]; M[5] = B[1]; /*M[6]= T[1];*/ M[7]= C[1];
+    M[8] = N[2]; M[9] = B[2]; /*M[10]=T[2];*/ M[11]=C[2];
+    /*M[12]=  0  ; M[13]=  0  ; M[14]= 0  ; M[15]= 1  ;*/
+    //This elemets (2,6,10,12,13,14,15) are not used
 }
 
 //joins vertex points for an Extrusion of @num 'cylindres' of @s sides
@@ -96,13 +97,10 @@ Extrusion::Extrusion(vector<v2d> cut, V3D(*d0)(double),V3D(*d1)(double),V3D(*d2)
     double step= (tf-t0)/(num-1);//inc in each step of curve
     vector<v2d> norm = normals(cut);
 
-    float M[16]= {1,0,0,0,
-                  0,1,0,0,
-                  0,0,1,0,
-                  0,0,0,1};
+    float M[16]={1,0,0,0, 0,1,0,0, 0,0,1,0, 0,0,0,1};
 
-    vertex= vector<vtx_p>(s*num);
     double t=t0;
+    vertex= vector<vtx_p>(s*num);
     for(unsigned c=0; c<num; c++, t+=step){
         frenet(M, d0(t), d1(t), d2(t));
         for(unsigned i=0; i<s; i++){
@@ -127,18 +125,18 @@ Extrusion::Extrusion(vector<v2d> cut, V3D(*f)(double), unsigned num, double t0, 
     double step= (tf-t0)/(num-1);//inc in each step of curve
     vector<v2d> norm = normals(cut);
 
-    //build vertex
+    float M[16]={1,0,0,0, 0,1,0,0, 0,0,1,0, 0,0,0,1};
+
     double t=t0;
-    V3D _p = f(t0-step), p = f(t0), p_ = f(t0+step);
     vertex= vector<vtx_p>(s*num);
-    for(unsigned c=0; c<num; c++, _p=p, p=p_, p_=f(t+=step)){
-        V3D d0= (p- _p + p-p_)%1;
-        V3D d1= perpen(d0);
-        V3D d2= d0 ^ d1;
-        float M[16]={d2[0],d1[0],d0[0],p[0],
-                     d2[1],d1[1],d0[1],p[0],
-                     d2[2],d1[2],d0[2],p[0],
-                      0,    0,    0,    1  };
+    for(unsigned c=0; c<num; c++,t+=step){
+        V3D C= f(t);
+        V3D T= ( f(t+step) - f(t-step) )%1;
+        V3D B= perpen(T);
+        V3D N= T ^ B;
+        M[0] = N[0]; M[1] = B[0]; M[3]= C[0];
+        M[4] = N[1]; M[5] = B[1]; M[7]= C[1];
+        M[8] = N[2]; M[9] = B[2]; M[11]=C[2];
 
         for(unsigned i=0; i<s; i++){
             float x= cut[i].x;
@@ -146,7 +144,7 @@ Extrusion::Extrusion(vector<v2d> cut, V3D(*f)(double), unsigned num, double t0, 
             V3D p = V3D(x*M[0]+y*M[1]+M[3], x*M[4]+y*M[5]+M[7], x*M[8]+y*M[9]+M[11], 1.0);
             x= norm[i].x;
             y= norm[i].y;
-            V3D v = V3D(x*M[0]+y*M[1], x*M[4]+y*M[5], x*M[8]+y*M[9], 0.0);// %1
+            V3D v = V3D(x*M[0]+y*M[1], x*M[4]+y*M[5], x*M[8]+y*M[9], 0.0);
             vertex[c*s+i]= make_shared<vtx>(vtx{p,v});
         }
     }
