@@ -23,7 +23,7 @@ protected:
     double t;
     GLdouble gX, gY, gZ;
     bool full=1, showN=0;
-    float Rot[16],Rx[16],Ry[16],Rz[16];
+    float Rx[16],Ry[16],Rz[16];//,Rot[16];
 
     void initializeGL();
     void paintGL();
