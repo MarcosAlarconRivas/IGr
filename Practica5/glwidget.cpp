@@ -25,7 +25,8 @@ GLWidget::GLWidget(QWidget *parent)
         /*Rot[i]=*/Rx[i]=Ry[i]=Rz[i]=I[i];
 
     //crear los objetos de la escena
-    tubo= new Extrusion(1, 16, &rusa0, &rusa1, &rusa2, 100, 0, 4*M_PI);
+    //tubo= new Extrusion(1, 16, &rusa0, &rusa1, &rusa2, 100, 0, 4*M_PI);
+    tubo= new Extrusion(1, 16, &rusa0, 66, 0, 4*M_PI);
 }
 
 GLWidget::~GLWidget(){

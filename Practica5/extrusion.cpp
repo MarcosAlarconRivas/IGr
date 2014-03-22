@@ -129,11 +129,12 @@ Extrusion::Extrusion(vector<v2d> cut, V3D(*f)(double), unsigned num, double t0, 
 
     double t=t0;
     vertex= vector<vtx_p>(s*num);
+    V3D B= perpen(( f(t+step/2) - f(t-step/2) ));
     for(unsigned c=0; c<num; c++,t+=step){
         V3D C= f(t);
-        V3D T= ( f(t+step) - f(t-step) )%1;
-        V3D B= perpen(T);
+        V3D T= ( f(t+step/2) - f(t-step/2) )%1;
         V3D N= T ^ B;
+        B = N ^ T;
         M[0] = N[0]; M[1] = B[0]; M[3]= C[0];
         M[4] = N[1]; M[5] = B[1]; M[7]= C[1];
         M[8] = N[2]; M[9] = B[2]; M[11]=C[2];
