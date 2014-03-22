@@ -75,13 +75,13 @@ static void quadFaces(vector<Face> &face, const vector<vtx_p> &vertex, unsigned 
     face= vector<Face>(s*num);
     for(unsigned c=0; c<num; c++)
         for(unsigned p=0; p<s; p++){
-            unsigned cs = c*s, c1s = (c+1)*s;//cut last is not joined whith first
+            unsigned cs = c*s, c1s = (c+1)*s;//last cut is not joined whith first
             unsigned p1 = (p+1)%s;
             Face fa= Face(4);
             fa[0]= vertex[p + cs];
-            fa[1]= vertex[p1+ cs];
+            fa[1]= vertex[p +c1s];
             fa[2]= vertex[p1+c1s];
-            fa[3]= vertex[p +c1s];
+            fa[3]= vertex[p1+ cs];
             face[cs+p]= fa;
         }
 }

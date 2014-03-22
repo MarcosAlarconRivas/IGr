@@ -34,9 +34,9 @@ GLWidget::GLWidget(QWidget *parent)
     Rot[1]=Rot[2]=Rot[3]=Rot[4]=Rot[6]=Rot[7]=Rot[8]=Rot[9]=Rot[11]=Rot[12]=Rot[13]=Rot[14]=0;
     //crear los objetos de la escena
     //tubo= new Extrusion(3, 6, &vivain0, &vivain1, &vivain2, 33);
-    //tubo= new Extrusion(1, 6, &rusa0, &rusa1, &rusa2, 66, 0, 4*M_PI);
+    tubo= new Extrusion(1, 6, &rusa0, &rusa1, &rusa2, 2, 0, 0.5);//4*M_PI);
     //tubo= new Extrusion(1, 8, V3D(10,0,0), V3D(10,10,10));
-    tubo= new Extrusion(.5, 6, &rusa0, 66, 0, 4*M_PI);
+    //tubo= new Extrusion(.5, 6, &rusa0, 66, 0, 4*M_PI);
     //tubo= new Extrusion(3, 6, &toro, &toro, &toro, 33);
 }
 
