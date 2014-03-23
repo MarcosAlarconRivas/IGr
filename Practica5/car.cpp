@@ -65,7 +65,7 @@ void Car::advance(double inc){
 void Car::paint(bool f)const{
     glPushMatrix();
         glMultTransposeMatrixf(M);
-        //glRotated(180,0,0,1);
+        glRotated(180,0,0,1);
         glColor4fv(cCol);
         chassis->paint(f);
 
@@ -98,7 +98,7 @@ void Car::paint(bool f)const{
     glPopMatrix();
 }
 
-static unsigned const WHELL_SLICES = 4;
+static unsigned const WHELL_SLICES = 12;
 
 void Car::makeWheel()const{
     gluCylinder(wheel, wR, wR, wW, WHELL_SLICES, 1);
@@ -137,11 +137,12 @@ void Car::roll(double angle){
     rollP-=360;
 }
 
-inline void Car::setRollConstant(double v){
+void Car::setRollConstant(double v){
     rollV=v;
 }
 
-inline void Car::setT(double t0){
+void Car::setT(double t0){
     t=t0;
+    frenet();
 }
 

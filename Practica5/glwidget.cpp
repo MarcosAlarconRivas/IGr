@@ -31,6 +31,7 @@ GLWidget::GLWidget(QWidget *parent)
     car->setWay(&rusa0, &rusa1, &rusa2);
     car->setChassisCol(0, 1, 0);
     car->setWheelsCol(.5, .5, .5);
+    car->setT(0);
 }
 
 GLWidget::~GLWidget(){
@@ -180,10 +181,10 @@ void GLWidget::resizeGL(int width, int height){
     aplyView();
 }
 
-void GLWidget::step(){
+/*void GLWidget::step(){
     car->advance(.05);
     repaint();
-}
+}*/
 
 void GLWidget::keyPressEvent(QKeyEvent *e){
     int key= e->key();
@@ -239,6 +240,14 @@ void GLWidget::keyPressEvent(QKeyEvent *e){
 
             case Qt::Key_K :
                         axis= !axis;
+                        break;
+
+            case Qt::Key_W :
+                        car->advance( .05);
+                        break;
+
+            case Qt::Key_Q :
+                        car->advance(-.05);
                         break;
 
             default:   return;

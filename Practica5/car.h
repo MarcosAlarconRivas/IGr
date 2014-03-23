@@ -21,7 +21,7 @@ protected:
     float cCol[4], wCol[4];//colors
     double wR, wW;//wheels dimensions
     double cW, cH, cL;//wheels positions
-    double rollV=180;//rotation speed of wheels
+    double rollV=360;//rotation speed of wheels
     double rollP=0;//current angle of rotation
 
 private:
