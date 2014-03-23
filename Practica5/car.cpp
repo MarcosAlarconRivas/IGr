@@ -30,8 +30,8 @@ void Car::Cube::addFace(int f, int i0, int i1, int i2, int i3){
 
 Car::Car(double width, double height, double length, double wheelRadius, double wheelWidth){
     wR=wheelRadius; wW= wheelWidth;
-    double w=width/2, h=height/2, l=length/2;
-    chassis= unique_ptr<Cube>(new Cube(w,h,l));
+    cW=width/2; cH=height/2; cL=length/2;
+    chassis= unique_ptr<Cube>(new Cube(cW,cH,cL));
     wheel= gluNewQuadric();
 }
 
@@ -59,16 +59,42 @@ void Car::setWay(V3D (*C)(double), V3D (*dC)(double), V3D (*ddC)(double)){
 void Car::advance(double inc){
     t += inc;
     frenet();
-    //roll(inc*rollV);
+    roll(inc*rollV);
 }
 
 void Car::paint(bool f)const{
     glPushMatrix();
         glMultTransposeMatrixf(M);
+        //glRotated(180,0,0,1);
         glColor4fv(cCol);
         chassis->paint(f);
+
         glColor4fv(wCol);
-        //paint wheels
+        glPushMatrix();//left front wheel
+            glTranslated( cW,-cH, cL);
+            glRotated(-90, 0,1,0);
+            glRotated(-rollP, 0,0,1);
+            makeWheel();
+        glPopMatrix();
+        glPushMatrix();//left back wheel
+            glTranslated( cW,-cH,-cL);
+            glRotated(-90, 0,1,0);
+            glRotated(-rollP, 0,0,1);
+            makeWheel();
+        glPopMatrix();
+        glPushMatrix();//rigth front wheel
+            glTranslated(-cW,-cH, cL);
+            glRotated( 90, 0,1,0);
+            glRotated( rollP, 0,0,1);
+            makeWheel();
+        glPopMatrix();
+        glPushMatrix();//rigth back wheel
+            glTranslated(-cW,-cH,-cL);
+            glRotated( 90, 0,1,0);
+            glRotated( rollP, 0,0,1);
+            makeWheel();
+        glPopMatrix();
+
     glPopMatrix();
 }
 
@@ -102,5 +128,20 @@ void Car::setChassisCol(float r, float g, float b, float a){
 
 void Car::setWheelsCol(float r, float g, float b, float a){
     wCol[0]=r; wCol[1]=g; wCol[2]=b; wCol[3]=a;
+}
+
+void Car::roll(double angle){
+    rollP += angle;
+    if(rollP>360)rollP-=360;
+    if(rollP>0)return;
+    rollP-=360;
+}
+
+inline void Car::setRollConstant(double v){
+    rollV=v;
+}
+
+inline void Car::setT(double t0){
+    t=t0;
 }
 

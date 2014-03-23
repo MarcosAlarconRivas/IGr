@@ -20,7 +20,9 @@ protected:
     unique_ptr<Cube> chassis=0;
     float cCol[4], wCol[4];//colors
     double wR, wW;//wheels dimensions
-    double rollV=1;//rotation speed of wheels
+    double cW, cH, cL;//wheels positions
+    double rollV=180;//rotation speed of wheels
+    double rollP=0;//current angle of rotation
 
 private:
     GLUquadric* wheel=0;
