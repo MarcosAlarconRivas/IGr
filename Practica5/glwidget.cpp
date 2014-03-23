@@ -19,22 +19,27 @@ GLWidget::GLWidget(QWidget *parent)
     setFocusPolicy(Qt::ClickFocus);
     setFocus();
 
-    t=gX=gY=gZ=0;
+    gX=gY=gZ=0;
     float I[16] = {1,0,0,0, 0,1,0,0, 0,0,1,0, 0,0,0,1};
     for(int i=0;i<16;i++)
         /*Rot[i]=*/Rx[i]=Ry[i]=Rz[i]=I[i];
 
     //crear los objetos de la escena
-    //tubo= new Extrusion(1, 16, &rusa0, &rusa1, &rusa2, 100, 0, 4*M_PI);
-    tubo= new Extrusion(1, 16, &rusa0, 66, 0, 4*M_PI);
+    pipe= new Extrusion(1, 16, &rusa0, &rusa1, &rusa2, 100, 0, 4*M_PI);
+    //pipe= new Extrusion(1, 16, &rusa0, 200, 0, 4*M_PI);
+    car = new Car(.75, .75, 1, .2, .1);
+    car->setWay(&rusa0, &rusa1, &rusa2);
+    car->setChassisCol(0, 1, 0);
+    car->setWheelsCol(.5, .5, .5);
 }
 
 GLWidget::~GLWidget(){
-    delete tubo;
+    delete pipe;
+    delete car;
 }
 
 void GLWidget::initializeGL(){
-    glClearColor(0.6,0.7,0.8,1.0);
+    glClearColor(0,0,0,1);//0.6,0.7,0.8,1.0);
     glEnable(GL_LIGHTING);
 
     glEnable(GL_COLOR_MATERIAL);
@@ -100,20 +105,13 @@ void GLWidget::paintGL(){
         glRotated(gY, 0,1,0);
         glRotated(gZ, 0,0,1);
     */
-        glColor4f(0.3, 0.3, 0.3, 1);
-        tubo->paint(full);
+        glColor4f(0, 0, 1, 1);
+        pipe->paint(full);
         glColor4f(0,1,1,.5);
-        if(showN)tubo->paintNormals();
+        if(showN)pipe->paintNormals();
 
-        auto esfera=gluNewQuadric();
-        glColor4f(1, 1, 0, .3);
-        glPushMatrix();
-            V3D tr= rusa0(t);
-            glTranslatef(tr[0], tr[1], tr[2]);
-            gluQuadricDrawStyle(esfera, GLU_FILL);
-            gluSphere(esfera, 1, 30, 30);
-        glPopMatrix();
-        gluDeleteQuadric(esfera);
+        car->paint(full);
+
     glPopMatrix();
 }
 
@@ -180,8 +178,7 @@ void GLWidget::resizeGL(int width, int height){
 }
 
 void GLWidget::step(){
-    t+=.01;
-    if(t>4*M_PI)t-=4*M_PI;
+    car->advance(.1);
     repaint();
 }
 

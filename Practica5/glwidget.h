@@ -5,6 +5,7 @@
 #include <QKeyEvent>
 #include <GL/glu.h>
 #include "extrusion.h"
+#include "car.h"
 
 class GLWidget : public QGLWidget{
     Q_OBJECT
@@ -19,11 +20,12 @@ public slots:
 protected:
     GLdouble eye[3], look[3], up[3]; //Camara
     GLdouble zoom, N, F;  //Volumen de vista
-    Extrusion *tubo;
-    double t;
     GLdouble gX, gY, gZ;
-    bool full=1, showN=0;
     float Rx[16],Ry[16],Rz[16];//,Rot[16];
+    bool full=1, showN=0;
+
+    Extrusion *pipe;
+    Car *car;
 
     void initializeGL();
     void paintGL();
