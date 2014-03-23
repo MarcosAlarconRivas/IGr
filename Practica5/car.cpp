@@ -59,10 +59,13 @@ void Car::advance(double inc){
 }
 
 void Car::paint(bool f)const{
-    glColor4fv(cCol);
-    chassis->paint(f);
-    glColor4fv(wCol);
-    //wheel->paint(f);
+    glPushMatrix();
+        glMultTransposeMatrixf(M);
+        glColor4fv(cCol);
+        chassis->paint(f);
+        glColor4fv(wCol);
+        //wheel->paint(f);
+    glPopMatrix();
 }
 
 void Car::setChassisCol(float r, float g, float b, float a){

@@ -22,7 +22,7 @@ protected:
     GLdouble zoom, N, F;  //Volumen de vista
     GLdouble gX, gY, gZ;
     float Rx[16],Ry[16],Rz[16];//,Rot[16];
-    bool full=1, showN=0;
+    bool full=1, showN=0, axis=1;
 
     Extrusion *pipe;
     Car *car;

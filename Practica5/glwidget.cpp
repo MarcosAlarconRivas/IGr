@@ -84,18 +84,20 @@ void GLWidget::initializeGL(){
 void GLWidget::paintGL(){
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    //Axis draw
-    glBegin(GL_LINES);
-          glColor4f(1, 0, 0, 1);
-          glVertex3f(  0, 0, 0);
-          glVertex3f(100, 0, 0);
-          glColor4f(0, 1, 0, 1);
-          glVertex3f( 0,   0, 0);
-          glVertex3f( 0, 100, 0);
-          glColor4f(0, 0, 1, 1);
-          glVertex3f( 0, 0,  0);
-          glVertex3f( 0, 0, 100);
-    glEnd();
+    if(axis){
+        //Axis draw
+        glBegin(GL_LINES);
+              glColor4f(1, 0, 0, 1);
+              glVertex3f(  0, 0, 0);
+              glVertex3f(100, 0, 0);
+              glColor4f(0, 1, 0, 1);
+              glVertex3f( 0,   0, 0);
+              glVertex3f( 0, 100, 0);
+              glColor4f(0, 0, 1, 1);
+              glVertex3f( 0, 0,  0);
+              glVertex3f( 0, 0, 100);
+        glEnd();
+    }
 
     glPushMatrix();
         glMultTransposeMatrixf(Rx);
@@ -232,6 +234,10 @@ void GLWidget::keyPressEvent(QKeyEvent *e){
 
             case Qt::Key_J :
                         showN= !showN;
+                        break;
+
+            case Qt::Key_K :
+                        axis= !axis;
                         break;
 
             default:   return;
