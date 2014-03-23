@@ -29,10 +29,14 @@ void Car::Cube::addFace(int f, int i0, int i1, int i2, int i3){
 }
 
 Car::Car(double width, double height, double length, double wheelRadius, double wheelWidth){
+    wR=wheelRadius; wW= wheelWidth;
     double w=width/2, h=height/2, l=length/2;
     chassis= unique_ptr<Cube>(new Cube(w,h,l));
-    //TODO bouid wheels
+    wheel= gluNewQuadric();
+}
 
+Car::~Car(){
+    gluDeleteQuadric(wheel);
 }
 
 //builds the fernet frame (M) for the current point (t)
@@ -55,7 +59,7 @@ void Car::setWay(V3D (*C)(double), V3D (*dC)(double), V3D (*ddC)(double)){
 void Car::advance(double inc){
     t += inc;
     frenet();
-    //roll(inc*rollW);
+    //roll(inc*rollV);
 }
 
 void Car::paint(bool f)const{
@@ -64,7 +68,31 @@ void Car::paint(bool f)const{
         glColor4fv(cCol);
         chassis->paint(f);
         glColor4fv(wCol);
-        //wheel->paint(f);
+        //paint wheels
+    glPopMatrix();
+}
+
+static unsigned const WHELL_SLICES = 4;
+
+void Car::makeWheel()const{
+    gluCylinder(wheel, wR, wR, wW, WHELL_SLICES, 1);
+    glPushMatrix();
+        glRotated(180, 1, 0, 0);
+        gluDisk(wheel, 0, wR, WHELL_SLICES, 1);
+    glPopMatrix();
+    glPushMatrix();
+        glTranslated(0, 0, wW);
+        gluDisk(wheel, 0, wR, WHELL_SLICES, 1);
+    glPopMatrix();
+}
+
+void Car::paintNormals()const{
+    glPushMatrix();
+        glMultTransposeMatrixf(M);
+        glColor4fv(cCol);
+        chassis->paintNormals();
+        glColor4fv(wCol);
+        //paint wheels normals
     glPopMatrix();
 }
 

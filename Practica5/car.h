@@ -1,6 +1,7 @@
 #ifndef CAR_H
 #define CAR_H
 #include <mesh.h>
+#include <GL/glu.h>
 
 class Car{
 private:
@@ -14,13 +15,19 @@ protected:
     V3D(*d1)(double)=0;
     V3D(*d2)(double)=0;
     float M [16]={1,0,0,0, 0,1,0,0, 0,0,1,0, 0,0,0,1};
-    float cCol[4], wCol[4];
-    double t=0, rollW=1;
+    double t=0;//current position of the car
+
     unique_ptr<Cube> chassis=0;
-    //vector<GLUquadric> wheel= vector<GLUquadric>(4);
+    float cCol[4], wCol[4];//colors
+    double wR, wW;//wheels dimensions
+    double rollV=1;//rotation speed of wheels
+
+private:
+    GLUquadric* wheel=0;
 
 public:
     Car(double width, double height, double length, double wheelRadius, double wheelWidth);
+   ~Car();
     void setChassisCol(float r, float g, float b, float a=1);
     void setWheelsCol (float r, float g, float b, float a=1);
     void setWay(V3D(*C)(double), V3D(*dC)(double), V3D(*ddC)(double));
@@ -28,10 +35,12 @@ public:
     void setT(double t);
     void advance(double t);
     void paint(bool f=1)const;
+    void paintNormals()const;
 
-private:
+protected:
     void roll(double angle);
     void frenet();
+    void makeWheel()const;
 
 };
 

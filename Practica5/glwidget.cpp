@@ -113,6 +113,7 @@ void GLWidget::paintGL(){
         if(showN)pipe->paintNormals();
 
         car->paint(full);
+        if(showN)car->paintNormals();
 
     glPopMatrix();
 }
