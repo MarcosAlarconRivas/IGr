@@ -27,7 +27,7 @@ GLWidget::GLWidget(QWidget *parent)
     //crear los objetos de la escena
     pipe= new Extrusion(1, 16, &rusa0, &rusa1, &rusa2, 100, 0, 4*M_PI);
     //pipe= new Extrusion(1, 16, &rusa0, 200, 0, 4*M_PI);
-    car = new Car(.75, .75, 1, .2, .1);
+    car = new Car(1, .75, 1.5, .2, .1);
     car->setWay(&rusa0, &rusa1, &rusa2);
     car->setChassisCol(0, 1, 0);
     car->setWheelsCol(.5, .5, .5);
@@ -180,7 +180,7 @@ void GLWidget::resizeGL(int width, int height){
 }
 
 void GLWidget::step(){
-    car->advance(.1);
+    car->advance(.05);
     repaint();
 }
 

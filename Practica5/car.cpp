@@ -37,7 +37,7 @@ Car::Car(double width, double height, double length, double wheelRadius, double 
 
 //builds the fernet frame (M) for the current point (t)
 void Car::frenet(){
-    V3D C= d0(t) %1;
+    V3D C= d0(t);
     V3D T= d1(t) %1;
     V3D B= T ^ d2(t);
     V3D N= T ^ B;
