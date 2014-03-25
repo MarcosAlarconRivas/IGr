@@ -20,6 +20,12 @@ public:
 
     Extrusion(double raduis, unsigned sides, V3D(*d0)(double),V3D(*d1)(double),V3D(*d2)(double),
               unsigned numOfCuts, double from=0, double to=2*M_PI);
+
+protected:
+    Extrusion(){}
+    static vector<v2d>& poligon(double rad, unsigned sides);
+    static vector<v2d>& normals(const vector<v2d>& cut);
+    static void frenet(float* M, V3D C, V3D dC, V3D ddC);
 };
 
 #endif // EXTRUSION_H

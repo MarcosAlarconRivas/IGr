@@ -1,4 +1,5 @@
 #include "glwidget.h"
+#include "trglpipe.h"
 
 static const double k = 2;
 
@@ -25,9 +26,11 @@ GLWidget::GLWidget(QWidget *parent)
         /*Rot[i]=*/Rx[i]=Ry[i]=Rz[i]=I[i];
 
     //crear los objetos de la escena
-    pipe= new Extrusion(1, 16, &rusa0, &rusa1, &rusa2, 100, 0, 4*M_PI);
-    //pipe= new Extrusion(1, 16, &rusa0, 200, 0, 4*M_PI);
-    car = new Car(1, .75, 1.5, .2, .1);
+    //pipe= new Extrusion(1, 16, &rusa0, &rusa1, &rusa2, 100, 0, 4*M_PI);
+    //pipe= new Extrusion(1, 16, &rusa0, 100, 0, 4*M_PI);
+    pipe= new TrglPipe(1, 6, &rusa0, &rusa1, &rusa2, 20, 0, 4*M_PI);
+
+    car= new Car(1, .75, 1.5, .2, .1);
     car->setWay(&rusa0, &rusa1, &rusa2);
     car->setChassisCol(0, 1, 0);
     car->setWheelsCol(.5, .5, .5);

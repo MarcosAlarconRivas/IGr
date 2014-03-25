@@ -2,7 +2,7 @@
 #include <cmath>
 
 //private fuction to make a regular poligon of @sides points and @rad size
-static vector<v2d>& poligon(double rad, unsigned sides){
+vector<v2d>& Extrusion::poligon(double rad, unsigned sides){
     static vector<v2d> pol= vector<v2d>(sides);
 
     float theta = 2 * M_PI / sides;
@@ -21,7 +21,7 @@ static vector<v2d>& poligon(double rad, unsigned sides){
 }
 
 //returns normals for a 2d poligon
-static vector<v2d>& normals(const vector<v2d>& cut){
+vector<v2d>& Extrusion::normals(const vector<v2d>& cut){
     unsigned s = cut.size();
     static vector<v2d> norm = vector<v2d>(s);
     for(unsigned i=0; i<s; i++){
@@ -61,7 +61,7 @@ static V3D perpen(V3D v){
 }
 
 //builds the fernet frame for the curve point
-static void frenet(float* M, V3D C, V3D dC, V3D ddC){
+void Extrusion::frenet(float* M, V3D C, V3D dC, V3D ddC){
     V3D T= dC %1, B= dC ^ ddC, N= T ^ B;
 
     M[0] = N[0]; M[1] = B[0]; /*M[2]= T[0];*/ M[3]= C[0];
@@ -74,17 +74,17 @@ static void frenet(float* M, V3D C, V3D dC, V3D ddC){
 //joins vertex points for an Extrusion of @num 'cylindres' of @s sides
 static void quadFaces(vector<Face> &face, const vector<vtx_p> &vertex, unsigned s, unsigned num){
     face= vector<Face>(s*num);
-    for(unsigned c=0; c<num; c++)
+    for(unsigned c=0; c<num; c++){
+        unsigned cs = c*s, c1s = (c+1)*s;
         for(unsigned p=0; p<s; p++){
-            unsigned cs = c*s, c1s = (c+1)*s;//last cut is not joined whith first
             unsigned p1 = (p+1)%s;
-            Face fa= Face(4);
-            fa[0]= vertex[p + cs];
-            fa[1]= vertex[p +c1s];
-            fa[2]= vertex[p1+c1s];
-            fa[3]= vertex[p1+ cs];
-            face[cs+p]= fa;
+            Face*f= &(face[cs+p]= Face(4));
+            (*f)[0]= vertex[p + cs];
+            (*f)[1]= vertex[p +c1s];
+            (*f)[2]= vertex[p1+c1s];
+            (*f)[3]= vertex[p1+ cs];
         }
+    }
 }
 
 Extrusion::Extrusion(double r, unsigned s, V3D(*d0)(double),V3D(*d1)(double),
@@ -193,3 +193,4 @@ Extrusion::Extrusion(vector<v2d> cut, V3D t0, V3D tf){
     //build faces
     quadFaces(face, vertex, s, 1);
 }
+
