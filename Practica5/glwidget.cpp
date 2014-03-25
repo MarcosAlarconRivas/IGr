@@ -28,7 +28,7 @@ GLWidget::GLWidget(QWidget *parent)
     //crear los objetos de la escena
     //pipe= new Extrusion(1, 16, &rusa0, &rusa1, &rusa2, 100, 0, 4*M_PI);
     //pipe= new Extrusion(1, 16, &rusa0, 100, 0, 4*M_PI);
-    pipe= new TrglPipe(1, 6, &rusa0, &rusa1, &rusa2, 20, 0, 4*M_PI);
+    pipe= new TrglPipe(1, 16, &rusa0, &rusa1, &rusa2, 50, 0, 4*M_PI);
 
     car= new Car(1, .75, 1.5, .2, .1);
     car->setWay(&rusa0, &rusa1, &rusa2);

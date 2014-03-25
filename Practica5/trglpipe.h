@@ -8,26 +8,19 @@ public:
              unsigned cutNum, double t0=0, double tf=2*M_PI){
 
         vector<v2d> cut= poligon(rad,sides);
-
-        //twist for each inter cut
-        double cz= cos(M_PI/sides), sz= sin(M_PI/sides);
-       /*Rz[16]={cz,-sz, 0, 0,
-                sz, cz, 0, 0,
-                 0,  0, 0, 0,
-                 0,  0, 0, 1};*/
-
-        double step= (tf-t0)/(cutNum-1)/2;
         vector<v2d> norm = normals(cut);
 
         float M[16]={1,0,0,0, 0,1,0,0, 0,0,1,0, 0,0,0,1};
 
+        //twist for each inter cut
+        double cz= cos(M_PI/sides), sz= sin(M_PI/sides);
         double t=t0;
+        double step= (tf-t0)/(cutNum-1)/2;
         unsigned numTot= (2*cutNum)-1;//num of cuts+ intercuts
         vertex= vector<vtx_p>(sides*numTot);
         for(unsigned c=0; c<numTot; c++, t+=step){
             frenet(M, d0(t), d1(t), d2(t));
             if(c%2)//twist the cut
-                //M*=Rz
                 for(int i=0;i<=12;i+=4){
                     float Mi=M[i];
                     M[i]= Mi*cz+M[i+1]*sz;
@@ -45,31 +38,31 @@ public:
         }
 
         //trangFaces(e, s, numR)
-        face= vector<Face>(sides*cutNum<<2);
+        face= vector<Face>(sides*(cutNum-1)<<2);
         unsigned currF=0;
-        for(unsigned c=0; c<cutNum-1; c++){
-            unsigned c0s = c*sides;//curent cut
-            unsigned c1sp = c0s+sides;//demi-cut
-            unsigned c2s = c1sp+sides;//next cut
-            for(unsigned p=0; p<sides; p++,c1sp++){
-                unsigned p1 = (p+1)%sides;//next point
-                //this 4 triangle cover the same area than the quad in quadFaces
+        for(unsigned c=0; c<numTot-1; c+=2){
+            unsigned p0 = c*sides;//curent point
+            unsigned p1 = p0+sides;//current point in inter-cut
+            unsigned p2 = p1+sides;//next cut, current point
+            for(unsigned i=0; i<sides; i++,p0++,p1++,p2++){
+                int j = (i==sides-1) ? -i : 1;
+                //this 4 trigl covers the same area than the quad in quadFaces
                 Face*f= &(face[currF++]= Face(3));
-                (*f)[0]= vertex[c0s+p ];
-                (*f)[1]= vertex[ c1sp ];
-                (*f)[2]= vertex[c0s+p1];
+                (*f)[0]= vertex[ p0 ];
+                (*f)[1]= vertex[ p1 ];
+                (*f)[2]= vertex[p0+j];
                 f= &(face[currF++]= Face(3));
-                (*f)[0]= vertex[c0s+p ];
-                (*f)[1]= vertex[c2s+p ];
-                (*f)[2]= vertex[c1sp ];
+                (*f)[0]= vertex[ p0 ];
+                (*f)[1]= vertex[ p2 ];
+                (*f)[2]= vertex[ p1 ];
                 f= &(face[currF++]= Face(3));
-                (*f)[0]= vertex[ c1sp ];
-                (*f)[1]= vertex[c2s+p ];
-                (*f)[2]= vertex[c2s+p1];
+                (*f)[0]= vertex[ p1 ];
+                (*f)[1]= vertex[ p2 ];
+                (*f)[2]= vertex[p2+j];
                 f= &(face[currF++]= Face(3));
-                (*f)[0]= vertex[c0s+p1];
-                (*f)[1]= vertex[ c1sp ];
-                (*f)[2]= vertex[c2s+p1];
+                (*f)[0]= vertex[p0+j];
+                (*f)[1]= vertex[ p1 ];
+                (*f)[2]= vertex[p2+j];
             }
         }
 
