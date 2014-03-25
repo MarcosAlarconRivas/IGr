@@ -104,9 +104,9 @@ void GLWidget::paintGL(){
     }
 
     glPushMatrix();
-        glMultTransposeMatrixf(Rx);
-        glMultTransposeMatrixf(Ry);
-        glMultTransposeMatrixf(Rz);
+        glMultMatrixf(Rx);
+        glMultMatrixf(Ry);
+        glMultMatrixf(Rz);
     /*  glRotated(gX, 1,0,0);
         glRotated(gY, 0,1,0);
         glRotated(gZ, 0,0,1);
