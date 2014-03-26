@@ -20,8 +20,8 @@ public:
 protected:
     GLdouble eye[3], look[3], up[3]; //Camara
     GLdouble zoom, N, F;  //Volumen de vista
-    GLdouble gX, gY, gZ;
-    float Rx[16],Ry[16],Rz[16];//,Rot[16];
+    //GLdouble gX, gY, gZ;
+    float Rot[16]; //Rx[16],Ry[16],Rz[16];
     bool full=1, showN=0, axis=1;
 
     Extrusion *pipe;
@@ -34,7 +34,7 @@ protected:
 
 private:
     void aplyView();
-    void buildRot(int i);
+    void buildRot(int axis, double angle);
 };
 
 #endif

@@ -20,10 +20,10 @@ GLWidget::GLWidget(QWidget *parent)
     setFocusPolicy(Qt::ClickFocus);
     setFocus();
 
-    gX=gY=gZ=0;
+    //gX=gY=gZ=0;
     float I[16] = {1,0,0,0, 0,1,0,0, 0,0,1,0, 0,0,0,1};
     for(int i=0;i<16;i++)
-        /*Rot[i]=*/Rx[i]=Ry[i]=Rz[i]=I[i];
+        Rot[i]=/*Rx[i]=Ry[i]=Rz[i]=*/I[i];
 
     //crear los objetos de la escena
     //pipe= new Extrusion(1, 16, &rusa0, &rusa1, &rusa2, 100, 0, 4*M_PI);
@@ -104,9 +104,7 @@ void GLWidget::paintGL(){
     }
 
     glPushMatrix();
-        glMultMatrixf(Rx);
-        glMultMatrixf(Ry);
-        glMultMatrixf(Rz);
+        glMultTransposeMatrixf(Rot);
     /*  glRotated(gX, 1,0,0);
         glRotated(gY, 0,1,0);
         glRotated(gZ, 0,0,1);
@@ -132,49 +130,79 @@ void GLWidget::aplyView(){
      glMatrixMode(GL_MODELVIEW);
 }
 
-void GLWidget::buildRot(int i){
-    double _2pi= 2*M_PI;
+void GLWidget::buildRot(int i, double alpha){
     if(!i){
-        if(gX>_2pi)gX-=_2pi;
-        if(gX<0)gX+=_2pi;
-        float cx=cos(gX), sx=sin(gX);
+        float cx=cos(alpha), sx=sin(alpha);
         /*
-        Rx=float[16]{1,  0,  0, 0,
+        Rx[16]=float{1,  0,  0, 0,
                      0, cx,-sx, 0,
                      0, sx, cx, 0,
                      0,  0,  0, 1};
+         */
+
+        float R5 = cx, R6 = -sx;
+        float R9 = sx, R10=  cx;
+        //M*=Rx
+        /*
+         *              m0, m1, m2, m3
+         * m4r5+m8r6, m5r5+m9r6, m6r5+m10r6, m7r5+m11r6
+         * m4r9+m8r10,m5r9+m9r10,m6r9+m10r10,m7r9+m11r10
+         *              m12, m13, m14, m15
         */
-        Rx[5] = cx; Rx[6] = -sx;
-        Rx[9] = sx; Rx[10]=  cx;
+        for(int i=0;i<4;i++){
+            int a=4+i, b=8+i;
+            float Ma=Rot[a];
+            Rot[a]=Ma*R5+Rot[b]*R6;
+            Rot[b]=Ma*R9+Rot[b]*R10;
+        }
 
     }else if(i==1){
-        if(gY>_2pi)gY-=_2pi;
-        if(gY<0)gY+=_2pi;
-        float cy=cos(gY), sy=sin(gY);
+        float cy=cos(alpha), sy=sin(alpha);
         /*
         Ry[16]=float{cy, 0, sy, 0,
                       0, 1,  0, 0,
                     -sy, 0, cy, 0,
                       0, 0,  0, 1};
         */
-        Ry[0] =  cy; Ry[2] = sy;
-        Ry[8] = -sy; Ry[10]= cy;
+        float R0 =  cy, R2 = sy;
+        float R8 = -sy, R10= cy;
+        //M*=Ry
+        /*
+         * m0r0+m8r2, m1r0+m9r2, m2r0+m10r2, m3r0+m11r2
+         *              m4, m5, m6, m7
+         * m0r8+m8r10,m1r8+m9r10,m2r8+m10r10,m3r8+m11r10
+         *              m12, m13, m14, m15
+        */
+        for(int i=0;i<4;i++){
+            int a=i, b=8+i;
+            float Ma=Rot[a];
+            Rot[a]=Ma*R0+Rot[b]*R2;
+            Rot[b]=Ma*R8+Rot[b]*R10;
+        }
     }else if(i==2){
-        if(gZ>_2pi)gZ-=_2pi;
-        if(gZ<0)gZ+=_2pi;
-        float cz=cos(gZ), sz=sin(gZ);
+        float cz=cos(alpha), sz=sin(alpha);
         /*
         Rz[16]={cz,-sz, 0, 0,
                 sz, cz, 0, 0,
                  0,  0, 0, 0,
                  0,  0, 0, 1};
         */
-        Rz[0] = cz; Rz[1] = -sz;
-        Rz[4] = sz; Rz[5] =  cz;
+        float R0 = cz, R1 = -sz;
+        float R4 = sz, R5 =  cz;
+        //M*=Rz
+        /*
+         * m0r0+m4r1, m1r0+m5r1, m2r0+m6r1, m3r0+m7r1
+         * m0r4+m4r5, m1r4+m5r5, m2r4+m6r5, m3r4+m7r5
+         *              m8,  m9,  m10, m11
+         *              m12, m13, m14, m15
+        */
+        for(int i=0;i<4;i++){
+            int a=i, b=4+i;
+            float Ma=Rot[a];
+            Rot[a]=Ma*R0+Rot[b]*R1;
+            Rot[b]=Ma*R4+Rot[b]*R5;
+        }
     }
-
-    //TODO Calcular Rot=Rx*Ry*Rz
-
 }
 
 void GLWidget::resizeGL(int width, int height){
@@ -204,33 +232,27 @@ void GLWidget::keyPressEvent(QKeyEvent *e){
                         break;
 
             case Qt::Key_Up :
-                        gX+=.05;
-                        buildRot(0);
+                        buildRot(0, .1);
                         break;
 
             case Qt::Key_Down :
-                        gX-=.05;
-                        buildRot(0);
+                        buildRot(0, -.1);
                         break;
 
             case Qt::Key_Right :
-                        gY+=.05;
-                        buildRot(1);
+                        buildRot(1, .1);
                         break;
 
             case Qt::Key_Left :
-                        gY-=.05;
-                        buildRot(1);
+                        buildRot(1, -.1);
                         break;
 
             case Qt::Key_A :
-                        gZ+=.05;
-                        buildRot(2);
+                        buildRot(2, .1);
                         break;
 
             case Qt::Key_Z :
-                        gZ-=.05;
-                        buildRot(2);
+                        buildRot(2, -.1);
                         break;
 
             case Qt::Key_H :
