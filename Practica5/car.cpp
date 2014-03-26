@@ -40,9 +40,10 @@ Car::~Car(){
 }
 
 //builds the fernet frame (M) for the current point (t)
-void Car::frenet(){
+void Car::frenet(int inc){//adapted for drifting
     V3D C= d0(t);
-    V3D T= d1(t) %1;
+    V3D T= (inc>0)?(d1(t)*2+d2(t)) %1:
+           (inc<0)?(d1(t)*2-d2(t)) %1 :d1(t) %1;
     V3D B= T ^ d2(t);
     V3D N= T ^ B;
 
@@ -58,7 +59,7 @@ void Car::setWay(V3D (*C)(double), V3D (*dC)(double), V3D (*ddC)(double)){
 
 void Car::advance(double inc){
     t += inc;
-    frenet();
+    frenet(inc>0?1:inc?-1:0);
     roll(inc*rollV);
 }
 
@@ -143,6 +144,6 @@ void Car::setRollConstant(double v){
 
 void Car::setT(double t0){
     t=t0;
-    frenet();
+    frenet(0);
 }
 

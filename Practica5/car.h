@@ -41,7 +41,7 @@ public:
 
 protected:
     void roll(double angle);
-    void frenet();
+    void frenet(int i=0);
     void makeWheel()const;
 
 };
