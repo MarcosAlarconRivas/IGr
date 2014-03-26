@@ -14,14 +14,10 @@ public:
     GLWidget(QWidget *parent);
    ~GLWidget();
 
-/*public slots:
-    void step();*/
-
 protected:
-    GLdouble eye[3], look[3], up[3]; //Camara
-    GLdouble zoom, N, F;  //Volumen de vista
-    //GLdouble gX, gY, gZ;
-    float Rot[16]; //Rx[16],Ry[16],Rz[16];
+    GLdouble eye[3], look[3], up[3]; //Camera
+    GLdouble zoom, N, F;  //View Volume
+    float Rot[16]; //Scene rotation
     bool full=1, showN=0, axis=1;
 
     Extrusion *pipe;
@@ -34,7 +30,7 @@ protected:
 
 private:
     void aplyView();
-    void buildRot(int axis, double angle);
+    void sceneRot(int axis, double angle);
 };
 
 #endif

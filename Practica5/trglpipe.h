@@ -37,7 +37,7 @@ public:
             }
         }
 
-        //trangFaces(e, s, numR)
+        //build (triangular) faces
         face= vector<Face>(sides*(cutNum-1)<<2);
         unsigned currF=0;
         for(unsigned c=0; c<numTot-1; c+=2){

@@ -40,9 +40,9 @@ Car::~Car(){
 }
 
 //builds the fernet frame (M) for the current point (t)
-void Car::frenet(int inc){//adapted for drifting
+void Car::frenet(int inc){
     V3D C= d0(t);
-    V3D T= (d1(t)*2 +d2(t)* inc )%1;
+    V3D T= (d1(t)*2 +d2(t)* inc )%1;//adapted for drifting
     V3D B= T ^ d2(t);
     V3D N= T ^ B;
 
@@ -118,7 +118,6 @@ void Car::paintNormals()const{
         glColor4fv(cCol);
         chassis->paintNormals();
         glColor4fv(wCol);
-        //paint wheels normals
     glPopMatrix();
 }
 

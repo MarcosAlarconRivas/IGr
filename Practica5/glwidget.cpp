@@ -20,12 +20,11 @@ GLWidget::GLWidget(QWidget *parent)
     setFocusPolicy(Qt::ClickFocus);
     setFocus();
 
-    //gX=gY=gZ=0;
     float I[16] = {1,0,0,0, 0,1,0,0, 0,0,1,0, 0,0,0,1};
     for(int i=0;i<16;i++)
-        Rot[i]=/*Rx[i]=Ry[i]=Rz[i]=*/I[i];
+        Rot[i]=I[i];
 
-    //crear los objetos de la escena
+    //create scene objects
     //pipe= new Extrusion(1, 16, &rusa0, &rusa1, &rusa2, 100, 0, 4*M_PI);
     //pipe= new Extrusion(1, 16, &rusa0, 100, 0, 4*M_PI);
     pipe= new TrglPipe(1, 16, &rusa0, &rusa1, &rusa2, 50, 0, 4*M_PI);
@@ -43,7 +42,7 @@ GLWidget::~GLWidget(){
 }
 
 void GLWidget::initializeGL(){
-    glClearColor(0,0,0,1);//0.6,0.7,0.8,1.0);
+    glClearColor(0,0,0,1);
     glEnable(GL_LIGHTING);
 
     glEnable(GL_COLOR_MATERIAL);
@@ -54,17 +53,17 @@ void GLWidget::initializeGL(){
     glDepthFunc(GL_LEQUAL);
 
     glEnable(GL_NORMALIZE);
-    glShadeModel(GL_SMOOTH);//normal por vertice
-    //glShadeModel(GL_FLAT);//normal por cara
+    glShadeModel(GL_SMOOTH);//a normal for each vertex
+    //glShadeModel(GL_FLAT);//a normal for each face
 
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-    //no pintar caras traseras
+    //do not paint back faces
     glCullFace(GL_BACK);
     glEnable(GL_CULL_FACE);
 
-    //Cámara
+    //Camera
     eye[0]=eye[1]=eye[2] =100;
     look[0]=look[1]=look[2]=0;
     up[0]=0; up[1]=1; up[2]=0;
@@ -72,10 +71,10 @@ void GLWidget::initializeGL(){
     glLoadIdentity();
     gluLookAt(eye[0], eye[1], eye[2], look[0], look[1], look[2], up[0], up[1], up[2]);
 
-    //Volumen de vista
+    //View Volume
     N=1; F=1000; zoom=25;
 
-    //Luz0
+    //Ligth0
     glEnable(GL_LIGHT0);
     GLfloat LuzDifusa[]={1.0,1.0,1.0,1.0};
     glLightfv(GL_LIGHT0, GL_DIFFUSE, LuzDifusa);
@@ -104,11 +103,10 @@ void GLWidget::paintGL(){
     }
 
     glPushMatrix();
+        //Rotate scene
         glMultTransposeMatrixf(Rot);
-    /*  glRotated(gX, 1,0,0);
-        glRotated(gY, 0,1,0);
-        glRotated(gZ, 0,0,1);
-    */
+
+        //Draw scene
         glColor4f(0, 0, 1, 1);
         pipe->paint(full);
         glColor4f(0,1,1,.5);
@@ -130,7 +128,7 @@ void GLWidget::aplyView(){
      glMatrixMode(GL_MODELVIEW);
 }
 
-void GLWidget::buildRot(int i, double alpha){
+void GLWidget::sceneRot(int i, double alpha){
     if(!i){
         float cx=cos(alpha), sx=sin(alpha);
         /*
@@ -206,16 +204,11 @@ void GLWidget::buildRot(int i, double alpha){
 }
 
 void GLWidget::resizeGL(int width, int height){
-    //se actualiza puerto de vista
+    //View port update
     glViewport(0,0,width,height);
 
     aplyView();
 }
-
-/*void GLWidget::step(){
-    car->advance(.05);
-    repaint();
-}*/
 
 void GLWidget::keyPressEvent(QKeyEvent *e){
     int key= e->key();
@@ -232,27 +225,27 @@ void GLWidget::keyPressEvent(QKeyEvent *e){
                         break;
 
             case Qt::Key_Up :
-                        buildRot(0, .1);
+                        sceneRot(0, .1);
                         break;
 
             case Qt::Key_Down :
-                        buildRot(0, -.1);
+                        sceneRot(0, -.1);
                         break;
 
             case Qt::Key_Right :
-                        buildRot(1, .1);
+                        sceneRot(1, .1);
                         break;
 
             case Qt::Key_Left :
-                        buildRot(1, -.1);
+                        sceneRot(1, -.1);
                         break;
 
             case Qt::Key_A :
-                        buildRot(2, .1);
+                        sceneRot(2, .1);
                         break;
 
             case Qt::Key_Z :
-                        buildRot(2, -.1);
+                        sceneRot(2, -.1);
                         break;
 
             case Qt::Key_H :
@@ -279,4 +272,3 @@ void GLWidget::keyPressEvent(QKeyEvent *e){
     }
     repaint();
 }
-
