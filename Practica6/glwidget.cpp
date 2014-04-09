@@ -85,7 +85,22 @@ void GLWidget::paintGL(){
         glMultTransposeMatrixf(Rot);
 
         //Draw scene
-
+        GLUquadric *esfera=gluNewQuadric();
+        glColor3f(1.0, 1.0, 1.0);
+        gluQuadricDrawStyle(esfera, GLU_FILL);
+        gluSphere(esfera, 3, 30, 30);
+        glPushMatrix();
+            glTranslated(5,0,0);
+            glColor3f(1.0, 0, 0);
+            gluSphere(esfera, 2, 30, 30);
+            glTranslated(-5,5,0);
+            glColor3f(0, 1.0, 0);
+            gluSphere(esfera, 2, 30, 30);
+            glTranslated(0,-5,5);
+            glColor3f(0, 0, 1.0);
+            gluSphere(esfera, 2, 30, 30);
+            gluDeleteQuadric(esfera);
+        glPopMatrix();
     glPopMatrix();
 }
 
@@ -219,15 +234,11 @@ void GLWidget::keyPressEvent(QKeyEvent *e){
                         sceneRot(2, -.1);
                         break;
 
-            case Qt::Key_H :
+            case Qt::Key_Space :
                         full= !full;
                         break;
 
-            case Qt::Key_J :
-                        showN= !showN;
-                        break;
-
-            case Qt::Key_K :
+            case Qt::Key_0 :
                         axis= !axis;
                         break;
 

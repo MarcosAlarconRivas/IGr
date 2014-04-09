@@ -16,7 +16,7 @@ protected:
     GLdouble eye[3], look[3], up[3]; //Camera
     GLdouble zoom, N, F;  //View Volume
     float Rot[16]; //Scene rotation
-    bool full=1, showN=0, axis=1;
+    bool full=1, axis=1;
 
 
     void initializeGL();
