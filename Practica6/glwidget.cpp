@@ -42,15 +42,9 @@ void GLWidget::initializeGL(){
     glEnable(GL_CULL_FACE);
 
     //Camera
-    eye[0]=eye[1]=eye[2] =100;
-    look[0]=look[1]=look[2]=0;
-    up[0]=0; up[1]=1; up[2]=0;
-    glMatrixMode(GL_MODELVIEW);
-    glLoadIdentity();
-    gluLookAt(eye[0], eye[1], eye[2], look[0], look[1], look[2], up[0], up[1], up[2]);
-
-    //View Volume
-    N=1; F=1000; zoom=25;
+    camera.setZoom(25);
+    camera.setVolume(1, 1000);
+    camera.lookAt(100,100,100);
 
     //Ligth0
     glEnable(GL_LIGHT0);
@@ -104,15 +98,7 @@ void GLWidget::paintGL(){
     glPopMatrix();
 }
 
-void GLWidget::aplyView(){
-     glMatrixMode(GL_PROJECTION);
-     glLoadIdentity();
 
-     float z= 2*zoom;
-     GLdouble x= width()/z, y= height()/z;
-     glOrtho(-x, x,-y, y, N, F);
-     glMatrixMode(GL_MODELVIEW);
-}
 
 void GLWidget::sceneRot(int i, double alpha){
     if(!i){
@@ -190,10 +176,9 @@ void GLWidget::sceneRot(int i, double alpha){
 }
 
 void GLWidget::resizeGL(int width, int height){
-    //View port update
-    glViewport(0,0,width,height);
+    glViewport(0,0,width,height);//View port update
 
-    aplyView();
+    camera.aplyView(width,height);//View volume
 }
 
 void GLWidget::keyPressEvent(QKeyEvent *e){
@@ -201,13 +186,13 @@ void GLWidget::keyPressEvent(QKeyEvent *e){
     switch(key){
 
             case Qt::Key_Plus :
-                        zoom*=1.1;
-                        aplyView();
+                        camera.Zoom(1.1);
+                        camera.aplyView(width(), height());
                         break;
 
             case Qt::Key_Minus :
-                        zoom/=1.1;
-                        aplyView();
+                        camera.Zoom(1/1.1);
+                        camera.aplyView(width(), height());
                         break;
 
             case Qt::Key_Up :
