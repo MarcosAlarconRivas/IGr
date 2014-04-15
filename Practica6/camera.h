@@ -8,6 +8,10 @@ protected:
     GLdouble zoom=1, N=1, F=100;
 public:
     Camera();
+    void roll(double a); void yaw(double a); void pitch(double a);
+    void turnX(double a); void turnY(double a); void turnZ(double a);
+    void travel(float x, float y, float z);
+    void side(double dist); void front(double dist); void zenit(double dist);
     void aplyView(int width, int height);
     void lookAt(double eye[3], double look[3], double up[3]);
     void lookAt(double eye0, double eye1, double eye2,

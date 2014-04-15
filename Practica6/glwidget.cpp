@@ -184,17 +184,17 @@ void GLWidget::resizeGL(int width, int height){
 void GLWidget::keyPressEvent(QKeyEvent *e){
     int key= e->key();
     switch(key){
-
+            //Zoom
             case Qt::Key_Plus :
                         camera.Zoom(1.1);
                         camera.aplyView(width(), height());
                         break;
-
             case Qt::Key_Minus :
                         camera.Zoom(1/1.1);
                         camera.aplyView(width(), height());
                         break;
 
+            //Scene Rotations
             case Qt::Key_Up :
                         sceneRot(0, .1);
                         break;
@@ -219,10 +219,36 @@ void GLWidget::keyPressEvent(QKeyEvent *e){
                         sceneRot(2, -.1);
                         break;
 
-            case Qt::Key_Space :
-                        full= !full;
+
+            //Translation
+            case Qt::Key_E :
+                        camera.travel(-5,0,0);
+                        break;
+            case Qt::Key_R :
+                        camera.travel( 5,0,0);
+                        break;
+            case Qt::Key_D :
+                        camera.travel(0,-5,0);
+                        break;
+            case Qt::Key_F :
+                        camera.travel(0, 5,0);
+                        break;
+            case Qt::Key_C :
+                        camera.travel(0,0,-5);
+                        break;
+            case Qt::Key_V :
+                        camera.travel(0,0, 5);
                         break;
 
+            //Restore camera position
+            case Qt::Key_Space :
+                        camera.lookAt(100,100,100);
+                        break;
+
+            //Scene settings
+            case Qt::Key_Shift :
+                        full = !full;
+                        break;
             case Qt::Key_0 :
                         axis= !axis;
                         break;

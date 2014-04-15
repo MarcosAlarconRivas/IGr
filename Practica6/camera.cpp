@@ -2,6 +2,13 @@
 
 Camera::Camera(){}
 
+void Camera::travel(float x, float y, float z){
+    eye[0]+=x;
+    eye[1]+=y;
+    eye[2]+=z;
+    lookThere();
+}
+
 void Camera::setZoom(double zoom){
     this->zoom=zoom;
 }
