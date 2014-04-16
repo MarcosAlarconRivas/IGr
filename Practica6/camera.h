@@ -6,6 +6,8 @@ class Camera{
 protected:
     GLdouble eye[3], look[3], up[3]; //Camera
     GLdouble zoom=1, N=1, F=100;
+    int perspective=0;
+
 public:
     Camera();
     void roll(double a); void yaw(double a); void pitch(double a);
@@ -21,6 +23,9 @@ public:
     void Zoom(double ratio);
     void setZoom(double zoom);
     void setVolume(double Near, double Far);
+    inline void Orthogonal(){perspective=0;}
+    inline void Perspective(){perspective=1;}
+
 };
 
 #endif // CAMERA_H

@@ -24,10 +24,13 @@ void Camera::setVolume(double Near, double Far){
 void Camera::aplyView(int width, int height){
      glMatrixMode(GL_PROJECTION);
      glLoadIdentity();
-
-     double z= 2*zoom;
-     GLdouble x= width/z, y= height/z;
-     glOrtho(-x, x,-y, y, N, F);
+    if(!perspective){
+         double z= 2*zoom;
+         GLdouble x= width/z, y= height/z;
+         glOrtho(-x, x,-y, y, N, F);
+    }else if(perspective==1){
+         gluPerspective(zoom, ((double) width)/height, N, F);
+    }
      glMatrixMode(GL_MODELVIEW);
 }
 

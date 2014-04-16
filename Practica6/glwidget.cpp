@@ -42,7 +42,7 @@ void GLWidget::initializeGL(){
     glEnable(GL_CULL_FACE);
 
     //Camera
-    camera.setZoom(25);
+    camera.setZoom(30);
     camera.setVolume(1, 1000);
     camera.lookAt(100,100,100);
 
@@ -243,7 +243,20 @@ void GLWidget::keyPressEvent(QKeyEvent *e){
             //Restore camera position
             case Qt::Key_Space :
                         camera.lookAt(100,100,100);
+                        camera.setZoom(30);
+                        camera.aplyView(width(), height());
                         break;
+
+            //Perspectives
+            case Qt::Key_O :
+                        camera.Orthogonal();
+                        camera.aplyView(width(), height());
+                        break;
+            case Qt::Key_P :
+                        camera.Perspective();
+                        camera.aplyView(width(), height());
+                        break;
+
 
             //Scene settings
             case Qt::Key_Shift :
