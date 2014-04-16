@@ -43,6 +43,7 @@ void GLWidget::initializeGL(){
 
     //Camera
     camera.setZoom(30);
+    camera.setWindow(width(),height());
     camera.setVolume(1, 1000);
     camera.lookAt(100,100,100);
 
@@ -178,7 +179,7 @@ void GLWidget::sceneRot(int i, double alpha){
 void GLWidget::resizeGL(int width, int height){
     glViewport(0,0,width,height);//View port update
 
-    camera.aplyView(width,height);//View volume
+    camera.setWindow(width,height);//View volume
 }
 
 void GLWidget::keyPressEvent(QKeyEvent *e){
@@ -187,38 +188,50 @@ void GLWidget::keyPressEvent(QKeyEvent *e){
             //Zoom
             case Qt::Key_Plus :
                         camera.Zoom(1.1);
-                        camera.aplyView(width(), height());
                         break;
             case Qt::Key_Minus :
                         camera.Zoom(1/1.1);
-                        camera.aplyView(width(), height());
                         break;
 
             //Scene Rotations
             case Qt::Key_Up :
                         sceneRot(0, .1);
                         break;
-
             case Qt::Key_Down :
                         sceneRot(0, -.1);
                         break;
-
             case Qt::Key_Right :
                         sceneRot(1, .1);
                         break;
-
             case Qt::Key_Left :
                         sceneRot(1, -.1);
                         break;
-
             case Qt::Key_A :
                         sceneRot(2, .1);
                         break;
-
             case Qt::Key_Z :
                         sceneRot(2, -.1);
                         break;
 
+            //Camera Rotations
+            case Qt::Key_U :
+                        camera.roll(-.5);
+                        break;
+            case Qt::Key_I :
+                        camera.roll( .5);
+                        break;
+            case Qt::Key_J :
+                        camera.yaw(-.5);
+                        break;
+            case Qt::Key_K :
+                        camera.yaw( .5);
+                        break;
+            case Qt::Key_N :
+                        camera.pitch(-.5);
+                        break;
+            case Qt::Key_M :
+                        camera.pitch( .5);
+                        break;
 
             //Translation
             case Qt::Key_E :
@@ -244,17 +257,14 @@ void GLWidget::keyPressEvent(QKeyEvent *e){
             case Qt::Key_Space :
                         camera.lookAt(100,100,100);
                         camera.setZoom(30);
-                        camera.aplyView(width(), height());
                         break;
 
             //Perspectives
             case Qt::Key_O :
                         camera.Orthogonal();
-                        camera.aplyView(width(), height());
                         break;
             case Qt::Key_P :
                         camera.Perspective();
-                        camera.aplyView(width(), height());
                         break;
 
 

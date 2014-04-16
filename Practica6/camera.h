@@ -1,20 +1,24 @@
 #ifndef CAMERA_H
 #define CAMERA_H
 #include <GL/glu.h>
+#include "v3d.h"
 
 class Camera{
 protected:
-    GLdouble eye[3], look[3], up[3]; //Camera
+    V3D eye, look, up; //Camera
     GLdouble zoom=1, N=1, F=100;
     int perspective=0;
+    unsigned width=100, height=100;
 
 public:
     Camera();
+    Camera(unsigned width, unsigned height);
     void roll(double a); void yaw(double a); void pitch(double a);
     void turnX(double a); void turnY(double a); void turnZ(double a);
     void travel(float x, float y, float z);
     void side(double dist); void front(double dist); void zenit(double dist);
-    void aplyView(int width, int height);
+    void aplyView();
+    void lookAt(V3D eye, V3D look, V3D up);
     void lookAt(double eye[3], double look[3], double up[3]);
     void lookAt(double eye0, double eye1, double eye2,
                         double look0=0, double look1=0,double look2=0,
@@ -23,8 +27,9 @@ public:
     void Zoom(double ratio);
     void setZoom(double zoom);
     void setVolume(double Near, double Far);
-    inline void Orthogonal(){perspective=0;}
-    inline void Perspective(){perspective=1;}
+    void setWindow(unsigned width, unsigned height);
+    inline void Orthogonal(){perspective=0;aplyView();}
+    inline void Perspective(){perspective=1;aplyView();}
 
 };
 
