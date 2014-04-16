@@ -41,13 +41,37 @@ void Camera::setVolume(double Near, double Far){
 void Camera::aplyView(){
      glMatrixMode(GL_PROJECTION);
      glLoadIdentity();
-    if(!perspective){
+
+    if(!perspective){//Orthogonal
          double z= 2*zoom;
-         GLdouble x= width/z, y= height/z;
-         glOrtho(-x, x,-y, y, N, F);
-    }else if(perspective==1){
+         double w= width/z, h= height/z;
+         glOrtho(-w, w,-h, h, N, F);
+
+    }else if(perspective==1){//Perspective
          gluPerspective(zoom, ((double) width)/height, N, F);
+
+    }else if(perspective==2){//Oblique
+        double w= width/2.0, h= height/2.0;
+        glOrtho(-w, w,-h, h, N, F);
+
+        double x=oblicV[0], y=oblicV[1], z=oblicV[2];
+        if(z!=0 && (x!=0 || y!=0)){
+            double x_z = x/z;
+            double y_z = y/z;
+            double M[16]= {
+               1, 0, -x_z, -N*x_z,
+               0, 1, -y_z, -N*y_z,
+               0, 0,   1,    0,
+               0, 0,   0,    1
+            };
+           glMultMatrixd(M);
+            //glMultTransposeMatrixd(M);
+        }
     }
+
+
+
+
      glMatrixMode(GL_MODELVIEW);
 }
 
