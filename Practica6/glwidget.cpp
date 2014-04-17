@@ -253,12 +253,23 @@ void GLWidget::keyPressEvent(QKeyEvent *e){
                         camera.travel(0,0, 5);
                         break;
 
-            //Restore camera position
+            //Camera positions
             case Qt::Key_Space :
                         camera.lookAt(100,100,100);
                         camera.setZoom(30);
                         break;
-
+            case Qt::Key_4 :
+                        camera.side(100);
+                        break;
+            case Qt::Key_5 :
+                        camera.front(100);
+                        break;
+            case Qt::Key_6 :
+                        camera.top(100);
+                        break;
+            case Qt::Key_7 :
+                        camera.oposed();
+                        break;
             //Perspectives
             case Qt::Key_O :
                         camera.Orthogonal();

@@ -116,3 +116,25 @@ void Camera::pitch(double a){
 
 }
 
+void Camera::orbitX(double a){
+
+}
+
+void Camera::orbitY(double a){
+
+}
+
+void Camera::orbitZ(double a){
+
+}
+
+void Camera::oposed(){
+    eye[0]= -eye[0];
+    eye[1]= -eye[1];
+    eye[2]= -eye[2];
+    lookThere();
+}
+
+
+
+

@@ -7,17 +7,16 @@ class Camera{
 protected:
     V3D eye, look, up; //Camera
     GLdouble zoom=1, N=1, F=100;
-    int perspective=0;
+    int perspective=1;
     unsigned width=100, height=100;
     V3D oblicV;
 
 public:
     Camera();
     Camera(unsigned width, unsigned height);
-    void roll(double a); void yaw(double a); void pitch(double a);
-    void turnX(double a); void turnY(double a); void turnZ(double a);
+    void roll(double angle); void yaw(double angle); void pitch(double angle);
+    void orbitX(double angle); void orbitY(double angle); void orbitZ(double angle);
     void travel(float x, float y, float z);
-    void side(double dist); void front(double dist); void zenit(double dist);
     void lookAt(V3D eye, V3D look, V3D up);
     void lookAt(double eye[3], double look[3], double up[3]);
     void lookAt(double eye0, double eye1, double eye2,
@@ -37,6 +36,17 @@ public:
     inline void Oblique(V3D d){
         perspective=2; oblicV=d; aplyView();
     }
+
+    inline void side(double d){
+        lookAt(d,0,0);
+    }
+    inline void front(double d){
+        lookAt(0,0,d);
+    }
+    inline void top(double d){
+        lookAt(0,d,0, 0,0,0, -1,0,0);
+    }
+    void oposed();
 
 protected:
     void aplyView();
