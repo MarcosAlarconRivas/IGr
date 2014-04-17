@@ -65,13 +65,8 @@ void Camera::aplyView(){
                0, 0,   0,    1
             };
            glMultMatrixd(M);
-            //glMultTransposeMatrixd(M);
         }
     }
-
-
-
-
      glMatrixMode(GL_MODELVIEW);
 }
 
@@ -104,6 +99,34 @@ void Camera::lookThere(){
     gluLookAt(eye[0], eye[1], eye[2], look[0], look[1], look[2], up[0], up[1], up[2]);
 }
 
+void Camera::orbitX(double a){
+    double p= atan2(eye[1], eye[2]) + a;
+    eye[2]=cos(p);
+    eye[1]=sin(p);
+    lookThere();
+}
+
+void Camera::orbitY(double a){
+    double p= atan2(eye[2], eye[0]) + a;
+    eye[0]=cos(p);
+    eye[2]=sin(p);
+    lookThere();
+}
+
+void Camera::orbitZ(double a){
+    double p= atan2(eye[1], eye[0]) + a;
+    eye[0]=cos(p);
+    eye[1]=sin(p);
+    lookThere();
+}
+
+void Camera::oposed(){
+    eye[0]= -eye[0];
+    eye[1]= -eye[1];
+    eye[2]= -eye[2];
+    lookThere();
+}
+
 void Camera::roll(double a){
 
 }
@@ -114,25 +137,6 @@ void Camera::yaw(double a){
 
 void Camera::pitch(double a){
 
-}
-
-void Camera::orbitX(double a){
-
-}
-
-void Camera::orbitY(double a){
-
-}
-
-void Camera::orbitZ(double a){
-
-}
-
-void Camera::oposed(){
-    eye[0]= -eye[0];
-    eye[1]= -eye[1];
-    eye[2]= -eye[2];
-    lookThere();
 }
 
 

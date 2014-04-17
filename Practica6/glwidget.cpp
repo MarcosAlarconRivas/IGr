@@ -252,6 +252,15 @@ void GLWidget::keyPressEvent(QKeyEvent *e){
             case Qt::Key_V :
                         camera.travel(0,0, 5);
                         break;
+            case Qt::Key_1 :
+                        camera.orbitX(.1);
+                        break;
+            case Qt::Key_2 :
+                        camera.orbitY(.1);
+                        break;
+            case Qt::Key_3 :
+                        camera.orbitZ(.1);
+                        break;
 
             //Camera positions
             case Qt::Key_Space :

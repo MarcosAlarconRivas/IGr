@@ -17,15 +17,15 @@ public:
     void roll(double angle); void yaw(double angle); void pitch(double angle);
     void orbitX(double angle); void orbitY(double angle); void orbitZ(double angle);
     void travel(float x, float y, float z);
-    void lookAt(V3D eye, V3D look, V3D up);
-    void lookAt(double eye[3], double look[3], double up[3]);
-    void lookAt(double eye0, double eye1, double eye2,
-                        double look0=0, double look1=0,double look2=0,
-                        double up0=0, double up1=1, double up2=0);
     void Zoom(double ratio);
     void setZoom(double zoom);
     void setVolume(double Near, double Far);
     void setWindow(unsigned width, unsigned height);
+    void lookAt(V3D eye, V3D look, V3D up);
+    void lookAt(double eye[3], double look[3], double up[3]);
+    void lookAt(double eye0, double eye1, double eye2,
+                double look0=0, double look1=0,double look2=0,
+                double up0=0, double up1=1, double up2=0);
 
     inline void Orthogonal(){
         perspective=0; aplyView();
