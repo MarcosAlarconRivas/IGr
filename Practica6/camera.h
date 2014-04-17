@@ -14,6 +14,7 @@ protected:
 public:
     Camera();
     Camera(unsigned width, unsigned height);
+    void rotate(double M[9]);
     void roll(double angle); void yaw(double angle); void pitch(double angle);
     void orbitX(double angle); void orbitY(double angle); void orbitZ(double angle);
     void travel(float x, float y, float z);

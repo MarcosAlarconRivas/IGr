@@ -127,18 +127,61 @@ void Camera::oposed(){
     lookThere();
 }
 
-void Camera::roll(double a){
+static void preM(float *v, const double *M){
+    float r[3];
+    for(int i=0; i<3; i++)
+        r[i]= M[i]*v[0]+M[i+4]*v[1]+M[i+8]*v[2]+M[i+12]*v[3];
 
+    for(int i=0; i<3; i++)
+        v[i]=r[i];
+}
+
+void Camera::roll(double a){
+    double R[16];
+    V3D f = look - eye;
+
+    glMatrixMode(GL_MODELVIEW);
+    glPushMatrix();
+        glLoadIdentity();
+        glRotated(a*180/M_PI, f[0], f[1], f[2]);
+        glGetDoublev(GL_MODELVIEW_MATRIX, R);
+    glPopMatrix();
+
+    preM(up.v, R);
+    lookThere();
 }
 
 void Camera::yaw(double a){
+    double R[16];
 
+    glMatrixMode(GL_MODELVIEW);
+    glPushMatrix();
+        glLoadIdentity();
+        glRotated(a*180/M_PI, up[0], up[1], up[2]);
+        glGetDoublev(GL_MODELVIEW_MATRIX, R);
+    glPopMatrix();
+
+    V3D f = look - eye;
+    preM(f.v , R);
+    look = f + eye;
+    lookThere();
 }
 
 void Camera::pitch(double a){
+    double R[16];
+    V3D f= look-eye;
+    V3D x= up ^ f;
 
+    glMatrixMode(GL_MODELVIEW);
+    glPushMatrix();
+        glLoadIdentity();
+        glRotated(a*180/M_PI, x[0], x[1], x[2]);
+        glGetDoublev(GL_MODELVIEW_MATRIX, R);
+    glPopMatrix();
+
+    preM(up.v, R);
+    V3D F = look - eye;
+    preM(F.v , R);
+    look = F + eye;
+    lookThere();
 }
-
-
-
-

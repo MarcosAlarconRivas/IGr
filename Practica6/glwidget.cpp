@@ -215,22 +215,22 @@ void GLWidget::keyPressEvent(QKeyEvent *e){
 
             //Camera Rotations
             case Qt::Key_U :
-                        camera.roll(-.5);
+                        camera.roll(-.1);
                         break;
             case Qt::Key_I :
-                        camera.roll( .5);
+                        camera.roll( .1);
                         break;
             case Qt::Key_J :
-                        camera.yaw(-.5);
+                        camera.yaw(-.1);
                         break;
             case Qt::Key_K :
-                        camera.yaw( .5);
+                        camera.yaw( .1);
                         break;
             case Qt::Key_N :
-                        camera.pitch(-.5);
+                        camera.pitch(-.1);
                         break;
             case Qt::Key_M :
-                        camera.pitch( .5);
+                        camera.pitch( .1);
                         break;
 
             //Translation
