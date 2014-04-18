@@ -4,6 +4,8 @@
 
 class Model{
 public:
+    virtual ~Model(){}
+
     void render(bool fill=1)const;
 
     void reset();

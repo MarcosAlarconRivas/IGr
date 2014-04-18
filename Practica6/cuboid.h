@@ -12,7 +12,7 @@ public:
     Cuboid(double width, double height, double depth, float r=1, float g=1, float b=1, float a=1);
     Cuboid(double width, double height, double depth, float color[4]);
 
-    void paint(bool fill=1)const;
+    void paint(bool fill)const;
 };
 
 #endif // CUBOID_H

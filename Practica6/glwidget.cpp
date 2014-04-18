@@ -1,4 +1,6 @@
 #include "glwidget.h"
+#include "cuboid.h"
+#include "sphere.h"
 
 GLWidget::GLWidget(QWidget *parent)
     : QGLWidget(QGLFormat(QGL::SampleBuffers), parent){
@@ -10,12 +12,25 @@ GLWidget::GLWidget(QWidget *parent)
     float I[16] = {1,0,0,0, 0,1,0,0, 0,0,1,0, 0,0,0,1};
     for(int i=0;i<16;i++)
         Rot[i]=I[i];
-
-    //create scene objects
 }
 
 GLWidget::~GLWidget(){
+    delete scene;
+}
 
+static Model* new_Billiard(){
+    //create scene objects
+    auto scene= new Composite;
+
+    Cuboid* t= new Cuboid(25.4, 1, 12.7, .1, 1, .2);
+    t->translate(0,7.5,0);
+    scene->push(t);
+
+    Sphere* b= new Sphere(.5);
+    b->translate(10, 1.5+7.5, 4);
+    scene->push(b);
+
+    return scene;
 }
 
 void GLWidget::initializeGL(){
@@ -54,6 +69,8 @@ void GLWidget::initializeGL(){
     glLightfv(GL_LIGHT0, GL_AMBIENT, LuzAmbiente);
     GLfloat PosicionLuz0[]={25.0, 25.0, 0.0, 1.0};
     glLightfv(GL_LIGHT0, GL_POSITION, PosicionLuz0);
+
+    scene=new_Billiard();
 }
 
 void GLWidget::paintGL(){
@@ -79,24 +96,7 @@ void GLWidget::paintGL(){
         glMultTransposeMatrixf(Rot);
 
         //Draw scene
-        /*GLUquadric *esfera=gluNewQuadric();
-        glColor3f(1.0, 1.0, 1.0);
-        gluQuadricDrawStyle(esfera, GLU_FILL);
-        gluSphere(esfera, 3, 30, 30);
-        glPushMatrix();
-            glTranslated(5,0,0);
-            glColor3f(1.0, 0, 0);
-            gluSphere(esfera, 2, 30, 30);
-            glTranslated(-5,5,0);
-            glColor3f(0, 1.0, 0);
-            gluSphere(esfera, 2, 30, 30);
-            glTranslated(0,-5,5);
-            glColor3f(0, 0, 1.0);
-            gluSphere(esfera, 2, 30, 30);
-            gluDeleteQuadric(esfera);
-        glPopMatrix();*/
-        Cuboid(33,10,25,1,.3,.2).render();
-
+        scene->render(full);
     glPopMatrix();
 }
 

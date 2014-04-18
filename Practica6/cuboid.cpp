@@ -18,17 +18,17 @@ Cuboid::Cuboid(double w, double h, double d, float *c){
         color[3]=c[3];
 }
 
-void Cuboid::paint(bool fill)const{
+void Cuboid::paint(bool f)const{
     glShadeModel(GL_FLAT);
     glColor4fv(color);
-    glBegin(fill?GL_POLYGON:GL_LINE_LOOP);
+    glBegin(f?GL_POLYGON:GL_LINE_LOOP);
         glNormal3f(0,0,-1);
         glVertex3d(0,0,0);
         glVertex3d(0,y,0);
         glVertex3d(x,y,0);
         glVertex3d(x,0,0);
     glEnd();
-    glBegin(fill?GL_POLYGON:GL_LINE_LOOP);
+    glBegin(f?GL_POLYGON:GL_LINE_LOOP);
         glNormal3f(0,0,1);
         glVertex3d(0,0,z);
         glVertex3d(x,0,z);
@@ -36,14 +36,14 @@ void Cuboid::paint(bool fill)const{
         glVertex3d(0,y,z);
     glEnd();
 
-    glBegin(fill?GL_POLYGON:GL_LINE_LOOP);
+    glBegin(f?GL_POLYGON:GL_LINE_LOOP);
         glNormal3f(-1,0,0);
         glVertex3d(0,0,0);
         glVertex3d(0,0,z);
         glVertex3d(0,y,z);
         glVertex3d(0,y,0);
     glEnd();
-    glBegin(fill?GL_POLYGON:GL_LINE_LOOP);
+    glBegin(f?GL_POLYGON:GL_LINE_LOOP);
         glNormal3f(1,0,0);
         glVertex3d(x,0,0);
         glVertex3d(x,y,0);
@@ -51,14 +51,14 @@ void Cuboid::paint(bool fill)const{
         glVertex3d(x,0,z);
     glEnd();
 
-    glBegin(fill?GL_POLYGON:GL_LINE_LOOP);
+    glBegin(f?GL_POLYGON:GL_LINE_LOOP);
         glNormal3f(0,-1,0);
         glVertex3d(0,0,0);
         glVertex3d(x,0,0);
         glVertex3d(x,0,z);
         glVertex3d(0,0,z);
     glEnd();
-    glBegin(fill?GL_POLYGON:GL_LINE_LOOP);
+    glBegin(f?GL_POLYGON:GL_LINE_LOOP);
         glNormal3f(0,1,0);
         glVertex3d(0,y,0);
         glVertex3d(0,y,z);
