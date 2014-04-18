@@ -5,6 +5,8 @@
 #include <QKeyEvent>
 #include <GL/glu.h>
 #include <camera.h>
+#include <extrusion.h>
+#include <cuboid.h>
 
 class GLWidget : public QGLWidget{
     Q_OBJECT

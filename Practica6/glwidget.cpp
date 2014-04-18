@@ -12,7 +12,6 @@ GLWidget::GLWidget(QWidget *parent)
         Rot[i]=I[i];
 
     //create scene objects
-
 }
 
 GLWidget::~GLWidget(){
@@ -31,7 +30,7 @@ void GLWidget::initializeGL(){
     glDepthFunc(GL_LEQUAL);
 
     glEnable(GL_NORMALIZE);
-    glShadeModel(GL_SMOOTH);//a normal for each vertex
+    //glShadeModel(GL_SMOOTH);//a normal for each vertex
     //glShadeModel(GL_FLAT);//a normal for each face
 
     glEnable(GL_BLEND);
@@ -80,7 +79,7 @@ void GLWidget::paintGL(){
         glMultTransposeMatrixf(Rot);
 
         //Draw scene
-        GLUquadric *esfera=gluNewQuadric();
+        /*GLUquadric *esfera=gluNewQuadric();
         glColor3f(1.0, 1.0, 1.0);
         gluQuadricDrawStyle(esfera, GLU_FILL);
         gluSphere(esfera, 3, 30, 30);
@@ -95,7 +94,9 @@ void GLWidget::paintGL(){
             glColor3f(0, 0, 1.0);
             gluSphere(esfera, 2, 30, 30);
             gluDeleteQuadric(esfera);
-        glPopMatrix();
+        glPopMatrix();*/
+        Cuboid(33,10,25,1,.3,.2).render();
+
     glPopMatrix();
 }
 
