@@ -9,13 +9,12 @@ Cuboid::Cuboid(double width, double height, double depth,
     color[3]=a;
 }
 
-Cuboid::Cuboid(double w, double h, double d, float *c){
+Cuboid::Cuboid(double w, double h, double d, float c[3], float alpha){
     x=w; y=h; z=d;
     color[0]=c[0];
     color[1]=c[1];
     color[2]=c[2];
-    if(sizeof(c) > sizeof(float)*3)
-        color[3]=c[3];
+    color[3]=alpha;
 }
 
 void Cuboid::paint(bool f)const{

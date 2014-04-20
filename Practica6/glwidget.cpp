@@ -24,15 +24,37 @@ static Model* new_Billiard(){
     auto balls= new Composite;
     auto table= new Composite;
 
-    Cuboid* t= new Cuboid(25.4, 1, 12.7, .1, 1, .2);
-    t->translate(0,7.5,0);
+    double ballR = .5715;
+    double legW=.6;
+    double inBrdr=.8;
+    double tabW=25.4, tabH=7.5, tabD=12.7;
+    float wood[3]{.5, .2, .02};
+
+    Cuboid* t= new Cuboid(tabW, .5, tabD, .1, 1, .2);//mat
+    t->translate(0,.5+tabH,0);
+    table->push(t);
+    t=new Cuboid(tabW+inBrdr*2, .5, tabD+inBrdr*2, wood);//table
+    t->translate(-inBrdr,tabH,-inBrdr);
+    table->push(t);
+    t=new Cuboid(legW, tabH, legW, wood);//leg 0,0
+    t->translate(-inBrdr,0,-inBrdr);
+    table->push(t);
+    t=new Cuboid(legW, tabH, legW, wood);//leg 1,0
+    t->translate(tabW+inBrdr-legW,0,-inBrdr);
+    table->push(t);
+    t=new Cuboid(legW, tabH, legW, wood);//leg 0,1
+    t->translate(-inBrdr,0,tabD +inBrdr-legW);
+    table->push(t);
+    t=new Cuboid(legW, tabH, legW, wood);//leg 1,1
+    t->translate(tabW+inBrdr-legW,0,tabD +inBrdr-legW);
     table->push(t);
 
-    double ballR = .5715;
-    balls->translate(.7*25.4, 7.5+1+ballR, .5*12.7);
+
+
+    balls->translate(.7*tabW, tabH+1+ballR, .5*tabD);
 
     Sphere* b= new Sphere(ballR);//white one
-    b->translate(-.5*25.4,0,0);
+    b->translate(-.5*tabW,0,0);
     balls->push(b);
 
     b=(new Sphere(ballR))->setColor(1,1,0);//9 yelow
