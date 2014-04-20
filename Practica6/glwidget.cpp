@@ -23,6 +23,7 @@ static Model* new_Billiard(){
     auto scene= new Composite;
     auto balls= new Composite;
     auto table= new Composite;
+    auto brdrs= new Composite;
 
     double ballR = .5715;
     double legW=.6;
@@ -48,6 +49,21 @@ static Model* new_Billiard(){
     t=new Cuboid(legW, tabH, legW, wood);//leg 1,1
     t->translate(tabW+inBrdr-legW,0,tabD +inBrdr-legW);
     table->push(t);
+
+    brdrs->translate(0, .5+tabH, 0);
+    t= new Cuboid(tabW, .5+ballR*1.2, inBrdr, wood);
+    t->translate(0,0,-inBrdr);
+    brdrs->push(t);
+    t= new Cuboid(tabW, .5+ballR*1.2, inBrdr, wood);
+    t->translate(0,0,tabD);
+    brdrs->push(t);
+    t= new Cuboid(inBrdr, .5+ballR*1.2, tabD+2*inBrdr, wood);
+    t->translate(-inBrdr,0,-inBrdr);
+    brdrs->push(t);
+    t= new Cuboid(inBrdr, .5+ballR*1.2, tabD+2*inBrdr, wood);
+    t->translate(tabW,0,-inBrdr);
+    brdrs->push(t);
+    table->push(brdrs);
 
 
 
