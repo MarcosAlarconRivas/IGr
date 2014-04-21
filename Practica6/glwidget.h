@@ -4,8 +4,11 @@
 #include <QGLWidget>
 #include <QKeyEvent>
 #include <GL/glu.h>
+#include <memory>
 #include "camera.h"
-#include "composite.h"
+#include "model.h"
+
+using namespace std;
 
 class GLWidget : public QGLWidget{
     Q_OBJECT
@@ -15,10 +18,10 @@ public:
    ~GLWidget();
 
 protected:
-    float Rot[16]; //Scene rotation
+    float Rot[16]={1,0,0,0, 0,1,0,0, 0,0,1,0, 0,0,0,1}; //Scene rotation
     bool full=1, axis=1;
-    Camera camera= Camera();
-    Model* scene;
+    Camera camera;
+    unique_ptr<Model> scene;
 
     void initializeGL();
     void paintGL();

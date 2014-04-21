@@ -20,16 +20,12 @@ GLWidget::GLWidget(QWidget *parent)
     setFocusPolicy(Qt::ClickFocus);
     setFocus();
 
-    float I[16] = {1,0,0,0, 0,1,0,0, 0,0,1,0, 0,0,0,1};
-    for(int i=0;i<16;i++)
-        Rot[i]=I[i];
-
     //create scene objects
     //pipe= new Extrusion(1, 16, &rusa0, &rusa1, &rusa2, 100, 0, 4*M_PI);
     //pipe= new Extrusion(1, 16, &rusa0, 100, 0, 4*M_PI);
-    pipe= new TrglPipe(1, 16, &rusa0, &rusa1, &rusa2, 50, 0, 4*M_PI);
+    pipe= unique_ptr<Extrusion>( new TrglPipe(1, 16, &rusa0, &rusa1, &rusa2, 50, 0, 4*M_PI) );
 
-    car= new Car(1, .75, 1.5, .2, .1);
+    car= unique_ptr<Car>( new Car(1, .75, 1.5, .2, .1) );
     car->setWay(&rusa0, &rusa1, &rusa2);
     car->setChassisCol(0, 1, 0);
     car->setWheelsCol(.5, .5, .5);
@@ -37,8 +33,8 @@ GLWidget::GLWidget(QWidget *parent)
 }
 
 GLWidget::~GLWidget(){
-    delete pipe;
-    delete car;
+    //delete pipe;
+    //delete car;
 }
 
 void GLWidget::initializeGL(){

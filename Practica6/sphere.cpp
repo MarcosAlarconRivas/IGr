@@ -8,18 +8,15 @@ Sphere::Sphere(double rd,unsigned sl,unsigned st,float r,float g,float b,float a
     setColor(r,g,b,a);
 }
 
-Sphere::Sphere(double rd, unsigned sl, unsigned st, float *c){
+Sphere::Sphere(double rd, unsigned sl, unsigned st, float c[3], float a){
     quad= gluNewQuadric();
     radius=rd;
     slices=sl;
     stacks=st;
-    if(c){
-        color[0]=c[0];
-        color[1]=c[1];
-        color[2]=c[2];
-        if(sizeof(c) > sizeof(float)*3)
-            color[3]=c[3];
-    }
+    color[0]=c[0];
+    color[1]=c[1];
+    color[2]=c[2];
+    color[3]=a;
 }
 
 Sphere::~Sphere(){
