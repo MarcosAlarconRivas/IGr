@@ -2,22 +2,51 @@
 #define BILLARD_H
 #include "cuboid.h"
 #include "sphere.h"
+#include "cone.h"
 #include "composite.h"
 
+Model* new_stick(float r, float g, float b){
+    double l1= .1, l2= 6, l3= 17, l4= .5, l5= .05;
+    double r1= .4, r2= .1;
+    auto stick= new Composite;
+
+    auto c= new Cone(0, r1, l1, 10, 5);
+    stick->push( c->setColor(.03,.03,.03) );
+
+    c= new Cone(r1, r1, l2);
+    c->translate(0,0,l1);
+    stick->push( c->setColor(r*.8,g*.8,b*.8) );
+
+    c = new Cone(r1, r2, l3);
+    c->translate(0,0,l1+l2);
+    stick->push( c->setColor(r*1.4,g*1.7,b*1.5) );
+
+    c = new Cone(r2, r2, l4, 10, 8);
+    c->translate(0,0,l1+l2+l3);
+    stick->push( c->setColor(1,1,1) );
+
+    c= new Cone(r2, 0, l5, 10, 5);
+    c->translate(0,0,l1+l2+l3+l4);
+    stick->push( c->setColor(0,.3,1) );
+    return stick;
+}
+
 Model* new_Billiard(){
-    //create scene objects
-    auto scene= new Composite;
-    auto balls= new Composite;
-    auto table= new Composite;
-    auto brdrs= new Composite;
 
     double ballR = .5715;
-
     double legW=1;
     double inBrdr=1.8;
     double woodW=.6;
     double tabW=25.4, tabH=7.5, tabD=12.7;
     float wood[3]{.5, .2, .02};
+
+    //create scene objects
+    auto scene= new Composite;
+    auto balls= new Composite;
+    auto table= new Composite;
+    auto brdrs= new Composite;
+    auto chalk= new Composite;
+    auto stick= new_stick(wood[0], wood[1], wood[2]);
 
     Cuboid* t= new Cuboid(tabW, woodW, tabD, .1, 1, .2);//mat
     t->translate(0,woodW+tabH,0);
@@ -52,7 +81,6 @@ Model* new_Billiard(){
     t->translate(tabW,0,-inBrdr);
     brdrs->push(t);
 
-    auto chalk= new Composite;
     t= new Cuboid(.21, .18, .21, .3, 0, .5);
     t->translate(-.005, -.005, -.005);
     chalk->push(t);
@@ -61,6 +89,12 @@ Model* new_Billiard(){
     chalk->rotate(30, 0, 1, 0);
     chalk->push(t);
     brdrs->push(chalk);
+
+    stick->translate(0, woodW+ballR*1.2, 0);
+    stick->rotate(-27, 0,1,0);
+    stick->translate(4,.5,-10);
+    stick->rotate(1, 1,0,0);
+    brdrs->push(stick);
 
     table->push(brdrs);
 
@@ -124,6 +158,5 @@ Model* new_Billiard(){
     scene->push(balls);
     return scene;
 }
-
 
 #endif // BILLARD_H

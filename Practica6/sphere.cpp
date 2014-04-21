@@ -25,7 +25,7 @@ Sphere::~Sphere(){
 
 void Sphere::paint(bool f)const{
     glShadeModel(GL_SMOOTH);
-    glColor3fv(color);
+    glColor4fv(color);
     gluQuadricDrawStyle(quad, f?GLU_FILL:GLU_LINE);
     gluSphere(quad, radius, slices, stacks);
 }

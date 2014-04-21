@@ -17,6 +17,14 @@ Cuboid::Cuboid(double w, double h, double d, float c[3], float alpha){
     color[3]=alpha;
 }
 
+Cuboid* Cuboid::setColor(float r, float g, float b, float a){
+    color[0]=r;
+    color[1]=g;
+    color[2]=b;
+    color[3]=a;
+    return this;
+}
+
 void Cuboid::paint(bool f)const{
     glShadeModel(GL_FLAT);
     glColor4fv(color);

@@ -13,6 +13,7 @@ public:
     Cuboid(double width, double height, double depth, float color[3], float alpha=1);
 
     void paint(bool fill)const;
+    Cuboid* setColor(float r, float g, float b, float a=1);
 };
 
 #endif // CUBOID_H
