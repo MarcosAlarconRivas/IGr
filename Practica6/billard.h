@@ -12,17 +12,17 @@ Model* new_Billiard(){
     auto brdrs= new Composite;
 
     double ballR = .5715;
-    //unsigned bP = 10;
 
     double legW=.6;
     double inBrdr=.8;
+    double woodW=.5;
     double tabW=25.4, tabH=7.5, tabD=12.7;
     float wood[3]{.5, .2, .02};
 
-    Cuboid* t= new Cuboid(tabW, .5, tabD, .1, 1, .2);//mat
-    t->translate(0,.5+tabH,0);
+    Cuboid* t= new Cuboid(tabW, woodW, tabD, .1, 1, .2);//mat
+    t->translate(0,woodW+tabH,0);
     table->push(t);
-    t=new Cuboid(tabW+inBrdr*2, .5, tabD+inBrdr*2, wood);//table
+    t=new Cuboid(tabW+inBrdr*2, woodW, tabD+inBrdr*2, wood);//table
     t->translate(-inBrdr,tabH,-inBrdr);
     table->push(t);
     t=new Cuboid(legW, tabH, legW, wood);//leg 0,0
@@ -38,24 +38,25 @@ Model* new_Billiard(){
     t->translate(tabW+inBrdr-legW,0,tabD +inBrdr-legW);
     table->push(t);
 
-    brdrs->translate(0, .5+tabH, 0);
-    t= new Cuboid(tabW, .5+ballR*1.2, inBrdr, wood);
+    brdrs->translate(0, woodW+tabH, 0);
+    t= new Cuboid(tabW, woodW+ballR*1.2, inBrdr, wood);
     t->translate(0,0,-inBrdr);
     brdrs->push(t);
-    t= new Cuboid(tabW, .5+ballR*1.2, inBrdr, wood);
+    t= new Cuboid(tabW, woodW+ballR*1.2, inBrdr, wood);
     t->translate(0,0,tabD);
     brdrs->push(t);
-    t= new Cuboid(inBrdr, .5+ballR*1.2, tabD+2*inBrdr, wood);
+    t= new Cuboid(inBrdr, woodW+ballR*1.2, tabD+2*inBrdr, wood);
     t->translate(-inBrdr,0,-inBrdr);
     brdrs->push(t);
-    t= new Cuboid(inBrdr, .5+ballR*1.2, tabD+2*inBrdr, wood);
+    t= new Cuboid(inBrdr, woodW+ballR*1.2, tabD+2*inBrdr, wood);
     t->translate(tabW,0,-inBrdr);
     brdrs->push(t);
     table->push(brdrs);
 
 
-    balls->translate(.7*tabW, tabH+1+ballR, .5*tabD);
-    double sqr3 = sqrt(3);//-3/(bP*bP);
+
+    balls->translate(.7*tabW, tabH+2*woodW+ballR, .5*tabD);
+    double sqr3 = sqrt(3);
 
     Sphere* b= new Sphere(ballR);//white one
     b->translate(-.5*tabW,0,0);
