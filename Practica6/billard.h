@@ -12,6 +12,7 @@ Model* new_Billiard(){
     auto brdrs= new Composite;
 
     double ballR = .5715;
+    //unsigned bP = 10;
 
     double legW=.6;
     double inBrdr=.8;
@@ -54,6 +55,7 @@ Model* new_Billiard(){
 
 
     balls->translate(.7*tabW, tabH+1+ballR, .5*tabD);
+    double sqr3 = sqrt(3);//-3/(bP*bP);
 
     Sphere* b= new Sphere(ballR);//white one
     b->translate(-.5*tabW,0,0);
@@ -63,49 +65,49 @@ Model* new_Billiard(){
     balls->push(b);
 
     b=(new Sphere(ballR))->setColor(.6,0,.08);//7 crimson
-    b->translate(ballR*1.6,0,ballR);
+    b->translate(ballR*sqr3,0,ballR);
     balls->push(b);
     b=(new Sphere(ballR))->setColor(.3,0,.4);//12 purple
-    b->translate(ballR*1.6,0,-ballR);
+    b->translate(ballR*sqr3,0,-ballR);
     balls->push(b);
 
     b=(new Sphere(ballR))->setColor(.02,.02,.02);//8 black
-    b->translate(2*ballR*1.6,0,0);
+    b->translate(2*ballR*sqr3,0,0);
     balls->push(b);
     b=(new Sphere(ballR))->setColor(.6,0,.08);//15 crimson
-    b->translate(2*ballR*1.6,0,2*ballR);
+    b->translate(2*ballR*sqr3,0,2*ballR);
     balls->push(b);
     b=(new Sphere(ballR))->setColor(1,1,0);//1 yelow
-    b->translate(2*ballR*1.6,0,-2*ballR);
+    b->translate(2*ballR*sqr3,0,-2*ballR);
     balls->push(b);
 
     b=(new Sphere(ballR))->setColor(0,0,1);//10 blue
-    b->translate(3*ballR*1.6,0,ballR);
+    b->translate(3*ballR*sqr3,0,ballR);
     balls->push(b);
     b=(new Sphere(ballR))->setColor(1,0,0);//3 red
-    b->translate(3*ballR*1.6,0,-ballR);
+    b->translate(3*ballR*sqr3,0,-ballR);
     balls->push(b);
     b=(new Sphere(ballR))->setColor(0,.5,.15);//6 green
-    b->translate(3*ballR*1.6,0,3*ballR);
+    b->translate(3*ballR*sqr3,0,3*ballR);
     balls->push(b);
     b=(new Sphere(ballR))->setColor(0,.5,.15);//14 green
-    b->translate(3*ballR*1.6,0,-3*ballR);
+    b->translate(3*ballR*sqr3,0,-3*ballR);
     balls->push(b);
 
     b=(new Sphere(ballR))->setColor(1,.2,0);//13 orange
-    b->translate(4*ballR*1.6,0,0);
+    b->translate(4*ballR*sqr3,0,0);
     balls->push(b);
     b=(new Sphere(ballR))->setColor(0,0,1);//2 blue
-    b->translate(4*ballR*1.6,0,2*ballR);
+    b->translate(4*ballR*sqr3,0,2*ballR);
     balls->push(b);
     b=(new Sphere(ballR))->setColor(.3,0,.4);//12 purple
-    b->translate(4*ballR*1.6,0,-2*ballR);
+    b->translate(4*ballR*sqr3,0,-2*ballR);
     balls->push(b);
     b=(new Sphere(ballR))->setColor(1,0,0);//11 red
-    b->translate(4*ballR*1.6,0,4*ballR);
+    b->translate(4*ballR*sqr3,0,4*ballR);
     balls->push(b);
     b=(new Sphere(ballR))->setColor(1,.2,0);//5 orange
-    b->translate(4*ballR*1.6,0,-4*ballR);
+    b->translate(4*ballR*sqr3,0,-4*ballR);
     balls->push(b);
 
     scene->push(table);
