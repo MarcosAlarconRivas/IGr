@@ -13,9 +13,9 @@ Model* new_Billiard(){
 
     double ballR = .5715;
 
-    double legW=.6;
-    double inBrdr=.8;
-    double woodW=.5;
+    double legW=1;
+    double inBrdr=1.8;
+    double woodW=.6;
     double tabW=25.4, tabH=7.5, tabD=12.7;
     float wood[3]{.5, .2, .02};
 
@@ -51,9 +51,18 @@ Model* new_Billiard(){
     t= new Cuboid(inBrdr, woodW+ballR*1.2, tabD+2*inBrdr, wood);
     t->translate(tabW,0,-inBrdr);
     brdrs->push(t);
+
+    auto chalk= new Composite;
+    t= new Cuboid(.21, .18, .21, .3, 0, .5);
+    t->translate(-.005, -.005, -.005);
+    chalk->push(t);
+    t= new Cuboid(.2, .2, .2, 0, .2, 1);
+    chalk->translate(-inBrdr*.6,woodW+ballR*1.2, tabD*.7);
+    chalk->rotate(30, 0, 1, 0);
+    chalk->push(t);
+    brdrs->push(chalk);
+
     table->push(brdrs);
-
-
 
     balls->translate(.7*tabW, tabH+2*woodW+ballR, .5*tabD);
     double sqr3 = sqrt(3);
