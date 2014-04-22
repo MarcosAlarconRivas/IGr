@@ -115,43 +115,43 @@ Model* new_Billiard(){
     auto stick= new_stick(wood[0], wood[1], wood[2]);
     auto balls= new_15Balls(ballR);
 
-    Cuboid* t= new Cuboid(tabW, woodW, tabD, .1, 1, .2);//mat
+    Cuboid* t= (new Cuboid(tabW, woodW, tabD))->setColor(.1, 1, .2);//mat
     t->translate(0,woodW+tabH,0);
     table->push(t);
-    t=new Cuboid(tabW+inBrdr*2, woodW, tabD+inBrdr*2, wood);//table
+    t=(new Cuboid(tabW+inBrdr*2, woodW, tabD+inBrdr*2))->setColor(wood);//table
     t->translate(-inBrdr,tabH,-inBrdr);
     table->push(t);
-    t=new Cuboid(legW, tabH, legW, wood);//leg 0,0
+    t=(new Cuboid(legW, tabH, legW))->setColor(wood);//leg 0,0
     t->translate(-inBrdr,0,-inBrdr);
     table->push(t);
-    t=new Cuboid(legW, tabH, legW, wood);//leg 1,0
+    t=(new Cuboid(legW, tabH, legW))->setColor(wood);//leg 1,0
     t->translate(tabW+inBrdr-legW,0,-inBrdr);
     table->push(t);
-    t=new Cuboid(legW, tabH, legW, wood);//leg 0,1
+    t=(new Cuboid(legW, tabH, legW))->setColor(wood);//leg 0,1
     t->translate(-inBrdr,0,tabD +inBrdr-legW);
     table->push(t);
-    t=new Cuboid(legW, tabH, legW, wood);//leg 1,1
+    t=(new Cuboid(legW, tabH, legW))->setColor(wood);//leg 1,1
     t->translate(tabW+inBrdr-legW,0,tabD +inBrdr-legW);
     table->push(t);
 
     brdrs->translate(0, woodW+tabH, 0);
-    t= new Cuboid(tabW, woodW+ballR*1.2, inBrdr, wood);
+    t=(new Cuboid(tabW, woodW+ballR*1.2, inBrdr))->setColor(wood);
     t->translate(0,0,-inBrdr);
     brdrs->push(t);
-    t= new Cuboid(tabW, woodW+ballR*1.2, inBrdr, wood);
+    t=(new Cuboid(tabW, woodW+ballR*1.2, inBrdr))->setColor(wood);
     t->translate(0,0,tabD);
     brdrs->push(t);
-    t= new Cuboid(inBrdr, woodW+ballR*1.2, tabD+2*inBrdr, wood);
+    t=(new Cuboid(inBrdr, woodW+ballR*1.2, tabD+2*inBrdr))->setColor(wood);
     t->translate(-inBrdr,0,-inBrdr);
     brdrs->push(t);
-    t= new Cuboid(inBrdr, woodW+ballR*1.2, tabD+2*inBrdr, wood);
+    t=(new Cuboid(inBrdr, woodW+ballR*1.2, tabD+2*inBrdr))->setColor(wood);
     t->translate(tabW,0,-inBrdr);
     brdrs->push(t);
 
-    t= new Cuboid(.21, .18, .21, .3, 0, .5);
+    t=(new Cuboid(.21, .18, .21))->setColor(.3, 0, .5);
     t->translate(-.005, -.005, -.005);
     chalk->push(t);
-    t= new Cuboid(.2, .2, .2, 0, .2, 1);
+    t=(new Cuboid(.2, .2, .2))->setColor(0, .2, 1);
     chalk->translate(-inBrdr*.6,woodW+ballR*1.2, tabD*.7);
     chalk->rotate(30, 0, 1, 0);
     chalk->push(t);

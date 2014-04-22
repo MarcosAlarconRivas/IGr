@@ -1,9 +1,9 @@
-#ifndef MESH_H
-#define MESH_H
+#ifndef SMOOTHMESH_H
+#define SMOOTHMESH_H
 #include "face.h"
 #include "model.h"
 
-class Mesh: public Model{
+class SmoothMesh: public Model{
 public:
     void paint(bool fill=1)const;
     void paintNormals()const;
@@ -12,4 +12,4 @@ protected:
     vector<vtx_p> vertex;
 };
 
-#endif // MESH_H
+#endif // SMOOTHMESH_H

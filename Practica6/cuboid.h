@@ -1,19 +1,21 @@
 #ifndef CUBOID_H
 #define CUBOID_H
-#include "model.h"
+#include "flatmesh.h"
 #include "GL/glu.h"
 
-class Cuboid: public Model{
+class Cuboid: public FlatMesh{
 protected:
     float color[4]={1,1,1,1};
-    double x=1, y=1, z=1;
 public:
-    Cuboid(){}
-    Cuboid(double width, double height, double depth, float r=1, float g=1, float b=1, float a=1);
-    Cuboid(double width, double height, double depth, float color[3], float alpha=1);
+    Cuboid(double width=1, double height=1, double depth=1, unsigned xdiv=0, unsigned ydiv=0, unsigned zdiv=0);
 
-    void paint(bool fill)const;
     Cuboid* setColor(float r, float g, float b, float a=1);
+    Cuboid* setColor(float color[3],float alpha=1);
+
+    inline void paint(bool fill)const{
+        glColor4fv(color);
+        FlatMesh::paint(fill);
+    }
 };
 
 #endif // CUBOID_H

@@ -1,11 +1,11 @@
-#include "mesh.h"
+#include "smoothmesh.h"
 
-void Mesh::paint(bool fill)const{
+void SmoothMesh::paint(bool fill)const{
     for(auto f= face.begin(); f != face.end(); f++)
         f->paint(fill);
 }
 
-void Mesh::paintNormals()const{
+void SmoothMesh::paintNormals()const{
     for(auto v= vertex.begin(); v != vertex.end(); v++){
         vtx_p vt= (*v);
         V3D p= vt->vert;
