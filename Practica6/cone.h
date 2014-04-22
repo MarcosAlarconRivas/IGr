@@ -10,7 +10,7 @@ protected:
     float color[4]={1,1,1,1};
     GLUquadric* quad;
 public:
-    Cone(double base, double top, double height, unsigned slices=10, unsigned stacks=10);
+    Cone(double base, double top, double height, unsigned slices=15, unsigned stacks=15);
    ~Cone();
 
     void paint(bool fill)const;
