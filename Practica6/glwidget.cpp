@@ -51,7 +51,9 @@ void GLWidget::initializeGL(){
     GLfloat PosicionLuz0[]={25.0, 25.0, 0.0, 1.0};
     glLightfv(GL_LIGHT0, GL_POSITION, PosicionLuz0);
 
-    scene=unique_ptr<Model>(new_Billiard());
+    scene=unique_ptr<Model>(new_Billiard(white, dir, fall));
+    up = V3D(-fall[0], -fall[1], -fall[2]) % 1;
+
 }
 
 void GLWidget::paintGL(){
@@ -160,6 +162,19 @@ void GLWidget::resizeGL(int width, int height){
     glViewport(0,0,width,height);//View port update
 
     camera.setWindow(width,height);//View volume
+}
+
+void GLWidget::step(){
+    if(runing<1)return;
+
+    if(runing<100)
+        white->slide(dir, .01);
+    else
+        white->slide(fall, .025);
+
+    if(++runing>140)runing=-1;
+
+    repaint();
 }
 
 void GLWidget::keyPressEvent(QKeyEvent *e){
@@ -276,6 +291,15 @@ void GLWidget::keyPressEvent(QKeyEvent *e){
                         break;
             case Qt::Key_0 :
                         axis= !axis;
+                        break;
+
+            //Ball move
+            case Qt::Key_F1 :
+                        if(runing){
+                            runing=0;
+                            white->restore();
+                        }else
+                           runing=1;
                         break;
 
             default:   return;

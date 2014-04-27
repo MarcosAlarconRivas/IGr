@@ -1,7 +1,7 @@
 #ifndef BILLARD_H
 #define BILLARD_H
+#include "ball.h"
 #include "cuboid.h"
-#include "sphere.h"
 #include "cone.h"
 #include "disk.h"
 #include "composite.h"
@@ -98,7 +98,7 @@ Composite* new_15Balls(double ballR){
     return balls;
 }
 
-Model* new_Billiard(){
+Model* new_Billiard(shared_ptr<Ball>& movile, V3D&d, V3D&fall){
     double ballR = .5715;
     double legW=1;
     double inBrdr=1.8;
@@ -185,11 +185,16 @@ Model* new_Billiard(){
     holes->push(h);
     table->push(holes);
 
-    balls->translate(.7*tabW, tabH+2*woodW+ballR, .5*tabD);
+    V3D ballsPos= V3D(.7*tabW, tabH+2*woodW+ballR, .5*tabD);
+    balls->translate(ballsPos[0], ballsPos[1], ballsPos[2]);
 
-    Sphere* b= new Sphere(ballR);//white one
+    Ball* b = new Ball(ballR);//white one
     b->translate(-.5*tabW,0,0);
+    b->memorize();
     balls->push(b);
+    movile= shared_ptr<Ball>(b);
+    d= ballsPos + b->getMemPosition(); d[0]= -d[0]; d[1]=0; d[2]= -d[2];
+    fall= V3D(0,-2*woodW,0);
 
     scene->push(table);
     scene->push(balls);
