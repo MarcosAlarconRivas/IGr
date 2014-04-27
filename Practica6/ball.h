@@ -11,9 +11,6 @@ public:
 
     void slide(V3D dir, double d){
         V3D v = dir*d;
-        /*MMatrix[12] +=v[0];
-        MMatrix[13] +=v[1];
-        MMatrix[14] +=v[2];*/
         translate(v[0], v[1], v[2]);
     }
 

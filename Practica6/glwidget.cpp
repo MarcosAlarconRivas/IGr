@@ -170,9 +170,9 @@ void GLWidget::step(){
     if(runing<100)
         white->slide(dir, .01);
     else
-        white->slide(fall, .025);
+        white->slide(fall, .05);
 
-    if(++runing>140)runing=-1;
+    if(++runing>120)runing=-1;
 
     repaint();
 }
@@ -301,6 +301,21 @@ void GLWidget::keyPressEvent(QKeyEvent *e){
                         }else
                            runing=1;
                         break;
+
+             //Scene transformations
+             case Qt::Key_F9  :
+                        scene->translate(-2,0,0);
+                        break;
+             case Qt::Key_F10 :
+                        scene->rotate(1, 0,0,1);
+                        break;
+             case Qt::Key_F11:
+                        scene->scale(1,1.1,1);
+                        break;
+             case Qt::Key_F12:
+                        scene->reset();
+                        break;
+
 
             default:   return;
     }
