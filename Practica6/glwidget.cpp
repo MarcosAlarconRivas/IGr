@@ -282,7 +282,7 @@ void GLWidget::keyPressEvent(QKeyEvent *e){
                         camera.Perspective();
                         break;
             case Qt::Key_Ntilde :
-                        camera.Oblique(V3D(0,.1,.9));
+                        camera.Oblique(V3D(0.09,.09,1));
                         break;
 
             //Scene settings
