@@ -170,9 +170,9 @@ void GLWidget::step(){
     if(runing<100)
         white->roll(dir, up, .01);
     else
-        white->slide(fall, .05);
+        white->slide(fall, .2);
 
-    if(++runing>120)runing=-1;
+    if(++runing>105)runing=-1;
 
     repaint();
 }

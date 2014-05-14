@@ -35,7 +35,7 @@ public:
         slide(dir, d);
         V3D axis = dir ^ up;
         d *= dir.mod();
-        double angle = (d/radius)*180/M_PI;
+        double angle = -(d/radius)*180/M_PI;
         selfRot(angle, axis[0], axis[1], axis[2]);
     }
 
