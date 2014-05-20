@@ -293,18 +293,19 @@ void GLWidget::keyPressEvent(QKeyEvent *e){
                            runing=1;
                         break;
 
-             //Scene transformations
-             case Qt::Key_F9  :
-                        scene->translate(-2,0,0);
-                        break;
-             case Qt::Key_F10 :
-                        scene->rotate(1, 0,0,1);
-                        break;
-             case Qt::Key_F11:
-                        scene->scale(1,1.1,1);
-                        break;
+             //Ligths
              case Qt::Key_F12:
-                        scene->reset();
+                        if(lightsOn){
+                            glDisable(GL_LIGHT0);
+                            float black[3]={0,0,0};
+                            glLightModelfv(GL_LIGHT_MODEL_AMBIENT, black);
+                            lightsOn=0;
+                        }else{
+                            glEnable(GL_LIGHT0);
+                            float grey[3]={.2,.2,.2};
+                            glLightModelfv(GL_LIGHT_MODEL_AMBIENT, grey);
+                            lightsOn=1;
+                        }
                         break;
 
 
