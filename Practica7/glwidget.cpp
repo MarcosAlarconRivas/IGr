@@ -25,7 +25,8 @@ void GLWidget::initializeGL(){
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_LEQUAL);
 
-    glEnable(GL_NORMALIZE);
+    glDisable(GL_NORMALIZE);
+    //glEnable(GL_NORMALIZE);
     //glShadeModel(GL_SMOOTH);//a normal for each vertex
     //glShadeModel(GL_FLAT);//a normal for each face
 
@@ -37,7 +38,7 @@ void GLWidget::initializeGL(){
     glEnable(GL_CULL_FACE);
 
     //Camera
-    camera.setZoom(30);
+    camera.setZoom(15);
     camera.setWindow(width(),height());
     camera.setVolume(1, 1000);
     camera.lookAt(100,100,100);
@@ -79,7 +80,7 @@ void GLWidget::paintGL(){
         glMultTransposeMatrixf(Rot);
 
         //Draw scene
-        scene->render(full);
+        scene->render(fill);
     glPopMatrix();
 }
 
@@ -182,10 +183,10 @@ void GLWidget::keyPressEvent(QKeyEvent *e){
     switch(key){
             //Zoom
             case Qt::Key_Plus :
-                        camera.Zoom(1.1);
+                        camera.Zoom(1/1.1);
                         break;
             case Qt::Key_Minus :
-                        camera.Zoom(1/1.1);
+                        camera.Zoom(1.1);
                         break;
 
             //Scene Rotations
@@ -216,16 +217,16 @@ void GLWidget::keyPressEvent(QKeyEvent *e){
                         camera.roll( .1);
                         break;
             case Qt::Key_J :
-                        camera.yaw(-.1);
+                        camera.yaw(-.01);
                         break;
             case Qt::Key_K :
-                        camera.yaw( .1);
+                        camera.yaw( .01);
                         break;
             case Qt::Key_N :
-                        camera.pitch(-.1);
+                        camera.pitch(-.01);
                         break;
             case Qt::Key_M :
-                        camera.pitch( .1);
+                        camera.pitch( .01);
                         break;
 
             //Translation
@@ -274,20 +275,10 @@ void GLWidget::keyPressEvent(QKeyEvent *e){
             case Qt::Key_7 :
                         camera.oposed();
                         break;
-            //Perspectives
-            case Qt::Key_O :
-                        camera.Orthogonal();
-                        break;
-            case Qt::Key_P :
-                        camera.Perspective();
-                        break;
-            case Qt::Key_Ntilde :
-                        camera.Oblique(V3D(0.09,.09,1));
-                        break;
 
             //Scene settings
             case Qt::Key_Shift :
-                        full = !full;
+                        fill = !fill;
                         break;
             case Qt::Key_0 :
                         axis= !axis;

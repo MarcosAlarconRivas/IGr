@@ -22,7 +22,7 @@ public slots:
 
 protected:
     float Rot[16]={1,0,0,0, 0,1,0,0, 0,0,1,0, 0,0,0,1}; //Scene rotation
-    bool full=1, axis=1;
+    bool fill=1, axis=0;
     Camera camera;
     unique_ptr<Model> scene;
     shared_ptr<Ball> white;

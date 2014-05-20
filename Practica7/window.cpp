@@ -18,7 +18,7 @@ Window::Window(){
 }
 
 QSize Window::sizeHint() const{
-    return QSize(400, 400);
+    return QSize(800, 600);
 }
 
 
