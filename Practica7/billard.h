@@ -5,6 +5,7 @@
 #include "cone.h"
 #include "disk.h"
 #include "composite.h"
+#include "lamp.h"
 
 Model* new_stick(float r, float g, float b){
     double l1= .1, l2= 6, l3= 17, l4= .5, l5= .05;
@@ -98,7 +99,7 @@ Composite* new_15Balls(double ballR){
     return balls;
 }
 
-Model* new_Billiard(shared_ptr<Ball>& movile, V3D&d, V3D&fall){
+Model* new_Billiard(shared_ptr<Ball>& movile, shared_ptr<Lamp>& lamp){
     double ballR = .5715;
     double legW=1;
     double inBrdr=1.8;
@@ -193,8 +194,15 @@ Model* new_Billiard(shared_ptr<Ball>& movile, V3D&d, V3D&fall){
     b->memorize();
     balls->push(b);
     movile= shared_ptr<Ball>(b);
-    d= ballsPos + b->getMemPosition(); d[0]= -d[0]; d[1]=0; d[2]= -d[2];
-    fall= V3D(0,-2*woodW,0);
+    V3D d= ballsPos + b->getMemPosition(); d[0]= -d[0]; d[1]=0; d[2]= -d[2];
+    V3D fall= V3D(0,-2*woodW,0);
+    movile->setingMove(d, V3D(-fall[0], -fall[1], -fall[2]) % 1, fall);
+
+    Lamp *l= new Lamp;
+    l->translate(tabW*.5,tabH*2.75,tabD*.5);
+    l->rotate(90, 1, 0, 0);
+    scene->push(l);
+    lamp= shared_ptr<Lamp>(l);
 
     scene->push(table);
     scene->push(balls);

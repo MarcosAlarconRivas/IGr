@@ -2,6 +2,7 @@
 #define BALL_H
 #include "sphere.h"
 #include "v3d.h"
+static V3D dir, up, fall;
 
 class Ball: public Sphere{
     V3D memPosition;
@@ -57,6 +58,21 @@ public:
 
     V3D getCurrentPosition(){
         return V3D((float)MMatrix[12], (float)MMatrix[13], (float)MMatrix[14], 1.0);
+    }
+
+    inline bool defaultMove(int &runing){
+        if(runing<1)return 0;
+
+        if(runing<100)
+            roll(dir, up, .01);
+        else
+            slide(fall, .2);
+
+        if(++runing>105)runing=-1;
+        return 1;
+    }
+    void setingMove(V3D newdir, V3D newup, V3D newfall){
+        dir=newdir; up=newup; fall=newfall;
     }
 };
 

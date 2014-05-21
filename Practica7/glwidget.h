@@ -7,6 +7,7 @@
 #include <memory>
 #include "camera.h"
 #include "ball.h"
+#include "lamp.h"
 
 using namespace std;
 
@@ -26,6 +27,7 @@ protected:
     bool lightsOn=1;
     Camera camera;
     unique_ptr<Model> scene;
+    shared_ptr<Lamp> lamp;
     shared_ptr<Ball> white;
 
     void initializeGL();
@@ -35,7 +37,6 @@ protected:
 
 private:
     void sceneRot(int axis, double angle);
-    V3D up, dir, fall;
     int runing=0;
 };
 

@@ -52,8 +52,7 @@ void GLWidget::initializeGL(){
     GLfloat PosicionLuz0[]={25.0, 25.0, 0.0, 1.0};
     glLightfv(GL_LIGHT0, GL_POSITION, PosicionLuz0);
 
-    scene=unique_ptr<Model>(new_Billiard(white, dir, fall));
-    up = V3D(-fall[0], -fall[1], -fall[2]) % 1;
+    scene=unique_ptr<Model>(new_Billiard(white, lamp));
 
 }
 
@@ -166,15 +165,7 @@ void GLWidget::resizeGL(int width, int height){
 }
 
 void GLWidget::step(){
-    if(runing<1)return;
-
-    if(runing<100)
-        white->roll(dir, up, .01);
-    else
-        white->slide(fall, .2);
-
-    if(++runing>105)runing=-1;
-
+    if(!white->defaultMove(runing))return;
     repaint();
 }
 
@@ -294,6 +285,9 @@ void GLWidget::keyPressEvent(QKeyEvent *e){
                         break;
 
              //Ligths
+             case Qt::Key_F11:
+                        lamp->lightSwich();
+                        break;
              case Qt::Key_F12:
                         if(lightsOn){
                             glDisable(GL_LIGHT0);
