@@ -201,7 +201,7 @@ Model* new_Billiard(shared_ptr<Ball>& movile, shared_ptr<Lamp>& lamp){
     Lamp *l= new Lamp;
     l->translate(tabW*.5,tabH*2.75,tabD*.5);
     l->rotate(90, 1, 0, 0);
-    scene->push(l);
+    //scene->push(l);
     lamp= shared_ptr<Lamp>(l);
 
     scene->push(table);

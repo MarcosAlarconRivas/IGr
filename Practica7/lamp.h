@@ -15,20 +15,35 @@ public:
     }
     void lightSwich(){
         if(on= !on){
-            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-            glMatrixMode(GL_MODELVIEW);
-            glPushMatrix();
-                glLoadMatrixd(MMatrix);
-                GLfloat LuzDifusa[]={1,.6,.2,1};
-                glLightfv(lightN, GL_DIFFUSE, LuzDifusa);
-                GLfloat PosLuz[]={0, 0, 0, 1};
-                glLightfv(lightN, GL_POSITION, PosLuz);
-                GLfloat DirLuz[]={0, 0, 1, 1};
-                glLightfv(lightN, GL_SPOT_DIRECTION, DirLuz);
-            glPopMatrix();
-            glEnable(lightN);
+             set_light();
+             glEnable(lightN);
         }else
              glDisable(lightN);
+    }
+    void set_light(){
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        glMatrixMode(GL_MODELVIEW);
+        glPushMatrix();
+            glLoadMatrixd(MMatrix);
+            GLfloat LuzDifusa[]={1,.6,.2,1};
+            glLightfv(lightN, GL_DIFFUSE, LuzDifusa);
+            GLfloat LuzEspec[]={1,1,1,1};
+            glLightfv(lightN, GL_SPECULAR, LuzEspec);
+            /*GLfloat LuzAmbien[]={.05,.1,0,1};
+            glLightfv(lightN, GL_AMBIENT, LuzAmbien);*/
+
+            //glLightf(lightN, GL_CONSTANT_ATTENUATION, .5);
+            //glLightf(lightN, GL_LINEAR_ATTENUATION, .01);
+            //glLightf(lightN, GL_QUADRATIC_ATTENUATION, .1);
+
+            GLfloat PosLuz[]={0, 0, 0, 1};
+            glLightfv(lightN, GL_POSITION, PosLuz);
+            GLfloat DirLuz[]={0, 0, 1};
+            glLightfv(lightN, GL_SPOT_DIRECTION, DirLuz);
+            //glLightf(lightN, GL_SPOT_EXPONENT, .5);
+            //glLightf(lightN, GL_SPOT_CUTOFF, 30);
+
+        glPopMatrix();
     }
 
 };

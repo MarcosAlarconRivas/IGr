@@ -80,6 +80,7 @@ void GLWidget::paintGL(){
 
         //Draw scene
         scene->render(fill);
+        lamp->render(fill);
     glPopMatrix();
 }
 
@@ -285,10 +286,34 @@ void GLWidget::keyPressEvent(QKeyEvent *e){
                         break;
 
              //Ligths
-             case Qt::Key_F11:
-                        lamp->lightSwich();
-                        break;
-             case Qt::Key_F12:
+             case Qt::Key_F5:
+                    lamp->translate(0,0,-1);
+                    lamp->set_light();
+                    break;
+             case Qt::Key_F6:
+                    lamp->translate(0,0, 1);
+                    lamp->set_light();
+                    break;
+            case Qt::Key_F7:
+                    lamp->translate(0,-1,0);
+                    lamp->set_light();
+                    break;
+            case Qt::Key_F8:
+                    lamp->translate(0, 1,0);
+                    lamp->set_light();
+                    break;
+            case Qt::Key_F9:
+                    lamp->translate(-1,0,0);
+                    lamp->set_light();
+                    break;
+            case Qt::Key_F10:
+                    lamp->translate( 1,0,0);
+                    lamp->set_light();
+                    break;
+            case Qt::Key_F11:
+                    lamp->lightSwich();
+                    break;
+            case Qt::Key_F12:
                         if(lightsOn){
                             glDisable(GL_LIGHT0);
                             float black[3]={0,0,0};
