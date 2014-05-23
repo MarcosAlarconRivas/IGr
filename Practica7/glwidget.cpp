@@ -79,8 +79,8 @@ void GLWidget::paintGL(){
         glMultTransposeMatrixf(Rot);
 
         //Draw scene
+        //lamp->render(fill);
         scene->render(fill);
-        lamp->render(fill);
     glPopMatrix();
 }
 
@@ -286,11 +286,11 @@ void GLWidget::keyPressEvent(QKeyEvent *e){
                         break;
 
              //Ligths
-             case Qt::Key_F5:
+            case Qt::Key_F5:
                     lamp->translate(0,0,-1);
                     lamp->set_light();
                     break;
-             case Qt::Key_F6:
+            case Qt::Key_F6:
                     lamp->translate(0,0, 1);
                     lamp->set_light();
                     break;
