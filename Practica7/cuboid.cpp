@@ -94,7 +94,7 @@ Cuboid::Cuboid(double w, double h, double d, unsigned x, unsigned y, unsigned z)
                 if(i==x)edgYHXW.push_back(p);
             }
 
-    n= make_shared<V3D>(V3D(0,-1,0,0));
+    n= make_shared<V3D>(V3D(0,1,0,0));
     for(unsigned j=0; j<z; j++)
             for(unsigned i=0; i<x; i++)
                 vertex.push_back(buildFace(i,j,x,n,points,1));
