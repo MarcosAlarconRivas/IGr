@@ -8,16 +8,8 @@ Sphere::Sphere(double rd,unsigned sl,unsigned st,float r,float g,float b,float a
     setColor(r,g,b,a);
 }
 
-Sphere::Sphere(double rd, unsigned sl, unsigned st, float c[3], float a){
-    quad= gluNewQuadric();
-    radius=rd;
-    slices=sl;
-    stacks=st;
-    color[0]=c[0];
-    color[1]=c[1];
-    color[2]=c[2];
-    color[3]=a;
-}
+Sphere::Sphere(double rd, unsigned sl, unsigned st, float c[3], float a)
+    :Sphere(rd, sl, st, c[0], c[1], c[2], a){}
 
 Sphere::~Sphere(){
     gluDeleteQuadric(quad);
