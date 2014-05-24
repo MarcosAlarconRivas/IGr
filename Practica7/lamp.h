@@ -19,13 +19,16 @@ public:
        push((new Cone(1.5,3.5,2.5))->setColor(.1,.9,.02, .75));
     }
     void lightSwich(){
+        auto it = begin();
         if(on= !on){
              set_light();
              glEnable(lightN);
-             ((Solid*)begin()->get())->set_emission(1,1,1);
+             ((Solid*)it->get())->set_emission(1,1,1);
+             ((Solid*)(++it)->get())->set_emission(0,.3,0);
         }else{
              glDisable(lightN);
-             ((Solid*)begin()->get())->set_emission(0,0,0);
+             ((Solid*)it->get())->set_emission(0,0,0);
+             ((Solid*)(++it)->get())->set_emission(0,0,0);
         }
     }
     void paint(bool b)const{
