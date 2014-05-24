@@ -135,10 +135,10 @@ Model* new_Billiard(shared_ptr<Ball>& movile, V3D&d, V3D&fall){
     table->push(t);
 
     brdrs->translate(0, woodW+tabH, 0);
-    t=(new Cuboid(tabW, woodW+ballR*1.2, inBrdr, 0, 2, 3))->setColor(wood);
+    t=(new Cuboid(tabW, woodW+ballR*1.2, inBrdr, 20, 2, 3))->setColor(wood);
     t->translate(0,0,-inBrdr);
     brdrs->push(t);
-    t=(new Cuboid(tabW, woodW+ballR*1.2, inBrdr, 0, 2, 3))->setColor(wood);
+    t=(new Cuboid(tabW, woodW+ballR*1.2, inBrdr, 20, 2, 3))->setColor(wood);
     t->translate(0,0,tabD);
     brdrs->push(t);
     t=(new Cuboid(inBrdr, woodW+ballR*1.2, tabD+2*inBrdr, 0, 2, 3))->setColor(wood);

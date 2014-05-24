@@ -136,10 +136,10 @@ Model* new_Billiard(shared_ptr<Ball>& movile, shared_ptr<Lamp>& lamp){
     table->push(t);
 
     brdrs->translate(0, woodW+tabH, 0);
-    t=(new Cuboid(tabW, woodW+ballR*1.2, inBrdr, 0, 2, 3))->setColor(wood);
+    t=(new Cuboid(tabW, woodW+ballR*1.2, inBrdr, 20, 2, 3))->setColor(wood);
     t->translate(0,0,-inBrdr);
     brdrs->push(t);
-    t=(new Cuboid(tabW, woodW+ballR*1.2, inBrdr, 0, 2, 3))->setColor(wood);
+    t=(new Cuboid(tabW, woodW+ballR*1.2, inBrdr, 20, 2, 3))->setColor(wood);
     t->translate(0,0,tabD);
     brdrs->push(t);
     t=(new Cuboid(inBrdr, woodW+ballR*1.2, tabD+2*inBrdr, 0, 2, 3))->setColor(wood);
@@ -201,7 +201,7 @@ Model* new_Billiard(shared_ptr<Ball>& movile, shared_ptr<Lamp>& lamp){
     Lamp *l= new Lamp;
     l->translate(tabW*.5,tabH*2.75,tabD*.5);
     l->rotate(90, 1, 0, 0);
-    scene->push(l);
+    //scene->push(l);
     lamp= shared_ptr<Lamp>(l);
 
     scene->push(table);

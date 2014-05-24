@@ -52,7 +52,7 @@ void GLWidget::initializeGL(){
     GLfloat PosicionLuz0[]={25.0, 25.0, 0.0, 1.0};
     glLightfv(GL_LIGHT0, GL_POSITION, PosicionLuz0);
 
-    scene=unique_ptr<Model>(new_Billiard(white, lamp));
+    table=unique_ptr<Model>(new_Billiard(white, lamp));
 
 }
 
@@ -77,11 +77,10 @@ void GLWidget::paintGL(){
     glPushMatrix();
         //Rotate scene
         glMultTransposeMatrixf(Rot);
-
         //Draw scene
-        //lamp->render(fill);
-        scene->render(fill);
+        table->render(fill);
     glPopMatrix();
+    lamp->render(fill);
 }
 
 void GLWidget::sceneRot(int i, double alpha){
@@ -286,6 +285,12 @@ void GLWidget::keyPressEvent(QKeyEvent *e){
                         break;
 
              //Ligths
+            case Qt::Key_F3:
+                    lamp->scale(1,1,.9);
+                    break;
+            case Qt::Key_F4:
+                    lamp->scale(1,1,1/.9);
+                    break;
             case Qt::Key_F5:
                     lamp->translate(0,0,-1);
                     lamp->set_light();

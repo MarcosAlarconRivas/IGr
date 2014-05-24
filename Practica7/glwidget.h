@@ -26,7 +26,7 @@ protected:
     bool fill=1, axis=0;
     bool lightsOn=1;
     Camera camera;
-    unique_ptr<Model> scene;
+    unique_ptr<Model> table;
     shared_ptr<Lamp> lamp;
     shared_ptr<Ball> white;
 
