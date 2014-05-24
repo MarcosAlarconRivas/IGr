@@ -1,9 +1,9 @@
 #ifndef CONE_H
 #define CONE_H
-#include "model.h"
+#include "solid.h"
 #include "GL/glu.h"
 
-class Cone : public Model{
+class Cone : public Solid{
 protected:
     double base, top, height;
     unsigned slices, stacks;

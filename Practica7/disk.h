@@ -1,9 +1,9 @@
 #ifndef DISK_H
 #define DISK_H
-#include "model.h"
+#include "solid.h"
 #include "GL/glu.h"
 
-class Disk : public Model{
+class Disk : public Solid{
 protected:
     double inR, outR;
     unsigned slices, loops;

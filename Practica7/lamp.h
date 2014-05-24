@@ -12,18 +12,21 @@ protected:
     double zR=1;
 public:
     Lamp(unsigned lightN=GL_LIGHT1){
-       push((new Cone(1.5,3.5,2.5))->setColor(.1,.9,.02, .75));
        this->lightN=lightN;
        Sphere *s= (new Sphere(.5))->setColor(1,1,1,.5);
        s->translate(0,0,1);
        push(s);
+       push((new Cone(1.5,3.5,2.5))->setColor(.1,.9,.02, .75));
     }
     void lightSwich(){
         if(on= !on){
              set_light();
              glEnable(lightN);
-        }else
+             ((Solid*)begin()->get())->set_emission(1,1,1);
+        }else{
              glDisable(lightN);
+             ((Solid*)begin()->get())->set_emission(0,0,0);
+        }
     }
     void paint(bool b)const{
         glCullFace(GL_BACK);
@@ -33,13 +36,13 @@ public:
         if(e)glEnable(GL_CULL_FACE);
     }
     void set_light()const{
-        //glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glMatrixMode(GL_MODELVIEW);
         glPushMatrix();
             glMultMatrixd(MMatrix);
-            GLfloat LuzDifusa[]={1,1,1,1};
+            GLfloat LuzDifusa[]={1,.8,.3,1};
             glLightfv(lightN, GL_DIFFUSE, LuzDifusa);
-            GLfloat LuzEspec[]={.1,.1,0,1};
+            GLfloat LuzEspec[]={.1,.1,.1,1};
             glLightfv(lightN, GL_SPECULAR, LuzEspec);
             /*GLfloat LuzAmbien[]={.05,.1,0,1};
             glLightfv(lightN, GL_AMBIENT, LuzAmbien);*/

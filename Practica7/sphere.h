@@ -1,8 +1,8 @@
 #ifndef SPHERE_H
 #define SPHERE_H
-#include "model.h"
+#include "solid.h"
 #include "GL/glu.h"
-class Sphere : public Model{
+class Sphere : public Solid{
 protected:
     double radius;
     unsigned slices, stacks;

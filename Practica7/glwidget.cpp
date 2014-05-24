@@ -19,7 +19,7 @@ void GLWidget::initializeGL(){
     glEnable(GL_LIGHTING);
 
     glEnable(GL_COLOR_MATERIAL);
-    glMaterialf(GL_FRONT, GL_SHININESS, 0.1);
+    //glMaterialf(GL_FRONT, GL_SHININESS, 0.1);
 
     glClearDepth(1.0f);
     glEnable(GL_DEPTH_TEST);

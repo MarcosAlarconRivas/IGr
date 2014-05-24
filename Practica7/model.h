@@ -6,7 +6,7 @@ class Model{
 public:
     virtual ~Model(){}
 
-    void render(bool fill=1)const;
+    virtual void render(bool fill=1)const;
 
     void reset();
     void mutlTrans(const double M[16]);
