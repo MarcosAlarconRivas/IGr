@@ -25,6 +25,15 @@ void GLWidget::initializeGL(){
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_LEQUAL);
 
+    //FOG
+    GLfloat fogCol[]={.8, .8, .8, .3};
+    glFogfv(GL_FOG_COLOR, fogCol);
+    glFogi(GL_FOG_MODE, GL_LINEAR);
+    glFogf(GL_FOG_DENSITY, .5);
+    glFogf(GL_FOG_START, 10);
+    glFogf(GL_FOG_END, 100);
+
+
     glDisable(GL_NORMALIZE);
     //glEnable(GL_NORMALIZE);
     //glShadeModel(GL_SMOOTH);//a normal for each vertex
@@ -38,10 +47,10 @@ void GLWidget::initializeGL(){
     glEnable(GL_CULL_FACE);
 
     //Camera
-    camera.setZoom(15);
+    camera.setZoom(30);
     camera.setWindow(width(),height());
     camera.setVolume(1, 1000);
-    camera.lookAt(100,100,100);
+    camera.lookAt(50,50,50);
 
     //Ligth0
     glEnable(GL_LIGHT0);
@@ -251,7 +260,7 @@ void GLWidget::keyPressEvent(QKeyEvent *e){
 
             //Camera positions
             case Qt::Key_Space :
-                        camera.lookAt(100,100,100);
+                        camera.lookAt(50,50,50);
                         camera.setZoom(30);
                         break;
             case Qt::Key_4 :
@@ -273,6 +282,12 @@ void GLWidget::keyPressEvent(QKeyEvent *e){
                         break;
             case Qt::Key_0 :
                         axis= !axis;
+                        break;
+            case Qt::Key_Control:
+                        if(fog= !fog)
+                            glEnable(GL_FOG);
+                        else
+                            glDisable(GL_FOG);
                         break;
 
             //Ball move

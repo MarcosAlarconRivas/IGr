@@ -24,7 +24,7 @@ public:
              set_light();
              glEnable(lightN);
              ((Solid*)it->get())->set_emission(1,1,1);
-             ((Solid*)(++it)->get())->set_emission(0,.3,0);
+             ((Solid*)(++it)->get())->set_emission(.05,.25,0);
         }else{
              glDisable(lightN);
              ((Solid*)it->get())->set_emission(0,0,0);
