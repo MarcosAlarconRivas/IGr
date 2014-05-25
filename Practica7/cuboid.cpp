@@ -12,12 +12,12 @@ static vector<shared_ptr<V3D>> buildFace(unsigned i, unsigned j, unsigned l,
    return face;
 }
 
-static vector<texCoor> mapFace(double i, double j, double di, double dj){
+static vector<texCoor> mapFace(double i, double j, double di, double dj,bool b){
   auto map= vector<texCoor>(4);
   map[0]=texCoor{i   ,   j};
-  map[1]=texCoor{i   ,j+dj};
+  map[b?1:3]=texCoor{i   ,j+dj};
   map[2]=texCoor{i+di,j+dj};
-  map[3]=texCoor{i+di,   j};
+  map[b?3:1]=texCoor{i+di,   j};
   return map;
 }
 
@@ -58,7 +58,7 @@ Cuboid::Cuboid(double w, double h, double d, unsigned x, unsigned y, unsigned z)
     for(unsigned j=0; j<y; j++)
             for(unsigned i=0; i<x; i++){
                 vertex.push_back(buildFace(i,j,x,n,points,1));
-                texC.push_back(mapFace(i*dx,j*dy,dx,dy));
+                texC.push_back(mapFace(i*dx,j*dy,dx,dy,1));
             }
     //face z=d
     points= vector<shared_ptr<V3D>>((x+1)*(y+1));
@@ -76,7 +76,7 @@ Cuboid::Cuboid(double w, double h, double d, unsigned x, unsigned y, unsigned z)
     for(unsigned j=0; j<y; j++)
             for(unsigned i=0; i<x; i++){
                 vertex.push_back(buildFace(i,j,x,n,points,0));
-                texC.push_back(mapFace(i*dx,j*dy,dx,dy));
+                texC.push_back(mapFace(i*dx,j*dy,dx,dy,0));
             }
 
     //face y=0
@@ -95,7 +95,7 @@ Cuboid::Cuboid(double w, double h, double d, unsigned x, unsigned y, unsigned z)
     for(unsigned j=0; j<z; j++)
             for(unsigned i=0; i<x; i++){
                 vertex.push_back(buildFace(i,j,x,n,points,0));
-                texC.push_back(mapFace(i*dx,j*dz,dx,dz));
+                texC.push_back(mapFace(i*dx,j*dz,dx,dz,0));
             }
 
     //face y=h
@@ -114,7 +114,7 @@ Cuboid::Cuboid(double w, double h, double d, unsigned x, unsigned y, unsigned z)
     for(unsigned j=0; j<z; j++)
             for(unsigned i=0; i<x; i++){
                 vertex.push_back(buildFace(i,j,x,n,points,1));
-                texC.push_back(mapFace(i*dx,j*dz,dx,dz));
+                texC.push_back(mapFace(i*dx,j*dz,dx,dz,1));
             }
 
 
@@ -132,7 +132,7 @@ Cuboid::Cuboid(double w, double h, double d, unsigned x, unsigned y, unsigned z)
     for(unsigned j=0; j<z; j++)
             for(unsigned i=0; i<y; i++){
                 vertex.push_back(buildFace(i,j,y,n,points,1));
-                texC.push_back(mapFace(i*dy,j*dz,dy,dz));
+                texC.push_back(mapFace(i*dy,j*dz,dy,dz,1));
             }
     //face x=w
     points= vector<shared_ptr<V3D>>((y+1)*(z+1));
@@ -148,7 +148,7 @@ Cuboid::Cuboid(double w, double h, double d, unsigned x, unsigned y, unsigned z)
     for(unsigned j=0; j<z; j++)
         for(unsigned i=0; i<y; i++){
                 vertex.push_back(buildFace(i,j,y,n,points,0));
-                texC.push_back(mapFace(i*dy,j*dz,dy,dz));
+                texC.push_back(mapFace(i*dy,j*dz,dy,dz,0));
             }
 }
 
@@ -160,7 +160,7 @@ Cuboid* Cuboid::setColor(float r, float g, float b, float a){
     return this;
 }
 
-Cuboid* Cuboid::setColor(float c[4], float a){
+Cuboid* Cuboid::setColor(float c[3], float a){
     return setColor(c[0], c[1], c[2], a);
 }
 
@@ -169,8 +169,7 @@ inline void Cuboid::paint(bool fill)const{
         glColor4fv(color);
         FlatMesh::paint(fill);
     }else{
-        //With out clearing color, it becomews mixed (color + texture)
-        //glColor3f(1,1,1);
+        glColor4fv(color);//Mixing color & texture
         glEnable(GL_TEXTURE_2D);
         glBindTexture(GL_TEXTURE_2D, texture);
         auto tex= texC.begin();

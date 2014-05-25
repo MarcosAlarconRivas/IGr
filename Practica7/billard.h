@@ -118,6 +118,10 @@ GLuint getTexture(QString path){
     return texture;
 }
 
+static Cuboid* set(Cuboid* c, float* cl, GLuint t){
+    return c->setColor(cl)->setTexture(t);
+}
+
 Model* new_Billiard(shared_ptr<Ball>& movile, shared_ptr<Lamp>& lamp){
     double ballR = .5715;
     double legW=1;
@@ -126,6 +130,7 @@ Model* new_Billiard(shared_ptr<Ball>& movile, shared_ptr<Lamp>& lamp){
     double tabW=25.4, tabH=7.5, tabD=12.7;
     float wood[3]{.5, .2, .02};
     GLuint woodTx=getTexture(QString("wood1.jpg"));
+    GLuint  matTx=getTexture(QString("mat.png"));
 
     //create scene objects
     auto scene= new Composite;
@@ -136,36 +141,36 @@ Model* new_Billiard(shared_ptr<Ball>& movile, shared_ptr<Lamp>& lamp){
     auto stick= new_stick(wood[0], wood[1], wood[2]);
     auto balls= new_15Balls(ballR);
 
-    Cuboid* t= (new Cuboid(tabW, woodW, tabD, 20, 0, 10))->setColor(.3, 1, .6)->setTexture(getTexture(QString("mat.png")));//mat
+    Cuboid* t= (new Cuboid(tabW, woodW, tabD, 20, 0, 10))->setColor(.3, 1, .6)->setTexture(matTx);//mat
     t->translate(0,woodW+tabH,0);
     table->push(t);
-    t=(new Cuboid(tabW+inBrdr*2, woodW, tabD+inBrdr*2, 20, 0, 10))->setColor(wood);//table
+    t=set(new Cuboid(tabW+inBrdr*2, woodW, tabD+inBrdr*2, 20, 0, 10), wood, woodTx);//table
     t->translate(-inBrdr,tabH,-inBrdr);
     table->push(t);
-    t=(new Cuboid(legW, tabH, legW, 0, 7))->setColor(wood);//leg 0,0
+    t=set(new Cuboid(legW, tabH, legW, 0, 7), wood, woodTx);//leg 0,0
     t->translate(-inBrdr,0,-inBrdr);
     table->push(t);
-    t=(new Cuboid(legW, tabH, legW, 0, 7))->setColor(wood);//leg 1,0
+    t=set(new Cuboid(legW, tabH, legW, 0, 7), wood, woodTx);//leg 1,0
     t->translate(tabW+inBrdr-legW,0,-inBrdr);
     table->push(t);
-    t=(new Cuboid(legW, tabH, legW, 0, 7))->setColor(wood);//leg 0,1
+    t=set(new Cuboid(legW, tabH, legW, 0, 7), wood, woodTx);//leg 0,1
     t->translate(-inBrdr,0,tabD +inBrdr-legW);
     table->push(t);
-    t=(new Cuboid(legW, tabH, legW, 0, 7))->setColor(wood);//leg 1,1
+    t=set(new Cuboid(legW, tabH, legW, 0, 7), wood, woodTx);//leg 1,1
     t->translate(tabW+inBrdr-legW,0,tabD +inBrdr-legW);
     table->push(t);
 
     brdrs->translate(0, woodW+tabH, 0);
-    t=((new Cuboid(tabW, woodW+ballR*1.2, inBrdr, 20, 2, 3))->setColor(wood))->setTexture(woodTx);
+    t=set(new Cuboid(tabW, woodW+ballR*1.2, inBrdr, 20, 2, 3), wood, woodTx);
     t->translate(0,0,-inBrdr);
     brdrs->push(t);
-    t=(new Cuboid(tabW, woodW+ballR*1.2, inBrdr, 20, 2, 3))->setColor(wood)->setTexture(woodTx);
+    t=set(new Cuboid(tabW, woodW+ballR*1.2, inBrdr, 20, 2, 3), wood, woodTx);
     t->translate(0,0,tabD);
     brdrs->push(t);
-    t=(new Cuboid(inBrdr, woodW+ballR*1.2, tabD+2*inBrdr, 0, 2, 3))->setColor(wood)->setTexture(woodTx);
+    t=set(new Cuboid(inBrdr, woodW+ballR*1.2, tabD+2*inBrdr, 0, 2, 3), wood, woodTx);
     t->translate(-inBrdr,0,-inBrdr);
     brdrs->push(t);
-    t=(new Cuboid(inBrdr, woodW+ballR*1.2, tabD+2*inBrdr, 0, 2, 3))->setColor(wood)->setTexture(woodTx);
+    t=set(new Cuboid(inBrdr, woodW+ballR*1.2, tabD+2*inBrdr, 0, 2, 3), wood, woodTx);
     t->translate(tabW,0,-inBrdr);
     brdrs->push(t);
 
