@@ -90,6 +90,36 @@ void GLWidget::paintGL(){
         table->render(fill);
     glPopMatrix();
     lamp->render(fill);
+
+    GLuint texture=0;
+    QImage im= QImage(QString("wood2.jpg"));
+    if(im.isNull()){texture=0;return;}
+    glEnable(GL_TEXTURE_2D);
+    glGenTextures( 1, &texture );
+    glBindTexture(GL_TEXTURE_2D, texture);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, im.width(), im.height(), 0, GL_BGRA, GL_UNSIGNED_BYTE, im.bits());
+    glBindTexture(GL_TEXTURE_2D,0);
+    glDisable(GL_TEXTURE_2D);
+
+    glColor3f(1,1,1);
+    glEnable(GL_TEXTURE_2D);
+    glBindTexture(GL_TEXTURE_2D, texture);
+    float a=3, x, z;
+    for( x= -20; x<100; x+=a)
+        for( z= -20; z<100; z+=a){
+            glBegin(GL_QUADS);
+               glNormal3f(0,1,0);
+               glTexCoord2f(0,1); glVertex3f(   x, 0, z  );
+               glTexCoord2f(1,1); glVertex3f(   x, 0, z+a);
+               glTexCoord2f(1,0); glVertex3f( x+a, 0, z+a);
+               glTexCoord2f(0,0); glVertex3f( x+a, 0, z  );
+            glEnd();
+        }
+    glDisable(GL_TEXTURE_2D);
 }
 
 void GLWidget::sceneRot(int i, double alpha){

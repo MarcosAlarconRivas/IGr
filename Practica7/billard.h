@@ -6,6 +6,7 @@
 #include "disk.h"
 #include "composite.h"
 #include "lamp.h"
+#include <QString>
 
 Model* new_stick(float r, float g, float b){
     double l1= .1, l2= 6, l3= 17, l4= .5, l5= .05;
@@ -99,6 +100,24 @@ Composite* new_15Balls(double ballR){
     return balls;
 }
 
+GLuint getTexture(QString path){
+    GLuint texture=0;
+    QImage im= QImage(path);
+    if(im.isNull())return 0;
+    glEnable(GL_TEXTURE_2D);
+    glGenTextures( 1, &texture );
+    glBindTexture(GL_TEXTURE_2D, texture);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, im.width(), im.height(), 0, GL_BGRA, GL_UNSIGNED_BYTE, im.bits());
+    glBindTexture(GL_TEXTURE_2D,0);
+    glDisable(GL_TEXTURE_2D);
+
+    return texture;
+}
+
 Model* new_Billiard(shared_ptr<Ball>& movile, shared_ptr<Lamp>& lamp){
     double ballR = .5715;
     double legW=1;
@@ -106,6 +125,7 @@ Model* new_Billiard(shared_ptr<Ball>& movile, shared_ptr<Lamp>& lamp){
     double woodW=.6;
     double tabW=25.4, tabH=7.5, tabD=12.7;
     float wood[3]{.5, .2, .02};
+    GLuint woodTx=getTexture(QString("wood1.jpg"));
 
     //create scene objects
     auto scene= new Composite;
@@ -116,7 +136,7 @@ Model* new_Billiard(shared_ptr<Ball>& movile, shared_ptr<Lamp>& lamp){
     auto stick= new_stick(wood[0], wood[1], wood[2]);
     auto balls= new_15Balls(ballR);
 
-    Cuboid* t= (new Cuboid(tabW, woodW, tabD, 20, 0, 10))->setColor(.1, 1, .2);//mat
+    Cuboid* t= (new Cuboid(tabW, woodW, tabD, 20, 0, 10))->setColor(.3, 1, .6)->setTexture(getTexture(QString("mat.png")));//mat
     t->translate(0,woodW+tabH,0);
     table->push(t);
     t=(new Cuboid(tabW+inBrdr*2, woodW, tabD+inBrdr*2, 20, 0, 10))->setColor(wood);//table
@@ -136,16 +156,16 @@ Model* new_Billiard(shared_ptr<Ball>& movile, shared_ptr<Lamp>& lamp){
     table->push(t);
 
     brdrs->translate(0, woodW+tabH, 0);
-    t=(new Cuboid(tabW, woodW+ballR*1.2, inBrdr, 20, 2, 3))->setColor(wood);
+    t=((new Cuboid(tabW, woodW+ballR*1.2, inBrdr, 20, 2, 3))->setColor(wood))->setTexture(woodTx);
     t->translate(0,0,-inBrdr);
     brdrs->push(t);
-    t=(new Cuboid(tabW, woodW+ballR*1.2, inBrdr, 20, 2, 3))->setColor(wood);
+    t=(new Cuboid(tabW, woodW+ballR*1.2, inBrdr, 20, 2, 3))->setColor(wood)->setTexture(woodTx);
     t->translate(0,0,tabD);
     brdrs->push(t);
-    t=(new Cuboid(inBrdr, woodW+ballR*1.2, tabD+2*inBrdr, 0, 2, 3))->setColor(wood);
+    t=(new Cuboid(inBrdr, woodW+ballR*1.2, tabD+2*inBrdr, 0, 2, 3))->setColor(wood)->setTexture(woodTx);
     t->translate(-inBrdr,0,-inBrdr);
     brdrs->push(t);
-    t=(new Cuboid(inBrdr, woodW+ballR*1.2, tabD+2*inBrdr, 0, 2, 3))->setColor(wood);
+    t=(new Cuboid(inBrdr, woodW+ballR*1.2, tabD+2*inBrdr, 0, 2, 3))->setColor(wood)->setTexture(woodTx);
     t->translate(tabW,0,-inBrdr);
     brdrs->push(t);
 
@@ -195,7 +215,7 @@ Model* new_Billiard(shared_ptr<Ball>& movile, shared_ptr<Lamp>& lamp){
     balls->push(b);
     movile= shared_ptr<Ball>(b);
     V3D d= ballsPos + b->getMemPosition(); d[0]= -d[0]; d[1]=0; d[2]= -d[2];
-    V3D fall= V3D(0,-2*woodW,0);
+    V3D fall= V3D(0,-2*woodW+ballR,0);
     movile->setingMove(d, V3D(-fall[0], -fall[1], -fall[2]) % 1, fall);
 
     Lamp *l= new Lamp;

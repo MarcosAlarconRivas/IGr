@@ -12,10 +12,21 @@ static vector<shared_ptr<V3D>> buildFace(unsigned i, unsigned j, unsigned l,
    return face;
 }
 
+static vector<texCoor> mapFace(double i, double j, double di, double dj){
+  auto map= vector<texCoor>(4);
+  map[0]=texCoor{i   ,   j};
+  map[1]=texCoor{i   ,j+dj};
+  map[2]=texCoor{i+di,j+dj};
+  map[3]=texCoor{i+di,   j};
+  return map;
+}
+
 Cuboid::Cuboid(double w, double h, double d, unsigned x, unsigned y, unsigned z){
     x++; y++; z++;
     double ix= w/x, iy= h/y, iz= d/z;
     int t;
+
+    double dx= 1.0/x, dy= 1.0/y, dz=1.0/z;
 
     //points shared by mutilpe faces
     auto edgZ0X0= vector<shared_ptr<V3D>>();//(y+1);
@@ -43,11 +54,12 @@ Cuboid::Cuboid(double w, double h, double d, unsigned x, unsigned y, unsigned z)
                 if(i==x)edgZ0XW.push_back(p);
             }
 
-
     auto n= make_shared<V3D>(V3D(0,0,-1,0));
     for(unsigned j=0; j<y; j++)
-            for(unsigned i=0; i<x; i++)
+            for(unsigned i=0; i<x; i++){
                 vertex.push_back(buildFace(i,j,x,n,points,1));
+                texC.push_back(mapFace(i*dx,j*dy,dx,dy));
+            }
     //face z=d
     points= vector<shared_ptr<V3D>>((x+1)*(y+1));
     for(unsigned j=0; j<=y; j++)
@@ -62,8 +74,10 @@ Cuboid::Cuboid(double w, double h, double d, unsigned x, unsigned y, unsigned z)
 
     n= make_shared<V3D>(V3D(0,0,1,0));
     for(unsigned j=0; j<y; j++)
-            for(unsigned i=0; i<x; i++)
+            for(unsigned i=0; i<x; i++){
                 vertex.push_back(buildFace(i,j,x,n,points,0));
+                texC.push_back(mapFace(i*dx,j*dy,dx,dy));
+            }
 
     //face y=0
     points= vector<shared_ptr<V3D>>((x+1)*(z+1));
@@ -79,8 +93,10 @@ Cuboid::Cuboid(double w, double h, double d, unsigned x, unsigned y, unsigned z)
 
     n= make_shared<V3D>(V3D(0,-1,0,0));
     for(unsigned j=0; j<z; j++)
-            for(unsigned i=0; i<x; i++)
+            for(unsigned i=0; i<x; i++){
                 vertex.push_back(buildFace(i,j,x,n,points,0));
+                texC.push_back(mapFace(i*dx,j*dz,dx,dz));
+            }
 
     //face y=h
     points= vector<shared_ptr<V3D>>((x+1)*(z+1));
@@ -96,8 +112,11 @@ Cuboid::Cuboid(double w, double h, double d, unsigned x, unsigned y, unsigned z)
 
     n= make_shared<V3D>(V3D(0,1,0,0));
     for(unsigned j=0; j<z; j++)
-            for(unsigned i=0; i<x; i++)
+            for(unsigned i=0; i<x; i++){
                 vertex.push_back(buildFace(i,j,x,n,points,1));
+                texC.push_back(mapFace(i*dx,j*dz,dx,dz));
+            }
+
 
     //face x=0
     points= vector<shared_ptr<V3D>>((y+1)*(z+1));
@@ -111,8 +130,10 @@ Cuboid::Cuboid(double w, double h, double d, unsigned x, unsigned y, unsigned z)
 
     n= make_shared<V3D>(V3D(-1,0,0,0));
     for(unsigned j=0; j<z; j++)
-            for(unsigned i=0; i<y; i++)
+            for(unsigned i=0; i<y; i++){
                 vertex.push_back(buildFace(i,j,y,n,points,1));
+                texC.push_back(mapFace(i*dy,j*dz,dy,dz));
+            }
     //face x=w
     points= vector<shared_ptr<V3D>>((y+1)*(z+1));
     t=0;for(auto e=edgZ0XW.begin(); e!=edgZ0XW.end(); e++)points[t++]= *e;
@@ -125,8 +146,10 @@ Cuboid::Cuboid(double w, double h, double d, unsigned x, unsigned y, unsigned z)
 
     n= make_shared<V3D>(V3D(1,0,0,0));
     for(unsigned j=0; j<z; j++)
-            for(unsigned i=0; i<y; i++)
+        for(unsigned i=0; i<y; i++){
                 vertex.push_back(buildFace(i,j,y,n,points,0));
+                texC.push_back(mapFace(i*dy,j*dz,dy,dz));
+            }
 }
 
 Cuboid* Cuboid::setColor(float r, float g, float b, float a){
@@ -139,4 +162,29 @@ Cuboid* Cuboid::setColor(float r, float g, float b, float a){
 
 Cuboid* Cuboid::setColor(float c[4], float a){
     return setColor(c[0], c[1], c[2], a);
+}
+
+inline void Cuboid::paint(bool fill)const{
+    if(!texture||!fill){
+        glColor4fv(color);
+        FlatMesh::paint(fill);
+    }else{
+        //With out clearing color, it becomews mixed (color + texture)
+        //glColor3f(1,1,1);
+        glEnable(GL_TEXTURE_2D);
+        glBindTexture(GL_TEXTURE_2D, texture);
+        auto tex= texC.begin();
+        for(auto face= vertex.begin(); face != vertex.end(); face++,tex++){
+            auto v= face->begin();
+            auto w= tex->begin();
+            glBegin(GL_QUADS);
+                glNormal3fv((*v++)->v);
+                glTexCoord2d(w->s, w->t);glVertex3fv((*v++)->v); w++;
+                glTexCoord2d(w->s, w->t);glVertex3fv((*v++)->v); w++;
+                glTexCoord2d(w->s, w->t);glVertex3fv((*v++)->v); w++;
+                glTexCoord2d(w->s, w->t);glVertex3fv((*v++)->v); w++;
+            glEnd();
+        }
+        glDisable(GL_TEXTURE_2D);
+    }
 }
