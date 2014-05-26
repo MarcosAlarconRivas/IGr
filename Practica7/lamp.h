@@ -10,6 +10,7 @@ protected:
     bool on=0;
     unsigned lightN;
     double zR=1;
+    float intens=1;//%
 public:
     Lamp(unsigned lightN=GL_LIGHT1){
        this->lightN=lightN;
@@ -43,9 +44,9 @@ public:
         glMatrixMode(GL_MODELVIEW);
         glPushMatrix();
             glMultMatrixd(MMatrix);
-            GLfloat LuzDifusa[]={1,.8,.3,1};
+            GLfloat LuzDifusa[]={1,1,1,1};
             glLightfv(lightN, GL_DIFFUSE, LuzDifusa);
-            GLfloat LuzEspec[]={.5,.5,.5,1};
+            GLfloat LuzEspec[]={.8,.8,.8,1};
             glLightfv(lightN, GL_SPECULAR, LuzEspec);
             /*GLfloat LuzAmbien[]={.05,.1,0,1};
             glLightfv(lightN, GL_AMBIENT, LuzAmbien);*/
@@ -65,6 +66,16 @@ public:
     void scale(double x, double y, double z){
         glLightf(lightN, GL_SPOT_CUTOFF, 40/(zR*=x));
         Model::scale(x,y,z);
+    }
+    float intensity(float r){
+        intens +=r;
+        if(intens < 0)intens=0;
+        if(intens > 1)intens=1;
+        GLfloat LuzDifusa[]={intens,intens,intens,1};
+        glLightfv(lightN, GL_DIFFUSE, LuzDifusa);
+        /*GLfloat LuzEspec[]={intens*0.8,intens*0.8,intens*0.8,1};
+        glLightfv(lightN, GL_SPECULAR, LuzEspec);*/
+        return intens;
     }
 
 };

@@ -330,6 +330,12 @@ void GLWidget::keyPressEvent(QKeyEvent *e){
             case Qt::Key_F10:
                     lamp->lightSwich();
                     break;
+            case Qt::Key_8:
+                    lamp->intensity(.05);
+                    break;
+            case Qt::Key_9:
+                    lamp->intensity(-.05);
+                    break;
             case Qt::Key_F11:
                         if(lightAm){
                             float black[3]={0,0,0};
@@ -342,11 +348,9 @@ void GLWidget::keyPressEvent(QKeyEvent *e){
                         }
                         break;
             case Qt::Key_F12:
-                        if(lightRm = !lightRm)
-                            glEnable(GL_LIGHT0);
+                        if(lightRm = !lightRm)glEnable(GL_LIGHT0);
                         else glDisable(GL_LIGHT0);
                         break;
-
 
             default:   return;
     }
