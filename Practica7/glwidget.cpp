@@ -55,7 +55,7 @@ void GLWidget::initializeGL(){
     glLightfv(GL_LIGHT0, GL_DIFFUSE, LuzDifusa);
     GLfloat LuzAmbiente[]={0.3,0.3,0.3,1.0};
     glLightfv(GL_LIGHT0, GL_AMBIENT, LuzAmbiente);
-    GLfloat PosicionLuz0[]={25.0, 25.0, 0.0, 1.0};
+    GLfloat PosicionLuz0[]={50.0, 50.0, 0.0, 1.0};
     glLightfv(GL_LIGHT0, GL_POSITION, PosicionLuz0);
 
     table=unique_ptr<Model>(new_Billiard(white, lamp));
@@ -297,51 +297,54 @@ void GLWidget::keyPressEvent(QKeyEvent *e){
                         break;
 
              //Ligths
-            case Qt::Key_F3:
+            case Qt::Key_F2:
                     lamp->scale(1,1,.9);
                     break;
-            case Qt::Key_F4:
+            case Qt::Key_F3:
                     lamp->scale(1,1,1/.9);
                     break;
-            case Qt::Key_F5:
+            case Qt::Key_F4:
                     lamp->translate(0,0,-1);
                     lamp->set_light();
                     break;
-            case Qt::Key_F6:
+            case Qt::Key_F5:
                     lamp->translate(0,0, 1);
                     lamp->set_light();
                     break;
-            case Qt::Key_F7:
+            case Qt::Key_F6:
                     lamp->translate(0,-1,0);
                     lamp->set_light();
                     break;
-            case Qt::Key_F8:
+            case Qt::Key_F7:
                     lamp->translate(0, 1,0);
                     lamp->set_light();
                     break;
-            case Qt::Key_F9:
+            case Qt::Key_F8:
                     lamp->translate(-1,0,0);
                     lamp->set_light();
                     break;
-            case Qt::Key_F10:
+            case Qt::Key_F9:
                     lamp->translate( 1,0,0);
                     lamp->set_light();
                     break;
-            case Qt::Key_F11:
+            case Qt::Key_F10:
                     lamp->lightSwich();
                     break;
-            case Qt::Key_F12:
-                        if(lightsOn){
-                            glDisable(GL_LIGHT0);
+            case Qt::Key_F11:
+                        if(lightAm){
                             float black[3]={0,0,0};
                             glLightModelfv(GL_LIGHT_MODEL_AMBIENT, black);
-                            lightsOn=0;
+                            lightAm=0;
                         }else{
-                            glEnable(GL_LIGHT0);
                             float grey[3]={.2,.2,.2};
                             glLightModelfv(GL_LIGHT_MODEL_AMBIENT, grey);
-                            lightsOn=1;
+                            lightAm=1;
                         }
+                        break;
+            case Qt::Key_F12:
+                        if(lightRm = !lightRm)
+                            glEnable(GL_LIGHT0);
+                        else glDisable(GL_LIGHT0);
                         break;
 
 

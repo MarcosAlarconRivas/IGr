@@ -45,7 +45,7 @@ public:
             glMultMatrixd(MMatrix);
             GLfloat LuzDifusa[]={1,.8,.3,1};
             glLightfv(lightN, GL_DIFFUSE, LuzDifusa);
-            GLfloat LuzEspec[]={.1,.1,.1,1};
+            GLfloat LuzEspec[]={.5,.5,.5,1};
             glLightfv(lightN, GL_SPECULAR, LuzEspec);
             /*GLfloat LuzAmbien[]={.05,.1,0,1};
             glLightfv(lightN, GL_AMBIENT, LuzAmbien);*/
