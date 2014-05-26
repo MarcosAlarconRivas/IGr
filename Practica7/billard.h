@@ -165,16 +165,16 @@ Model* new_Billiard(shared_ptr<Ball>& movile, shared_ptr<Lamp>& lamp){
 
     brdrs->translate(0, woodW+tabH, 0);
     t=set(new Cuboid(tabW, woodW+ballR*1.2, inBrdr, 20, 2, 3), wood, woodTx);
-    t->translate(0,0,-inBrdr);
+    t->translate(0,0,-inBrdr);t->set_specular(.5,1,.4,0);
     brdrs->push(t);
     t=set(new Cuboid(tabW, woodW+ballR*1.2, inBrdr, 20, 2, 3), wood, woodTx);
-    t->translate(0,0,tabD);
+    t->translate(0,0,tabD);t->set_specular(.5,1,.4,0);
     brdrs->push(t);
     t=set(new Cuboid(inBrdr, woodW+ballR*1.2, tabD+2*inBrdr, 0, 2, 3), wood, woodTx);
-    t->translate(-inBrdr,0,-inBrdr);
+    t->translate(-inBrdr,0,-inBrdr);t->set_specular(.5,1,.4,0);
     brdrs->push(t);
     t=set(new Cuboid(inBrdr, woodW+ballR*1.2, tabD+2*inBrdr, 0, 2, 3), wood, woodTx);
-    t->translate(tabW,0,-inBrdr);
+    t->translate(tabW,0,-inBrdr);t->set_specular(.5,1,.4,0);
     brdrs->push(t);
 
     t=(new Cuboid(.21, .18, .21))->setColor(.3, 0, .5);

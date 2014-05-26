@@ -33,7 +33,8 @@ void Solid::set_diffuse(float r, float g, float b, float a){
     diffuse[3]=a;
 }
 
-void Solid::set_specular(float r, float g, float b, float a){
+void Solid::set_specular(float s,float r, float g, float b, float a){
+    shininess=s;
     specular[0]=r;
     specular[1]=g;
     specular[2]=b;

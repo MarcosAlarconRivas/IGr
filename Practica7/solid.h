@@ -11,7 +11,7 @@ public:
     GLfloat shininess=0;
     //void setColor(float r, float g, float b, float a=1);
     void set_emission(float r, float g, float b, float a=1);
-    void set_specular(float r, float g, float b, float a=1);
+    void set_specular(float shininess, float r, float g, float b, float a=1);
     void set_diffuse(float r, float g, float b, float a=1);
     void set_ambient(float r, float g, float b, float a=1);
 protected:
