@@ -217,14 +217,13 @@ Model* new_Billiard(shared_ptr<Ball>& movile, shared_ptr<Lamp>& lamp){
     V3D ballsPos= V3D(.7*tabW, tabH+2*woodW+ballR, .5*tabD);
     balls->translate(ballsPos[0], ballsPos[1], ballsPos[2]);
 
-    Ball* b = new Ball(ballR);//white one
-    b->translate(-.5*tabW,0,0);
-    b->memorize();
-    balls->push(b);//FIXME store after make shared
-    movile= shared_ptr<Ball>(b);
-    V3D d= ballsPos + b->getMemPosition(); d[0]= -d[0]; d[1]=0; d[2]= -d[2];
+    movile= shared_ptr<Ball>(new Ball(ballR));//white one
+    movile->translate(-.5*tabW,0,0);
+    movile->memorize();
+    V3D d= ballsPos + movile->getMemPosition(); d[0]= -d[0]; d[1]=0; d[2]= -d[2];
     V3D fall= V3D(0,-2*woodW+ballR,0);
     movile->setingMove(d, V3D(-fall[0], -fall[1], -fall[2]) % 1, fall);
+    balls->push_back(movile);
 
     Lamp *l= new Lamp;
     l->translate(tabW*.5,tabH*2.75,tabD*.5);
