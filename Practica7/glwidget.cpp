@@ -57,6 +57,8 @@ void GLWidget::initializeGL(){
     glLightfv(GL_LIGHT0, GL_AMBIENT, LuzAmbiente);
     GLfloat PosicionLuz0[]={50.0, 50.0, 0.0, 1.0};
     glLightfv(GL_LIGHT0, GL_POSITION, PosicionLuz0);
+    GLfloat DireccionLuz0[]={0.0, -1.0, -1.0, 0.0};
+    glLightfv(GL_LIGHT0, GL_SPOT_DIRECTION, DireccionLuz0);
 
     table=unique_ptr<Model>(new_Billiard(white, lamp));
 
