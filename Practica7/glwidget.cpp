@@ -9,10 +9,7 @@ GLWidget::GLWidget(QWidget *parent)
     setFocus();
 }
 
-GLWidget::~GLWidget(){
-    GLuint tex=0;
-    glDeleteTextures(textures, &tex);
-}
+GLWidget::~GLWidget(){}
 
 void GLWidget::initializeGL(){
     glClearColor(0,0,0,1);
@@ -61,7 +58,7 @@ void GLWidget::initializeGL(){
     GLfloat PosicionLuz0[]={25.0, 25.0, 0.0, 1.0};
     glLightfv(GL_LIGHT0, GL_POSITION, PosicionLuz0);
 
-    table=unique_ptr<Model>(new_Billiard(white, lamp, textures));
+    table=unique_ptr<Model>(new_Billiard(white, lamp));
 
 }
 

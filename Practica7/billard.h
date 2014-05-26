@@ -8,6 +8,25 @@
 #include "lamp.h"
 #include <QString>
 
+GLuint getTexture(QString path, bool mirrored=1){
+    GLuint texture=0;
+    QImage im= QImage(path);
+    if(mirrored)im = im.mirrored(1, 0);
+    if(im.isNull())return 0;
+    glEnable(GL_TEXTURE_2D);
+    glGenTextures( 1, &texture );
+    glBindTexture(GL_TEXTURE_2D, texture);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, im.width(), im.height(), 0, GL_BGRA, GL_UNSIGNED_BYTE, im.bits());
+    glBindTexture(GL_TEXTURE_2D,0);
+    glDisable(GL_TEXTURE_2D);
+
+    return texture;
+}
+
 Model* new_stick(float r, float g, float b){
     double l1= .1, l2= 6, l3= 17, l4= .5, l5= .05;
     double r1= .4, r2= .1;
@@ -46,83 +65,67 @@ static Composite* new_hole(double rad, double hth){
 }
 
 Composite* new_15Balls(double ballR){
+    //Images from http://www.sharecg.com
     double sqr3 = sqrt(3);
-    Sphere* b;
+    Sphere* b; 
     auto balls = new Composite;
-    b=(new Sphere(ballR))->setColor(1,1,0);//9 yelow
+    b=(new Sphere(ballR))->setTexture(getTexture(QString("ball9.jpeg")));
+    b->rotate(90,0,0,1);
     balls->push(b);
 
-    b=(new Sphere(ballR))->setColor(.6,0,.08);//7 crimson
-    b->translate(ballR*sqr3,0,ballR);
+    b=(new Sphere(ballR))->setTexture(getTexture(QString("ball7.jpeg")));
+    b->translate(ballR*sqr3,0,ballR);b->rotate(90,0,0,1);
     balls->push(b);
-    b=(new Sphere(ballR))->setColor(.3,0,.4);//12 purple
-    b->translate(ballR*sqr3,0,-ballR);
-    balls->push(b);
-
-    b=(new Sphere(ballR))->setColor(.02,.02,.02);//8 black
-    b->translate(2*ballR*sqr3,0,0);
-    balls->push(b);
-    b=(new Sphere(ballR))->setColor(.6,0,.08);//15 crimson
-    b->translate(2*ballR*sqr3,0,2*ballR);
-    balls->push(b);
-    b=(new Sphere(ballR))->setColor(1,1,0);//1 yelow
-    b->translate(2*ballR*sqr3,0,-2*ballR);
+    b=(new Sphere(ballR))->setTexture(getTexture(QString("ball12.jpeg")));
+    b->translate(ballR*sqr3,0,-ballR);b->rotate(90,0,0,1);
     balls->push(b);
 
-    b=(new Sphere(ballR))->setColor(0,0,1);//10 blue
-    b->translate(3*ballR*sqr3,0,ballR);
+    b=(new Sphere(ballR))->setTexture(getTexture(QString("ball8.jpeg")));
+    b->translate(2*ballR*sqr3,0,0);b->rotate(90,0,0,1);
     balls->push(b);
-    b=(new Sphere(ballR))->setColor(1,0,0);//3 red
-    b->translate(3*ballR*sqr3,0,-ballR);
+    b=(new Sphere(ballR))->setTexture(getTexture(QString("ball15.jpeg")));
+    b->translate(2*ballR*sqr3,0,2*ballR);b->rotate(90,0,0,1);
     balls->push(b);
-    b=(new Sphere(ballR))->setColor(0,.5,.15);//6 green
-    b->translate(3*ballR*sqr3,0,3*ballR);
-    balls->push(b);
-    b=(new Sphere(ballR))->setColor(0,.5,.15);//14 green
-    b->translate(3*ballR*sqr3,0,-3*ballR);
+    b=(new Sphere(ballR))->setTexture(getTexture(QString("ball1.jpeg")));
+    b->translate(2*ballR*sqr3,0,-2*ballR);b->rotate(90,0,0,1);
     balls->push(b);
 
-    b=(new Sphere(ballR))->setColor(1,.2,0);//13 orange
-    b->translate(4*ballR*sqr3,0,0);
+    b=(new Sphere(ballR))->setTexture(getTexture(QString("ball10.jpeg")));
+    b->translate(3*ballR*sqr3,0,ballR);b->rotate(90,0,0,1);
     balls->push(b);
-    b=(new Sphere(ballR))->setColor(0,0,1);//2 blue
-    b->translate(4*ballR*sqr3,0,2*ballR);
+    b=(new Sphere(ballR))->setTexture(getTexture(QString("ball3.jpeg")));
+    b->translate(3*ballR*sqr3,0,-ballR);b->rotate(90,0,0,1);
     balls->push(b);
-    b=(new Sphere(ballR))->setColor(.3,0,.4);//12 purple
-    b->translate(4*ballR*sqr3,0,-2*ballR);
+    b=(new Sphere(ballR))->setTexture(getTexture(QString("ball6.jpeg")));
+    b->translate(3*ballR*sqr3,0,3*ballR);b->rotate(90,0,0,1);
     balls->push(b);
-    b=(new Sphere(ballR))->setColor(1,0,0);//11 red
-    b->translate(4*ballR*sqr3,0,4*ballR);
+    b=(new Sphere(ballR))->setTexture(getTexture(QString("ball14.jpeg")));
+    b->translate(3*ballR*sqr3,0,-3*ballR);b->rotate(90,0,0,1);
     balls->push(b);
-    b=(new Sphere(ballR))->setColor(1,.2,0);//5 orange
-    b->translate(4*ballR*sqr3,0,-4*ballR);
+
+    b=(new Sphere(ballR))->setTexture(getTexture(QString("ball13.jpeg")));
+    b->translate(4*ballR*sqr3,0,0);b->rotate(90,0,0,1);
+    balls->push(b);
+    b=(new Sphere(ballR))->setTexture(getTexture(QString("ball2.jpeg")));
+    b->translate(4*ballR*sqr3,0,2*ballR);b->rotate(90,0,0,1);
+    balls->push(b);
+    b=(new Sphere(ballR))->setTexture(getTexture(QString("ball4.jpeg")));
+    b->translate(4*ballR*sqr3,0,-2*ballR);b->rotate(90,0,0,1);
+    balls->push(b);
+    b=(new Sphere(ballR))->setTexture(getTexture(QString("ball11.jpeg")));
+    b->translate(4*ballR*sqr3,0,4*ballR);b->rotate(90,0,0,1);
+    balls->push(b);
+    b=(new Sphere(ballR))->setTexture(getTexture(QString("ball5.jpeg")));
+    b->translate(4*ballR*sqr3,0,-4*ballR);b->rotate(90,0,0,1);
     balls->push(b);
     return balls;
-}
-
-GLuint getTexture(QString path){
-    GLuint texture=0;
-    QImage im= QImage(path);
-    if(im.isNull())return 0;
-    glEnable(GL_TEXTURE_2D);
-    glGenTextures( 1, &texture );
-    glBindTexture(GL_TEXTURE_2D, texture);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, im.width(), im.height(), 0, GL_BGRA, GL_UNSIGNED_BYTE, im.bits());
-    glBindTexture(GL_TEXTURE_2D,0);
-    glDisable(GL_TEXTURE_2D);
-
-    return texture;
 }
 
 static Cuboid* set(Cuboid* c, float* cl, GLuint t){
     return c->setColor(cl)->setTexture(t);
 }
 
-Model* new_Billiard(shared_ptr<Ball>& movile, shared_ptr<Lamp>& lamp, GLuint& texture){
+Model* new_Billiard(shared_ptr<Ball>& movile, shared_ptr<Lamp>& lamp){
     double ballR = .5715;
     double legW=1;
     double inBrdr=1.8;
@@ -131,7 +134,6 @@ Model* new_Billiard(shared_ptr<Ball>& movile, shared_ptr<Lamp>& lamp, GLuint& te
     float wood[3]{.5, .2, .02};
     GLuint woodTx=getTexture(QString("wood1.jpg"));
     GLuint  matTx=getTexture(QString("mat.png"));
-    texture+=2;
 
     //create scene objects
     auto scene= new Composite;
@@ -218,7 +220,7 @@ Model* new_Billiard(shared_ptr<Ball>& movile, shared_ptr<Lamp>& lamp, GLuint& te
     Ball* b = new Ball(ballR);//white one
     b->translate(-.5*tabW,0,0);
     b->memorize();
-    balls->push(b);
+    balls->push(b);//FIXME store after make shared
     movile= shared_ptr<Ball>(b);
     V3D d= ballsPos + b->getMemPosition(); d[0]= -d[0]; d[1]=0; d[2]= -d[2];
     V3D fall= V3D(0,-2*woodW+ballR,0);

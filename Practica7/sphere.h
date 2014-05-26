@@ -8,6 +8,7 @@ protected:
     unsigned slices, stacks;
     GLUquadric* quad;
     float color[4];
+    GLuint texture=0;
 
 public:
     Sphere(double radius, unsigned slices, unsigned stacks, float color[3], float alpha=1);
@@ -17,6 +18,7 @@ public:
 
     void paint(bool fill)const;
     Sphere* setColor(float r, float g, float b, float a=1);
+    Sphere* setTexture(GLuint texture);
 
 };
 
