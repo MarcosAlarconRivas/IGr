@@ -122,7 +122,7 @@ static Cuboid* set(Cuboid* c, float* cl, GLuint t){
     return c->setColor(cl)->setTexture(t);
 }
 
-Model* new_Billiard(shared_ptr<Ball>& movile, shared_ptr<Lamp>& lamp){
+Model* new_Billiard(shared_ptr<Ball>& movile, shared_ptr<Lamp>& lamp, GLuint& texture){
     double ballR = .5715;
     double legW=1;
     double inBrdr=1.8;
@@ -131,6 +131,7 @@ Model* new_Billiard(shared_ptr<Ball>& movile, shared_ptr<Lamp>& lamp){
     float wood[3]{.5, .2, .02};
     GLuint woodTx=getTexture(QString("wood1.jpg"));
     GLuint  matTx=getTexture(QString("mat.png"));
+    texture+=2;
 
     //create scene objects
     auto scene= new Composite;

@@ -38,6 +38,7 @@ protected:
 private:
     void sceneRot(int axis, double angle);
     int runing=0;
+    GLuint textures=0;
 };
 
 #endif
