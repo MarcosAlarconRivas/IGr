@@ -356,3 +356,33 @@ void GLWidget::keyPressEvent(QKeyEvent *e){
     }
     repaint();
 }
+
+static bool aprox(float a, float b){
+    if(a==b)return 1;
+    if(!a || !b)return 0;
+    float d= a/b;
+    return d<1.2 && d>.8;
+}
+
+void GLWidget::mouseReleaseEvent(QMouseEvent * event){
+    if(event->button()!=Qt::LeftButton)return;
+    GLint x = event->x(), y = event->y();
+    float data[4] = {0, 0, 0, 0};
+    glReadPixels (x, height() - y, 1, 1, GL_RGBA, GL_FLOAT, &data);
+    int i;
+    float chalk0[4]= {.3, 0, .5, 1};
+    for(i=0; i<4; i++)
+        if(!aprox(data[i],chalk0[i]))break;
+
+    if(i<4){
+        float chalk1[4]= {0, .2, 1, 1};
+        for(i=0; i<4; i++)
+            if(!aprox(data[i],chalk1[i]))break;
+    }
+
+    if(i==4){
+        lamp->lightSwich();
+        repaint();
+    }
+
+}

@@ -34,6 +34,7 @@ protected:
     void paintGL();
     void resizeGL(int width, int height);
     void keyPressEvent(QKeyEvent *event);
+    void mouseReleaseEvent(QMouseEvent * event);
 
 private:
     void sceneRot(int axis, double angle);
