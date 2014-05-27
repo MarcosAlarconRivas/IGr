@@ -188,12 +188,11 @@ Model* new_Billiard(shared_ptr<Ball>& movile, V3D&d, V3D&fall){
     V3D ballsPos= V3D(.7*tabW, tabH+2*woodW+ballR, .5*tabD);
     balls->translate(ballsPos[0], ballsPos[1], ballsPos[2]);
 
-    Ball* b = new Ball(ballR);//white one
-    b->translate(-.5*tabW,0,0);
-    b->memorize();
-    balls->push(b);
-    movile= shared_ptr<Ball>(b);
-    d= ballsPos + b->getMemPosition(); d[0]= -d[0]; d[1]=0; d[2]= -d[2];
+    movile= shared_ptr<Ball>(new Ball(ballR));//white one
+    movile->translate(-.5*tabW,0,0);
+    movile->memorize();
+    balls->push_back(movile);
+    d= ballsPos + movile->getMemPosition(); d[0]= -d[0]; d[1]=0; d[2]= -d[2];
     fall= V3D(0,-2*woodW,0);
 
     scene->push(table);

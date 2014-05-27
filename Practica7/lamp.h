@@ -64,8 +64,8 @@ public:
         glPopMatrix();
     }
     void scale(double x, double y, double z){
-        glLightf(lightN, GL_SPOT_CUTOFF, 40/(zR*=x));
         Model::scale(x,y,z);
+        glLightf(lightN, GL_SPOT_CUTOFF, 40/(zR*= z));
     }
     float intensity(float r){
         intens +=r;
